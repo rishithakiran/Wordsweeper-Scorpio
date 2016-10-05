@@ -1,9 +1,9 @@
-package com.scorpio
+package com.scorpio;
 
 import java.io.*;
-
-import server.Server;
-import xml.Message;
+import com.scorpio.server.protocol.SampleProtocolHandler;
+import com.scorpio.server.core.Server;
+import com.scorpio.xml.Message;
 
 /** Code to launch Server from the command line. */
 public class ServerLauncher {

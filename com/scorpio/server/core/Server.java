@@ -1,4 +1,6 @@
-package server;
+package com.scorpio.server.core;
+
+import com.scorpio.server.protocol.IProtocolHandler;
 
 import java.io.*;
 import java.net.*;

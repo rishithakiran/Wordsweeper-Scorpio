@@ -1,6 +1,7 @@
-package server;
+package com.scorpio.server.protocol;
 
-import xml.*;
+import com.scorpio.server.core.ClientState;
+import com.scorpio.xml.*;
 
 /** 
  * ServerThread out-sources processing of protocol to implementors 
@@ -17,7 +18,7 @@ public interface IProtocolHandler {
 	 * Use this object to write back a response.
 	 * <p>
 	 * Classes that implement this interface must make sure that the
-	 * {@link #process(ClientState, Message)} method is synchronized, 
+	 * {@link #process(ClientState, Message)} method is synchronized,
 	 * otherwise 
 	 */
 	Message process(ClientState state, Message request);

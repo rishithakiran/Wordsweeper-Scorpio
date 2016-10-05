@@ -1,6 +1,8 @@
-package server;
+package com.scorpio.server.core;
 
-/** 
+import com.scorpio.server.protocol.IProtocolHandler;
+
+/**
  * If you want to be told when a client exits, make sure your ProtocolHandler
  * implements {@link IShutdownHandler} instead of {@link IProtocolHandler}.
  * <p>

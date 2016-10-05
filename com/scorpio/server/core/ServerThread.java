@@ -1,11 +1,12 @@
-package server;
+package com.scorpio.server.core;
 
 import java.io.*;
 import java.net.*;
 import java.util.UUID;
 
+import com.scorpio.server.protocol.IProtocolHandler;
 import org.w3c.dom.*;
-import xml.*;
+import com.scorpio.xml.*;
 
 /** Thread to handle individual requests from a client. */
 public class ServerThread extends Thread implements ClientState {

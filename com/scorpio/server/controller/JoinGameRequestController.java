@@ -1,10 +1,10 @@
-package server.controller;
+package com.scorpio.server.controller;
 
-import server.ClientState;
-import server.IProtocolHandler;
-import server.Server;
-import server.model.ServerModel;
-import xml.Message;
+import com.scorpio.server.core.ClientState;
+import com.scorpio.server.protocol.IProtocolHandler;
+import com.scorpio.server.core.Server;
+import com.scorpio.server.model.ServerModel;
+import com.scorpio.xml.Message;
 
 /**
  * Controller on server to package up the current state of the model

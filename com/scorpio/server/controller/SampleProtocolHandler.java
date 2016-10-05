@@ -1,10 +1,10 @@
-package server.controller;
+package com.scorpio.server.controller;
 import org.w3c.dom.Node;
 
-import server.ClientState;
-import server.IShutdownHandler;
-import server.model.ServerModel;
-import xml.*;
+import com.scorpio.server.core.ClientState;
+import com.scorpio.server.core.IShutdownHandler;
+import com.scorpio.server.model.ServerModel;
+import com.scorpio.xml.*;
 
 /**
  * Sample implementation of a protocol handler to respond to messages received from clients.

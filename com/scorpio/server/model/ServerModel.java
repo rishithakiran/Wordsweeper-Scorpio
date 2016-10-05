@@ -1,4 +1,4 @@
-package server.model;
+package com.scorpio.server.model;
 
 /** HACK: Replace with actual functionality! */
 

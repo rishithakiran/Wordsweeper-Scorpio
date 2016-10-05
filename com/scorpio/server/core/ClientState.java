@@ -1,6 +1,6 @@
-package com.scorpio.server;
+package com.scorpio.server.core;
 
-import xml.Message;
+import com.scorpio.xml.Message;
 
 /** Server-side interface to per-client state. Exposes only the methods of ServerThread that are safe. */
 public interface ClientState {

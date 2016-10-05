@@ -1,5 +1,5 @@
-package server.controller;
-import server.ClientState;
+package com.scorpio.server.controller;
+import com.scorpio.server.core.ClientState;
 
 /**
  * Controller to detect when terminating client has something to be cleaned up.
