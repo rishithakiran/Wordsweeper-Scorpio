@@ -1,3 +1,5 @@
+package com.scorpio
+
 import java.io.*;
 
 import server.Server;
