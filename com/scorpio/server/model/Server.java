@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
 	The server model is a singleton
  */
-public class Server {
+public class Server implements IModel{
 	private HashMap<Integer, Game> games = new HashMap<Integer, Game>();
 	private Server instance = null;
 

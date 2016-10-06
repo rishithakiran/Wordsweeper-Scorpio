@@ -2,7 +2,7 @@ package com.scorpio.server.model;
 
 import com.scorpio.server.accessory.Coordinate;
 
-public class Tile {
+public class Tile implements IModel{
     private Coordinate location;
 
     private char contents;

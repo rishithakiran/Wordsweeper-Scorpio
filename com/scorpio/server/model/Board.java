@@ -2,7 +2,7 @@ package com.scorpio.server.model;
 
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements IModel{
     private ArrayList<Tile> tiles;
     private int size;
 

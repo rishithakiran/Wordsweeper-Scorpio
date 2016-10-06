@@ -2,7 +2,7 @@ package com.scorpio.server.model;
 
 import java.util.ArrayList;
 
-public class Game {
+public class Game implements IModel{
     private int id;
     private boolean isLocked;
     private Board board;
