@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.UUID;
 
 import com.scorpio.server.protocol.IProtocolHandler;
+import com.scorpio.server.protocol.IShutdownHandler;
 import org.w3c.dom.*;
 import com.scorpio.xml.*;
 

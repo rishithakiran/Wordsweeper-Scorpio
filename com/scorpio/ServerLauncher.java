@@ -1,8 +1,10 @@
 package com.scorpio;
 
 import java.io.*;
-import com.scorpio.server.protocol.SampleProtocolHandler;
+
+import com.scorpio.server.controller.JoinGameRequestController;
 import com.scorpio.server.core.Server;
+import com.scorpio.server.model.ServerModel;
 import com.scorpio.xml.Message;
 
 /** Code to launch Server from the command line. */
@@ -17,7 +19,7 @@ public class ServerLauncher {
 		}
 		
 		// Start server and have ProtocolHandler be responsible for all XML messages.
-		Server server = new Server(new SampleProtocolHandler(), 9371);
+		Server server = new Server(new JoinGameRequestController(new ServerModel()), 9371);
 	
 		try {
 			server.bind();

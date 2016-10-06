@@ -1,6 +1,6 @@
-package com.scorpio.server.core;
+package com.scorpio.server.protocol;
 
-import com.scorpio.server.protocol.IProtocolHandler;
+import com.scorpio.server.core.ClientState;
 
 /**
  * If you want to be told when a client exits, make sure your ProtocolHandler
