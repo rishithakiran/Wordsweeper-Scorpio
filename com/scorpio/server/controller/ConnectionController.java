@@ -63,7 +63,7 @@ public class ConnectionController implements IShutdownHandler {
 
 
     @Override
-    public Message process(ClientState state, Message request) {
+    public synchronized Message process(ClientState state, Message request) {
         // Safety first
         if(request == null){
             return null;
