@@ -5,17 +5,17 @@ import java.util.HashMap;
 /**
 	The server model is a singleton
  */
-public class Server implements IModel{
+public class GameManager implements IModel{
 	private HashMap<Integer, Game> games = new HashMap<Integer, Game>();
-	private Server instance = null;
+	private static GameManager instance = null;
 
-	public Server getInstance(){
+	public static GameManager getInstance(){
 		if(instance == null){
-			instance = new Server();
+			instance = new GameManager();
 		}
 		return instance;
 	}
-	private Server(){
+	private GameManager(){
 
 	}
 
