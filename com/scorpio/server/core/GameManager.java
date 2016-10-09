@@ -1,11 +1,14 @@
-package com.scorpio.server.model;
+package com.scorpio.server.core;
+
+import com.scorpio.server.model.Game;
+import com.scorpio.server.model.IModel;
 
 import java.util.HashMap;
 
 /**
 	The server model is a singleton
  */
-public class GameManager implements IModel{
+public class GameManager implements IModel {
 	private HashMap<Integer, Game> games = new HashMap<Integer, Game>();
 	private static GameManager instance = null;
 
@@ -17,6 +20,10 @@ public class GameManager implements IModel{
 	}
 	private GameManager(){
 
+	}
+
+	public int numberOfGames(){
+		return games.size();
 	}
 
 	public Game findGameById(int gameId){

@@ -1,4 +1,4 @@
-package com.scorpio.test;
+package com.scorpio.test.util;
 
 /**
  * When a class is locally declared, Java does not allow
