@@ -68,7 +68,6 @@ public class ConnectionControllerTest {
 
         ConnectionController router = new ConnectionController(GameManager.getInstance(), mapping);
         Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
-        TestHandler.t = new Trigger();
 
         assert(null == router.process(null, msg));
     }

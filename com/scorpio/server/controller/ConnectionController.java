@@ -14,8 +14,8 @@ import java.util.HashMap;
  * controller
  */
 public class ConnectionController implements IShutdownHandler {
-    GameManager model = null;
-    HashMap<String, Class> requestMapping = null;
+    private final GameManager model;
+    private final HashMap<String, Class> requestMapping;
 
     /**
      * Initialize this controller with the default mappings

@@ -6,7 +6,6 @@ import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.xml.Message;
 
 public class GameAccessController implements IProtocolHandler{
-
     public GameAccessController(GameManager m){
 
     }
