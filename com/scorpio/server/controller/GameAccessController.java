@@ -22,6 +22,13 @@ public class GameAccessController implements IProtocolHandler {
 		this.gm = gm;
 	}
 
+    /**
+     * This function will require major rework, very likely becoming its own class
+     * @param playerID
+     * @param gameID
+     * @param requestID
+     * @return
+     */
 	private Message buildBoardResponse(String playerID, UUID gameID, String requestID){
 		Game g = GameManager.getInstance().findGameById(gameID);
 
@@ -57,25 +64,16 @@ public class GameAccessController implements IProtocolHandler {
 		switch(type){
 			case "createGameRequest":
 				String playerName = child.getAttributes().item(0).getNodeValue();
-				UUID gameID = createGame(new Player(playerName));
+				UUID gameID = this.createGame(new Player(playerName));
+
+                // Formulate a response and send it
 				return buildBoardResponse(playerName, gameID, request.id());
 
 			case "joinGameRequest":
 				// Find the game
 				Game targetGame = GameManager.getInstance().findGameById(UUID.fromString(child.getAttributes().item(0).getNodeValue()));
 				Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue());
-
-				// We may need to resize the board
-				// TODO
-				//targetGame.getBoard().grow(12);
-
-				// Select a random location for our new player
-				int x = (new Random()).nextInt(targetGame.getBoard().getSize()-3);
-				int y = (new Random()).nextInt(targetGame.getBoard().getSize()-3);
-				newPlayer.setLocation(new Coordinate(x, y));
-
-				// Add them to the board
-				targetGame.addPlayer(newPlayer);
+                this.joinGame(newPlayer, targetGame);
 
 				// Formulate a response and send it
 				return buildBoardResponse(newPlayer.getName(), targetGame.getId(), request.id());
@@ -83,6 +81,26 @@ public class GameAccessController implements IProtocolHandler {
 		}
 		return null;
 	}
+
+    /**
+     * Add the given player to the specified game, resizing the board
+     * if necessary
+     * @param player Player to add to game
+     * @param game Target game
+     */
+	public void joinGame(Player player, Game game){
+        // We may need to resize the board
+        // TODO
+        //targetGame.getBoard().grow(12);
+
+        // Select a random location for our new player
+        int x = (new Random()).nextInt(game.getBoard().getSize()-3);
+        int y = (new Random()).nextInt(game.getBoard().getSize()-3);
+        player.setLocation(new Coordinate(x, y));
+
+        // Add them to the board
+        game.addPlayer(player);
+    }
 
 	/**
 	 * Creates the game with appropriate values
