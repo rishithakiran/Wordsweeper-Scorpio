@@ -9,7 +9,7 @@ import java.util.HashMap;
 	The server model is a singleton
  */
 public class GameManager implements IModel {
-	private HashMap<Integer, Game> games = new HashMap<Integer, Game>();
+	public HashMap<Integer, Game> games = new HashMap<Integer, Game>();
 	private static GameManager instance = null;
 
 	public static GameManager getInstance(){
