@@ -20,7 +20,7 @@ public class XMLUtil {
             fis.read(data);
             fis.close();
             String xmlString = new String(data, "UTF-8");
-
+            xmlString = xmlString.replaceAll("\n[ ]*", "");
 
             Message msg = new Message(xmlString);
             return msg;

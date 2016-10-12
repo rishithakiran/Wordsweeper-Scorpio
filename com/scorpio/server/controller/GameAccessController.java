@@ -1,6 +1,8 @@
 package com.scorpio.server.controller;
 
 import java.util.ArrayList;
+
+import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
 
 import com.scorpio.server.core.GameManager;
@@ -26,8 +28,26 @@ public class GameAccessController implements IProtocolHandler {
 		switch(type){
 			case "createGameRequest":
 				System.out.println(0);
-				createGame(new Player(playerName));
-				break;
+				int id = createGame(new Player(playerName));
+				Game g = GameManager.getInstance().findGameById(id);
+				String managingUser = g.getManagingPlayer().getName();
+				Coordinate coord = g.getBonus();
+				String boardResponseHeader = String.format("<boardResponse gameId='%s' managingUser='%s' bonus='%s'>", id, managingUser, coord.toString());
+				// One player for now
+				String player = String.format("<player name='%s' position='%s' board='%s' score='%s'/>",
+						playerName,
+						g.getManagingPlayer().getLocation().toString(),
+						g.getPlayerBoard(g.getManagingPlayer().getName()),
+						"0");
+
+				String boardResponseFooter = "</boardResponse>";
+				String header = "<response id='" + request.id() + "' success='true'>";
+
+				String footer = "</response>";
+
+				String complete = header + boardResponseHeader + player + boardResponseFooter + footer;
+				// We will return the apprpriate data to the client
+				return new Message(complete);
 		}
 		return null;
 	}
@@ -37,20 +57,22 @@ public class GameAccessController implements IProtocolHandler {
 	 * 
 	 * @param player
 	 */
-	public Board createGame(Player player) {
+	public int createGame(Player player) {
 		ArrayList<Player> players = new ArrayList<>();
+		player.setLocation(new Coordinate(0,0));
 		players.add(player);
 
 		player.setManagingUser(true);
 
 		Game game = new Game();
-		game.setBoard(new Board());
+		game.setBoard(new Board(7));
+		game.getBoard().fillRandom();
 		game.setId(generateId());
 		game.setLocked(false);
 
 		game.setPlayers(players);
 		GameManager.getInstance().games.put(game.getId(), game);
-		return game.getBoard();
+		return game.getId();
 	}
 
 	public Board joinGame(Player player, int gameId) {

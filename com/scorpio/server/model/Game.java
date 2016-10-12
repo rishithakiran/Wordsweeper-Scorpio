@@ -1,6 +1,11 @@
 package com.scorpio.server.model;
 
+import com.scorpio.server.accessory.Coordinate;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Game implements IModel {
 	private int id;
@@ -54,7 +59,7 @@ public class Game implements IModel {
 		int word_score = 0;
 		ArrayList<Tile> tiles = word.tiles;
 		for (Tile tile : tiles) {
-			tile_score = (tile.getPoits() * tile.getMultiplier()) * tile.getSharedBy();
+			tile_score = (tile.getPoints() * tile.getMultiplier()) * tile.getSharedBy();
 			word_score = word_score + tile_score;
 		}
 		return word_score;
@@ -66,6 +71,23 @@ public class Game implements IModel {
 				return player;
 		}
 		return null;
+	}
+
+
+	public Coordinate getBonus(){
+		return new Coordinate(0,0);
+	}
+
+	private Player getPlayer(String name){
+		List<Player> l = this.players.stream().filter((s) -> s.getName().equals(name)).collect(Collectors.toList());
+		if(l.size() != 1){
+			return null;
+		}
+		return l.get(0);
+	}
+	public Board getPlayerBoard(String player){
+		Coordinate playerLoc = this.getPlayer(player).getLocation();
+		return this.board.getSubBoard(playerLoc, 4);
 	}
 
 }

@@ -1,9 +1,13 @@
 package com.scorpio.server.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.test.util.XMLUtil;
+import com.scorpio.xml.Message;
 
 public class Board implements IModel {
 
@@ -12,6 +16,34 @@ public class Board implements IModel {
 
 	public ArrayList<Tile> getTiles() {
 		return tiles;
+	}
+
+
+	/**
+	 * Get a subboard that grows along these coordinates
+	 *  --> X+
+	 * |
+	 * V
+	 * Y+
+	 */
+
+	public Board getSubBoard(Coordinate start, int size){
+		Board subBoard = new Board(4);
+		for(int x = 0; x < size; x++){
+			for(int y = 0; y < size; y++){
+				subBoard.tiles.add(this.getTileAt(new Coordinate(start.x + x, start.y + y)));
+			}
+		}
+		return subBoard;
+	}
+
+
+	public Tile getTileAt(Coordinate c){
+		List<Tile> l = this.tiles.stream().filter((t) -> t.getLocation().equals(c)).collect(Collectors.toList());
+		if(l.size() != 1){
+			return null;
+		}
+		return l.get(0);
 	}
 
 	public void setTiles(ArrayList<Tile> tiles) {
@@ -26,21 +58,36 @@ public class Board implements IModel {
 		this.size = size;
 	}
 
-	public Board() {
-		ArrayList<Tile> tiles = new ArrayList<>();
-		this.size = 4;
-		for (int row = 1; row <= 4; row++) {
-			for (int column = 1; column <= 4; column++) {
-				Coordinate coordinate = new Coordinate();
-				coordinate.x = row;
-				coordinate.y = column;
+	public Board(int size) {
+		this.tiles = new ArrayList<Tile>();
+		this.size = size;
+	}
+
+	public void fillRandom(){
+		for (int row = 0; row < this.size; row++) {
+			for (int column = 0; column < this.size; column++) {
+				Coordinate coordinate = new Coordinate(row, column);
 				Tile tile = new Tile();
 				tile.setLocation(coordinate);
 				tiles.add(tile);
 			}
 		}
-		this.tiles = tiles;
 	}
+
+	// Serialize the board to a format that can be passed
+	// directly to an XML document
+	public String toString(){
+		String out = "";
+		for(int x = 0; x < this.size; x++){
+			for(int y = 0; y < this.size; y++){
+				out += this.getTileAt(new Coordinate(x,y)).getContents() + ",";
+			}
+		}
+		// Strip the trailing comma
+		out = out.substring(0, out.length() - 1);
+		return out;
+	}
+
 
 	public boolean isValidWord(Word w) {
 		return false;
@@ -51,7 +98,7 @@ public class Board implements IModel {
 		ArrayList<Tile> tiles = new ArrayList<>();
 		Random random = new Random();
 		int max = board.getSize() + size;
-		Board newBoard = new Board();
+		Board newBoard = new Board(4);
 		for (Tile tile : board.getTiles()) {
 			tiles.add(tile);
 		}
@@ -61,9 +108,7 @@ public class Board implements IModel {
 		int lastIndex = startIndex + 3;
 		for (int row = startIndex; row <= lastIndex; row++) {
 			for (int col = startIndex; col <= lastIndex; col++) {
-				Coordinate coordinate = new Coordinate();
-				coordinate.x = row;
-				coordinate.y = col;
+				Coordinate coordinate = new Coordinate(row,col);
 				Tile tile = new Tile();
 				tile.setLocation(coordinate);
 				tiles.add(tile);

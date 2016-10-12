@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response id="e3b52914-fa5a-45d1-9fcc-a38ca0e6fcae" success="true">
+    <boardResponse gameId="0" managingUser="John" bonus="0,0">
+        <player name="John" position="0,0" board="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p" score="0"/>
+    </boardResponse>
+</response>
