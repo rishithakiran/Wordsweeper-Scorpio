@@ -2,6 +2,7 @@ package com.scorpio.server.core;
 
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.IModel;
+import com.scorpio.server.model.Player;
 
 import java.util.HashMap;
 

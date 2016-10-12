@@ -9,11 +9,26 @@ import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.xml.Message;
+import org.w3c.dom.Node;
 
 public class GameAccessController implements IProtocolHandler {
+	GameManager gm;
+	public GameAccessController(GameManager gm){
+		this.gm = gm;
+	}
 
 	@Override
 	public Message process(ClientState state, Message request) {
+		Node child = request.contents.getFirstChild();
+		String type = child.getLocalName();
+
+		String playerName = child.getAttributes().item(0).getNodeValue();
+		switch(type){
+			case "createGameRequest":
+				System.out.println(0);
+				createGame(new Player(playerName));
+				break;
+		}
 		return null;
 	}
 
