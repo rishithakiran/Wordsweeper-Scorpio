@@ -1,23 +1,16 @@
 package com.scorpio.server.controller;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
 
+import com.scorpio.server.core.GameManager;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
-import com.scorpio.server.model.Server;
-import com.scorpio.server.model.Tile;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.xml.Message;
 
 public class GameAccessController implements IProtocolHandler {
-
-	Server server;
 
 	@Override
 	public Message process(ClientState state, Message request) {
@@ -41,13 +34,13 @@ public class GameAccessController implements IProtocolHandler {
 		game.setLocked(false);
 
 		game.setPlayers(players);
-		Server.games.put(game.getId(), game);
+		GameManager.getInstance().games.put(game.getId(), game);
 		return game.getBoard();
 	}
 
 	public Board joinGame(Player player, int gameId) {
 
-		Game game = Server.games.get(gameId);
+		Game game = GameManager.getInstance().games.get(gameId);
 		// check if the game exists
 		if ((game != null) && (!game.isLocked())) {
 			if (game.getPassword() == null) {
@@ -68,10 +61,10 @@ public class GameAccessController implements IProtocolHandler {
 
 	// How will you check if the random number is not repeated?
 	private int generateId() {
-		if (Server.games.size() == 0) {
+		if (GameManager.getInstance().games.size() == 0) {
 			return 1;
 		}
-		return Server.games.size() + 1;
+		return GameManager.getInstance().games.size() + 1;
 		/*
 		 * Random random = new Random(); // For now creating an id beween 1 to
 		 * 100 return (random.nextInt((100 - 1) + 1) + 1);
