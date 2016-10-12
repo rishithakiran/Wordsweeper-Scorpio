@@ -62,7 +62,11 @@ public class GameAccessController implements IProtocolHandler {
                 // Filter out the player that just joined the game (they'll get their own request)
                 players = players.stream().filter((s) -> !(s.getName().equals(newPlayer.getName()))).collect(Collectors.toList());
                 for (Player p : players) {
-                    // Formulate BoardResponse and send it.
+                    // If we've lost the client state, pass
+                    if(p.getClientState() == null){
+                        continue;
+                    }
+                    
                     String requestID = p.getClientState().id();
                     BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, true);
                     Message brm = new Message(br.toXML());
