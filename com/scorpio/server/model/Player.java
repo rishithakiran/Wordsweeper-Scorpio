@@ -7,10 +7,9 @@ public class Player implements IModel{
     private Coordinate location;
     private int score;
     private boolean isManagingUser;
-    
+
     public Player(String name){
 		this.name = name;
-
     }
     public String getName() {
 		return name;

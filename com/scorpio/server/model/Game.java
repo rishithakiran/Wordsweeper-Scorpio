@@ -3,7 +3,6 @@ package com.scorpio.server.model;
 import java.util.ArrayList;
 
 public class Game implements IModel {
-
 	private int id;
 	private boolean isLocked;
 	private Board board;
@@ -50,11 +49,23 @@ public class Game implements IModel {
 		this.password = password;
 	}
 
-	public int computeScore() {
-		return 0;
+	public int computeScore(String player, Word word) {
+		int tile_score = 0;
+		int word_score = 0;
+		ArrayList<Tile> tiles = word.tiles;
+		for (Tile tile : tiles) {
+			tile_score = (tile.getPoits() * tile.getMultiplier()) * tile.getSharedBy();
+			word_score = word_score + tile_score;
+		}
+		return word_score;
 	}
 
 	public Player getManagingPlayer() {
+		for (Player player : players) {
+			if (player.isManagingUser() == true)
+				return player;
+		}
 		return null;
 	}
+
 }

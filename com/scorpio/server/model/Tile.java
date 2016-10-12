@@ -92,8 +92,4 @@ public class Tile implements IModel {
 		return sharedBy;
 	}
 
-	public void setSharedBy(int sharedBy) {
-		this.sharedBy = sharedBy;
-	}
-
 }
