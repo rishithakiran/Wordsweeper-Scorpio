@@ -73,8 +73,6 @@ public class Board implements IModel {
 		board.setSize(lastIndex);
 
 		return board;
-	}>>>>>>>Implementation for
-
-	the GameAccessController
+	}
 
 }

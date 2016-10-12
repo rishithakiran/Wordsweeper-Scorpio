@@ -8,6 +8,7 @@ public class Player implements IModel{
     private int score;
     private boolean isManagingUser;
     
+
     public Player(){
 
     }
