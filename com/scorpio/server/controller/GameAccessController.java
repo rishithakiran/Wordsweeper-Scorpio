@@ -10,12 +10,14 @@ import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
 
 import com.scorpio.server.core.GameManager;
+import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
+import com.scorpio.server.protocol.response.FailureResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
@@ -23,7 +25,6 @@ public class GameAccessController implements IProtocolHandler {
 
 	@Override
 	public Message process(ClientState state, Message request) {
-
 		Node child = request.contents.getFirstChild();
 		String type = child.getLocalName();
 		switch(type){
@@ -32,19 +33,31 @@ public class GameAccessController implements IProtocolHandler {
 				String gameUUID = UUID.randomUUID().toString();
 				// for the purpose of testing, UUID is always 'somePlace'
 				gameUUID = "somePlace";
-				this.createGame(new Player(playerName, state), gameUUID);
-
-				// Formulate a response and send it
-				BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
-				return new Message(br.toXML());
+                try {
+                    this.createGame(new Player(playerName, state), gameUUID);
+                    // Formulate a response and send it
+                    BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
+                    return new Message(br.toXML());
+                }catch(WordSweeperException ex){
+                    // If this occurs, we could not create a new game
+                    FailureResponse fr = new FailureResponse(ex.toString(), request.id());
+                    return new Message(fr.toXML());
+                }
 			}
 			case "joinGameRequest": {
 				// Find the game
 				Game targetGame = GameManager.getInstance().findGameById(child.getAttributes().item(0).getNodeValue());
 				Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue(), state);
-				this.joinGame(newPlayer, targetGame);
 
-				// Notify all players that the game has changed
+                try {
+                    this.joinGame(newPlayer, targetGame);
+                }catch(WordSweeperException ex){
+                    // If this occurs, we could not join the game
+                    FailureResponse fr = new FailureResponse(ex.toString(), request.id());
+                    return new Message(fr.toXML());
+                }
+
+                // Notify all players that the game has changed
 				List<Player> players = targetGame.getPlayers();
 				// Filter out the player that just joined the game (they'll get their own request)
 				players = players.stream().filter((s) -> !(s.getName().equals(newPlayer.getName()))).collect(Collectors.toList());
@@ -70,19 +83,25 @@ public class GameAccessController implements IProtocolHandler {
      * @param player Player to add to game
      * @param game Target game
      */
-	public void joinGame(Player player, Game game){
+	public void joinGame(Player player, Game game) throws WordSweeperException{
         // We may need to resize the board
         // TODO
         //targetGame.getBoard().grow(12);
 
+		// We need to verify this player is not already in the game
+		if(game.getPlayers().contains(player)){
+            throw new WordSweeperException("Player already in game");
+        }
+
         // Select a random location for our new player
         int playerBoardSize = 4;
-        int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
-        int y = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
-        player.setLocation(new Coordinate(x, y));
-
-        // Add them to the board
-        game.addPlayer(player);
+        synchronized (game) {
+            int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
+            int y = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
+            player.setLocation(new Coordinate(x, y));
+            // Add them to the board
+            game.addPlayer(player);
+        }
     }
 
 	/**
@@ -90,19 +109,24 @@ public class GameAccessController implements IProtocolHandler {
 	 * 
 	 * @param player
 	 */
-	public void createGame(Player player, String gameID) {
-		ArrayList<Player> players = new ArrayList<>();
-		player.setLocation(new Coordinate(0,0));
-		players.add(player);
+	public void createGame(Player player, String gameID) throws WordSweeperException{
+        if(GameManager.getInstance().findGameById(gameID) != null){
+            throw new WordSweeperException("Game exists");
+        }
 
-		player.setManagingUser(true);
+        Game game = new Game();
+        game.setBoard(new RandomBoard(7));
+        game.setId(gameID);
+        game.setLocked(false);
 
-		Game game = new Game();
-		game.setBoard(new RandomBoard(7));
-		game.setId(gameID);
-		game.setLocked(false);
+        int playerBoardSize = 4;
+        int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
+        int y = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
+        player.setLocation(new Coordinate(x, y));
 
-		game.setPlayers(players);
+        player.setManagingUser(true);
+        game.addPlayer(player);
+
 		GameManager.getInstance().games.put(game.getId(), game);
 	}
 
