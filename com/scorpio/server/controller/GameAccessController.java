@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
@@ -12,68 +13,53 @@ import com.scorpio.server.core.GameManager;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
+import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.protocol.IProtocolHandler;
+import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
 public class GameAccessController implements IProtocolHandler {
 
-    /**
-     * This function will require major rework, very likely becoming its own class
-     * @param playerID
-     * @param gameID
-     * @param requestID
-     * @return
-     */
-	private Message buildBoardResponse(String playerID, UUID gameID, String requestID){
-		Game g = GameManager.getInstance().findGameById(gameID);
-
-		String managingUser = g.getManagingPlayer().getName();
-		String header = "<response id='" + requestID + "' success='true'>";
-		String boardResponseHeader = String.format("<boardResponse gameId='%s' managingUser='%s' bonus='%s'>", gameID.toString(), managingUser, g.getBonus().toString());
-
-		String playerXML = "";
-		List<Player> players = g.getPlayers();
-		for(Player p : players){
-			playerXML += String.format("<player name='%s' position='%s' board='%s' score='%d'/>",
-					playerID,
-					p.getLocation().toString(),
-					g.getPlayerBoard(p.getName()),
-					p.getScore());
-		}
-
-
-		String boardResponseFooter = "</boardResponse>";
-		String footer = "</response>";
-
-		String complete = header + boardResponseHeader + playerXML + boardResponseFooter + footer;
-
-		// We will return the appropriate data to the client
-		return new Message(complete);
-	}
-
-
 	@Override
 	public Message process(ClientState state, Message request) {
+
 		Node child = request.contents.getFirstChild();
 		String type = child.getLocalName();
 		switch(type){
-			case "createGameRequest":
+			case "createGameRequest": {
 				String playerName = child.getAttributes().item(0).getNodeValue();
-				UUID gameID = this.createGame(new Player(playerName));
-
-                // Formulate a response and send it
-				return buildBoardResponse(playerName, gameID, request.id());
-
-			case "joinGameRequest":
-				// Find the game
-				Game targetGame = GameManager.getInstance().findGameById(UUID.fromString(child.getAttributes().item(0).getNodeValue()));
-				Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue());
-                this.joinGame(newPlayer, targetGame);
+				String gameUUID = UUID.randomUUID().toString();
+				// for the purpose of testing, UUID is always 'somePlace'
+				gameUUID = "somePlace";
+				this.createGame(new Player(playerName, state), gameUUID);
 
 				// Formulate a response and send it
-				return buildBoardResponse(newPlayer.getName(), targetGame.getId(), request.id());
+				BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
+				return new Message(br.toXML());
+			}
+			case "joinGameRequest": {
+				// Find the game
+				Game targetGame = GameManager.getInstance().findGameById(child.getAttributes().item(0).getNodeValue());
+				Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue(), state);
+				this.joinGame(newPlayer, targetGame);
 
+				// Notify all players that the game has changed
+				List<Player> players = targetGame.getPlayers();
+				// Filter out the player that just joined the game (they'll get their own request)
+				players = players.stream().filter((s) -> !(s.getName().equals(newPlayer.getName()))).collect(Collectors.toList());
+				for(Player p : players){
+					// Formulate BoardResponse and send it.
+					String requestID = p.getClientState().id();
+					BoardResponse br = new BoardResponse(p.getName(), targetGame.getId(), requestID, true);
+					Message brm = new Message(br.toXML());
+					p.getClientState().sendMessage(brm);
+				}
+
+				// Finally, send the response to the player that just joined
+				BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame.getId(), request.id(), true);
+				return new Message(br.toXML());
+			}
 		}
 		return null;
 	}
@@ -90,8 +76,9 @@ public class GameAccessController implements IProtocolHandler {
         //targetGame.getBoard().grow(12);
 
         // Select a random location for our new player
-        int x = (new Random()).nextInt(game.getBoard().getSize()-3);
-        int y = (new Random()).nextInt(game.getBoard().getSize()-3);
+        int playerBoardSize = 4;
+        int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
+        int y = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
         player.setLocation(new Coordinate(x, y));
 
         // Add them to the board
@@ -103,7 +90,7 @@ public class GameAccessController implements IProtocolHandler {
 	 * 
 	 * @param player
 	 */
-	public UUID createGame(Player player) {
+	public void createGame(Player player, String gameID) {
 		ArrayList<Player> players = new ArrayList<>();
 		player.setLocation(new Coordinate(0,0));
 		players.add(player);
@@ -111,14 +98,12 @@ public class GameAccessController implements IProtocolHandler {
 		player.setManagingUser(true);
 
 		Game game = new Game();
-		game.setBoard(new Board(7));
-		game.getBoard().fillRandom();
-		game.setId(UUID.randomUUID());
+		game.setBoard(new RandomBoard(7));
+		game.setId(gameID);
 		game.setLocked(false);
 
 		game.setPlayers(players);
 		GameManager.getInstance().games.put(game.getId(), game);
-		return game.getId();
 	}
 
 	public void exitGame(Player player, int gameId) {

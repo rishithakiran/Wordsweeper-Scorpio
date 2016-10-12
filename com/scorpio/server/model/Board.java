@@ -11,8 +11,8 @@ import com.scorpio.xml.Message;
 
 public class Board implements IModel {
 
-	private ArrayList<Tile> tiles;
-	private int size;
+	protected ArrayList<Tile> tiles;
+	protected int size;
 
 	public Board(int size) {
 		this.tiles = new ArrayList<Tile>();
@@ -27,12 +27,24 @@ public class Board implements IModel {
 	 * @return The sub board
 	 */
 	public Board getSubBoard(Coordinate start, int size){
-		// TODO Bounds check
+		if(size + start.x >= this.size || size + start.y >= this.size){
+			return null;
+		}
 
-		Board subBoard = new Board(4);
+		Board subBoard = new Board(size);
 		for(int x = 0; x < size; x++){
 			for(int y = 0; y < size; y++){
-				subBoard.tiles.add(this.getTileAt(new Coordinate(start.x + x, start.y + y)));
+				Tile t = this.getTileAt(new Coordinate(start.x + x, start.y + y));
+				// Make a fresh copy of this tile
+				// This is inelegant, but I can't think of a prettier way to handle
+				// the issue
+				Tile tCopy = new Tile();
+				tCopy.setContents(t.getContents());
+				tCopy.setPoints(t.getPoints());
+				tCopy.setMultiplier(t.getMultiplier());
+				// Readdress the coordinate
+				tCopy.setLocation(new Coordinate(x,y));
+				subBoard.tiles.add(tCopy);
 			}
 		}
 		return subBoard;
@@ -61,20 +73,7 @@ public class Board implements IModel {
 	}
 
 
-	/**
-	 * When called, will fill all tiles on the board with a random
-	 * value
-	 */
-	public void fillRandom(){
-		for (int row = 0; row < this.size; row++) {
-			for (int column = 0; column < this.size; column++) {
-				Coordinate coordinate = new Coordinate(row, column);
-				Tile tile = new Tile();
-				tile.setLocation(coordinate);
-				this.tiles.add(tile);
-			}
-		}
-	}
+
 
 	/**
 	 * Serialize the board in preparation to be sent through a boardResponse message

@@ -9,17 +9,17 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Game implements IModel {
-	private UUID id;
+	private String id;
 	private boolean isLocked;
 	private Board board;
 	private ArrayList<Player> players;
 	private String password;
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
