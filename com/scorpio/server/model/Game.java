@@ -15,6 +15,10 @@ public class Game implements IModel {
 	private ArrayList<Player> players;
 	private String password;
 
+	public Game(){
+		this.players = new ArrayList<Player>();
+	}
+
 	public String getId() {
 		return id;
 	}
