@@ -58,6 +58,30 @@ public class Tile implements IModel {
 
 	}
 
+	@Override
+	public boolean equals(Object other){
+		if (other == null) return false;
+		if (other == this) return true;
+		if (!(other instanceof Tile))return false;
+		Tile otherTile = (Tile) other;
+		if(!otherTile.getLocation().equals(this.getLocation())){
+			return false;
+		}
+		if(!otherTile.getContents().equals(this.getContents())){
+			return false;
+		}
+		if(otherTile.getMultiplier() != this.getMultiplier()){
+			return false;
+		}
+		if(otherTile.getPoints() != this.getPoints()){
+			return false;
+		}
+		if(otherTile.getSharedBy() != this.getSharedBy()){
+			return false;
+		}
+		return true;
+	}
+
 	public Coordinate getLocation() {
 		return location;
 	}

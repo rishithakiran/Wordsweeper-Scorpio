@@ -1,28 +1,32 @@
 package com.scorpio.test.unit.server.protocol;
 
+import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.controller.GameAccessController;
 import com.scorpio.server.core.GameManager;
+import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.protocol.response.BoardResponse;
+import org.junit.Before;
 import org.junit.Test;
-import org.testng.annotations.BeforeTest;
 
 import java.util.UUID;
 
 public class BoardResponseTest {
-    @BeforeTest
+    @Before
     public void resetGameManager(){
         GameManager.reset();
     }
 
     @Test
-    public void functionality_Basic(){
+    public void functionality_Basic() throws WordSweeperException{
         UUID gameUUID = UUID.randomUUID();
         UUID reqUUID = UUID.randomUUID();
         String testPlayerName = "testPlayer";
         GameAccessController gac = new GameAccessController();
-        gac.createGame(new Player(testPlayerName, null), gameUUID.toString());
+        Player newPlayer = new Player(testPlayerName,null);
+        gac.createGame(newPlayer, gameUUID.toString());
+        newPlayer.setLocation(new Coordinate(0,0));
         Game g = GameManager.getInstance().findGameById(gameUUID.toString());
 
         String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), false).toXML();
@@ -35,12 +39,14 @@ public class BoardResponseTest {
     }
 
     @Test
-    public void functionality_Admin(){
+    public void functionality_Admin() throws WordSweeperException{
         UUID gameUUID = UUID.randomUUID();
         UUID reqUUID = UUID.randomUUID();
         String testPlayerName = "testPlayer";
         GameAccessController gac = new GameAccessController();
-        gac.createGame(new Player(testPlayerName, null), gameUUID.toString());
+        Player newPlayer = new Player(testPlayerName,null);
+        gac.createGame(newPlayer, gameUUID.toString());
+        newPlayer.setLocation(new Coordinate(0,0));
         Game g = GameManager.getInstance().findGameById(gameUUID.toString());
 
         String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), true).toXML();
