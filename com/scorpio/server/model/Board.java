@@ -14,11 +14,6 @@ public class Board implements IModel {
 	private ArrayList<Tile> tiles;
 	private int size;
 
-	public ArrayList<Tile> getTiles() {
-		return tiles;
-	}
-
-
 	/**
 	 * Get a subboard that grows along these coordinates
 	 *  --> X+
@@ -26,7 +21,6 @@ public class Board implements IModel {
 	 * V
 	 * Y+
 	 */
-
 	public Board getSubBoard(Coordinate start, int size){
 		Board subBoard = new Board(4);
 		for(int x = 0; x < size; x++){
@@ -46,16 +40,8 @@ public class Board implements IModel {
 		return l.get(0);
 	}
 
-	public void setTiles(ArrayList<Tile> tiles) {
-		this.tiles = tiles;
-	}
-
 	public int getSize() {
 		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
 	}
 
 	public Board(int size) {
@@ -69,7 +55,7 @@ public class Board implements IModel {
 				Coordinate coordinate = new Coordinate(row, column);
 				Tile tile = new Tile();
 				tile.setLocation(coordinate);
-				tiles.add(tile);
+				this.tiles.add(tile);
 			}
 		}
 	}
@@ -93,31 +79,20 @@ public class Board implements IModel {
 		return false;
 	}
 
-	public Board grow(Board board, int size) {
-
-		ArrayList<Tile> tiles = new ArrayList<>();
-		Random random = new Random();
-		int max = board.getSize() + size;
-		Board newBoard = new Board(4);
-		for (Tile tile : board.getTiles()) {
-			tiles.add(tile);
+	public void grow(int newsize) {
+		if(this.size >= newsize){
+			return;
 		}
-		// the first board in the game will be created at position 0
-		int min = 1;
-		int startIndex = random.nextInt((max - min) + 1) + min;
-		int lastIndex = startIndex + 3;
-		for (int row = startIndex; row <= lastIndex; row++) {
-			for (int col = startIndex; col <= lastIndex; col++) {
-				Coordinate coordinate = new Coordinate(row,col);
-				Tile tile = new Tile();
-				tile.setLocation(coordinate);
-				tiles.add(tile);
+
+		// Create the required new tiles
+		for(int x = this.size; x < newsize; x++){
+			for(int y = this.size; y < newsize; y++){
+				Tile t = new Tile();
+				t.setLocation(new Coordinate(x, y));
+				this.tiles.add(t);
 			}
 		}
-		board.setTiles(tiles);
-		board.setSize(lastIndex);
 
-		return board;
 	}
 
 }

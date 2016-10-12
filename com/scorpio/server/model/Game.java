@@ -4,21 +4,22 @@ import com.scorpio.server.accessory.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Game implements IModel {
-	private int id;
+	private UUID id;
 	private boolean isLocked;
 	private Board board;
 	private ArrayList<Player> players;
 	private String password;
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -44,6 +45,10 @@ public class Game implements IModel {
 
 	public void setPlayers(ArrayList<Player> players) {
 		this.players = players;
+	}
+
+	public void addPlayer(Player p){
+		this.players.add(p);
 	}
 
 	public String getPassword() {

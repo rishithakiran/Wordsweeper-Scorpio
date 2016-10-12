@@ -1,6 +1,9 @@
 package com.scorpio.server.controller;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
@@ -19,35 +22,64 @@ public class GameAccessController implements IProtocolHandler {
 		this.gm = gm;
 	}
 
+	private Message buildBoardResponse(String playerID, UUID gameID, String requestID){
+		Game g = GameManager.getInstance().findGameById(gameID);
+
+		String managingUser = g.getManagingPlayer().getName();
+		String header = "<response id='" + requestID + "' success='true'>";
+		String boardResponseHeader = String.format("<boardResponse gameId='%s' managingUser='%s' bonus='%s'>", gameID.toString(), managingUser, g.getBonus().toString());
+
+		String playerXML = "";
+		List<Player> players = g.getPlayers();
+		for(Player p : players){
+			playerXML += String.format("<player name='%s' position='%s' board='%s' score='%d'/>",
+					playerID,
+					p.getLocation().toString(),
+					g.getPlayerBoard(p.getName()),
+					p.getScore());
+		}
+
+
+		String boardResponseFooter = "</boardResponse>";
+		String footer = "</response>";
+
+		String complete = header + boardResponseHeader + playerXML + boardResponseFooter + footer;
+
+		// We will return the appropriate data to the client
+		return new Message(complete);
+	}
+
+
 	@Override
 	public Message process(ClientState state, Message request) {
 		Node child = request.contents.getFirstChild();
 		String type = child.getLocalName();
-
-		String playerName = child.getAttributes().item(0).getNodeValue();
 		switch(type){
 			case "createGameRequest":
-				System.out.println(0);
-				int id = createGame(new Player(playerName));
-				Game g = GameManager.getInstance().findGameById(id);
-				String managingUser = g.getManagingPlayer().getName();
-				Coordinate coord = g.getBonus();
-				String boardResponseHeader = String.format("<boardResponse gameId='%s' managingUser='%s' bonus='%s'>", id, managingUser, coord.toString());
-				// One player for now
-				String player = String.format("<player name='%s' position='%s' board='%s' score='%s'/>",
-						playerName,
-						g.getManagingPlayer().getLocation().toString(),
-						g.getPlayerBoard(g.getManagingPlayer().getName()),
-						"0");
+				String playerName = child.getAttributes().item(0).getNodeValue();
+				UUID gameID = createGame(new Player(playerName));
+				return buildBoardResponse(playerName, gameID, request.id());
 
-				String boardResponseFooter = "</boardResponse>";
-				String header = "<response id='" + request.id() + "' success='true'>";
+			case "joinGameRequest":
+				// Find the game
+				Game targetGame = GameManager.getInstance().findGameById(UUID.fromString(child.getAttributes().item(0).getNodeValue()));
+				Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue());
 
-				String footer = "</response>";
+				// We may need to resize the board
+				// TODO
+				//targetGame.getBoard().grow(12);
 
-				String complete = header + boardResponseHeader + player + boardResponseFooter + footer;
-				// We will return the apprpriate data to the client
-				return new Message(complete);
+				// Select a random location for our new player
+				int x = (new Random()).nextInt(targetGame.getBoard().getSize()-3);
+				int y = (new Random()).nextInt(targetGame.getBoard().getSize()-3);
+				newPlayer.setLocation(new Coordinate(x, y));
+
+				// Add them to the board
+				targetGame.addPlayer(newPlayer);
+
+				// Formulate a response and send it
+				return buildBoardResponse(newPlayer.getName(), targetGame.getId(), request.id());
+
 		}
 		return null;
 	}
@@ -57,7 +89,7 @@ public class GameAccessController implements IProtocolHandler {
 	 * 
 	 * @param player
 	 */
-	public int createGame(Player player) {
+	public UUID createGame(Player player) {
 		ArrayList<Player> players = new ArrayList<>();
 		player.setLocation(new Coordinate(0,0));
 		players.add(player);
@@ -67,7 +99,7 @@ public class GameAccessController implements IProtocolHandler {
 		Game game = new Game();
 		game.setBoard(new Board(7));
 		game.getBoard().fillRandom();
-		game.setId(generateId());
+		game.setId(UUID.randomUUID());
 		game.setLocked(false);
 
 		game.setPlayers(players);
@@ -75,36 +107,9 @@ public class GameAccessController implements IProtocolHandler {
 		return game.getId();
 	}
 
-	public Board joinGame(Player player, int gameId) {
-
-		Game game = GameManager.getInstance().games.get(gameId);
-		// check if the game exists
-		if ((game != null) && (!game.isLocked())) {
-			if (game.getPassword() == null) {
-				game.getPlayers().add(player);
-				Board board = game.getBoard();
-				return board.grow(board, 4);
-			}
-
-		}
-
-		return null;
-
-	}
-
 	public void exitGame(Player player, int gameId) {
 
 	}
 
-	// How will you check if the random number is not repeated?
-	private int generateId() {
-		if (GameManager.getInstance().games.size() == 0) {
-			return 1;
-		}
-		return GameManager.getInstance().games.size() + 1;
-		/*
-		 * Random random = new Random(); // For now creating an id beween 1 to
-		 * 100 return (random.nextInt((100 - 1) + 1) + 1);
-		 */
-	}
+
 }

@@ -5,12 +5,13 @@ import com.scorpio.server.model.IModel;
 import com.scorpio.server.model.Player;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
 	The server model is a singleton
  */
 public class GameManager implements IModel {
-	public HashMap<Integer, Game> games = new HashMap<Integer, Game>();
+	public HashMap<UUID, Game> games = new HashMap<UUID, Game>();
 	private static GameManager instance = null;
 
 	public static GameManager getInstance(){
@@ -27,7 +28,7 @@ public class GameManager implements IModel {
 		return games.size();
 	}
 
-	public Game findGameById(int gameId){
+	public Game findGameById(UUID gameId){
 		return this.games.get(gameId);
 	}
 }
