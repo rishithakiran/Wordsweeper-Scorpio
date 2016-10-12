@@ -14,15 +14,12 @@ import java.util.HashMap;
  * controller
  */
 public class ConnectionController implements IShutdownHandler {
-    private final GameManager model;
     private final HashMap<String, Class> requestMapping;
 
     /**
      * Initialize this controller with the default mappings
-     * @param gm The GameManager this controller is brokering for
      */
-    public ConnectionController(GameManager gm){
-        this.model = gm;
+    public ConnectionController(){
 
         this.requestMapping = new HashMap<String, Class>();
         this.requestMapping.put("createGameRequest", GameAccessController.class);
@@ -32,11 +29,9 @@ public class ConnectionController implements IShutdownHandler {
     /**
      * Initialize this controller with a custom map of requests to
      * controllers
-     * @param gm The GameManager this controller is brokering for
      * @param map Mapping of requests to controllers
      */
-    public ConnectionController(GameManager gm, HashMap<String, Class> map){
-        this.model = gm;
+    public ConnectionController(HashMap<String, Class> map){
         this.requestMapping = map;
     }
 
@@ -44,13 +39,12 @@ public class ConnectionController implements IShutdownHandler {
      * Given a controller name, attempt to locate its class and
      * construct it with the given GameManager instance
      * @param controllerClass Class of the controller
-     * @param gm GameManager to be used in construction
      * @return Controller instance, null on error
      */
-    private IProtocolHandler controllerFromClass(Class controllerClass, GameManager gm) {
+    private IProtocolHandler controllerFromClass(Class controllerClass) {
         try {
-            Constructor controllerConstructor = controllerClass.getConstructor(GameManager.class);
-            IProtocolHandler controller = (IProtocolHandler) controllerConstructor.newInstance(new Object[]{gm});
+            Constructor controllerConstructor = controllerClass.getConstructor();
+            IProtocolHandler controller = (IProtocolHandler) controllerConstructor.newInstance();
             return controller;
         }catch(Exception ex){
             // Log it out and return null. This doesn't warrant throwing
@@ -77,7 +71,7 @@ public class ConnectionController implements IShutdownHandler {
             return null;
         }
 
-        IProtocolHandler cn = this.controllerFromClass(controllerClass, this.model);
+        IProtocolHandler cn = this.controllerFromClass(controllerClass);
 
         // If this returns null, there's a problem with one of our mappings
         return cn==null ? null : cn.process(state, request);

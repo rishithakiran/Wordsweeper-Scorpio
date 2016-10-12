@@ -19,7 +19,7 @@ public class ServerLauncher {
 		}
 		
 		// Start server and have ProtocolHandler be responsible for all XML messages.
-		Server server = new Server(new ConnectionController(GameManager.getInstance()), 11425);
+		Server server = new Server(new ConnectionController(), 11425);
 	
 		try {
 			server.bind();

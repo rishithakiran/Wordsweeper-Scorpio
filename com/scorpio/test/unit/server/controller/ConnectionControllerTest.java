@@ -25,7 +25,7 @@ public class ConnectionControllerTest {
         HashMap<String, Class> mapping = new HashMap<String, Class>();
         mapping.put("createGameRequest", TestHandler.class);
 
-        ConnectionController router = new ConnectionController(GameManager.getInstance(), mapping);
+        ConnectionController router = new ConnectionController(mapping);
         Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
         TestHandler.t = new Trigger();
 
@@ -43,7 +43,7 @@ public class ConnectionControllerTest {
     public void resiliency_BadClass(){
         HashMap<String, Class> mapping = new HashMap<String, Class>();
 
-        ConnectionController router = new ConnectionController(GameManager.getInstance(), mapping);
+        ConnectionController router = new ConnectionController(mapping);
         Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
 
         assert( router.process(null, msg) == null );
@@ -66,7 +66,7 @@ public class ConnectionControllerTest {
 
         mapping.put("createGameRequest", BadClass.class);
 
-        ConnectionController router = new ConnectionController(GameManager.getInstance(), mapping);
+        ConnectionController router = new ConnectionController(mapping);
         Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
 
         assert(null == router.process(null, msg));
@@ -77,7 +77,7 @@ public class ConnectionControllerTest {
      * Validate that if we're passed an empty message, nothing bad happens
      */
     public void resiliency_BadMessage(){
-        ConnectionController router = new ConnectionController(GameManager.getInstance());
+        ConnectionController router = new ConnectionController();
         assert( router.process(null, null) == null );
     }
 

@@ -17,10 +17,6 @@ import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
 public class GameAccessController implements IProtocolHandler {
-	GameManager gm;
-	public GameAccessController(GameManager gm){
-		this.gm = gm;
-	}
 
     /**
      * This function will require major rework, very likely becoming its own class

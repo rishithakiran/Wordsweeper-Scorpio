@@ -11,7 +11,7 @@ public class CreateGameTest {
 
     @Test
     public void functionality_Basic(){
-        ConnectionController router = new ConnectionController(GameManager.getInstance());
+        ConnectionController router = new ConnectionController();
         Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
 
         int gamesBefore = GameManager.getInstance().numberOfGames();

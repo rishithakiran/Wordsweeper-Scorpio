@@ -12,8 +12,6 @@ import com.scorpio.xml.Message;
 public class TestHandler implements IProtocolHandler {
     public static Trigger t;
 
-    public TestHandler(GameManager gm){}
-
     @Override
     public Message process(ClientState state, Message request) {
         t.trip();
