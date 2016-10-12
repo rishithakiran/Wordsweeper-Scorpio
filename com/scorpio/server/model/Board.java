@@ -27,7 +27,7 @@ public class Board implements IModel {
 	 * @return The sub board
 	 */
 	public Board getSubBoard(Coordinate start, int size){
-		if(size + start.x >= this.size || size + start.y >= this.size){
+		if(size + start.x > this.size || size + start.y > this.size){
 			return null;
 		}
 
