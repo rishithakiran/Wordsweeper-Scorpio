@@ -39,7 +39,7 @@ public class GameAccessControllerTest {
         gac.createGame(owner, gameId);
 
         Game testGame = GameManager.getInstance().findGameById("abc");
-        gac.joinGame(new Player("test2", null), testGame);
+        gac.joinGame(new Player("test2", null), gameId);
 
         assert(testGame.getPlayers().size() == 2);
     }
@@ -58,7 +58,7 @@ public class GameAccessControllerTest {
             // so fast fail
             fail();
         }
-        gac.joinGame(owner,GameManager.getInstance().findGameById(gameId));
+        gac.joinGame(owner,gameId);
     }
 
     @Test(expected = WordSweeperException.class)
@@ -78,5 +78,13 @@ public class GameAccessControllerTest {
         }
 
         gac.createGame(new Player("test2", null), gameId);
+    }
+
+    @Test(expected = WordSweeperException.class)
+    public void error_GameDoesNotExist() throws WordSweeperException{
+        GameAccessController gac = new GameAccessController();
+        Player owner = new Player("test", null);
+        String gameId = "abc";
+        gac.joinGame(owner,gameId);
     }
 }
