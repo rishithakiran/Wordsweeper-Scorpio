@@ -66,15 +66,15 @@ public class GameAccessController implements IProtocolHandler {
                     if(p.getClientState() == null){
                         continue;
                     }
-                    
+
                     String requestID = p.getClientState().id();
-                    BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, true);
+                    BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
                     Message brm = new Message(br.toXML());
                     p.getClientState().sendMessage(brm);
                 }
 
                 // Finally, send the response to the player that just joined
-                BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), true);
+                BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), false);
                 return new Message(br.toXML());
             }
             default:{
