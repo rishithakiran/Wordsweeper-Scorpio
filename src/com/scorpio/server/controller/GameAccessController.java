@@ -31,8 +31,6 @@ public class GameAccessController implements IProtocolHandler {
             case "createGameRequest": {
                 String playerName = child.getAttributes().item(0).getNodeValue();
                 String gameUUID = UUID.randomUUID().toString();
-                // for the purpose of testing, UUID is always 'somePlace'
-                gameUUID = "somePlace";
                 try {
                     this.createGame(new Player(playerName, state), gameUUID);
                     // Formulate a response and send it
