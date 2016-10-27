@@ -27,6 +27,7 @@ public class GameAccessControllerTest {
 
         Game testGame = GameManager.getInstance().findGameById("abc");
         assert(testGame != null);
+        assert(testGame.getManagingPlayer() == owner);
         assert(testGame.getPlayers().size() == 1);
         assert(testGame.getBoard().getSize() == 7);
     }
