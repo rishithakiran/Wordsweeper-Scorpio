@@ -25,7 +25,7 @@ public class JoinGameTest {
         ConnectionController router = new ConnectionController();
         GameAccessController gac = new GameAccessController();
         try {
-            gac.createGame(new Player("testPlayer", null), "somePlace");
+            gac.createGame(new Player("testPlayer", null), "somePlace","abc");
         }catch(WordSweeperException ex){
             fail();
         }

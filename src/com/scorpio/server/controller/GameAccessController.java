@@ -1,17 +1,16 @@
 package com.scorpio.server.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.w3c.dom.Node;
+
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
-
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
-import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.model.RandomBoard;
@@ -19,7 +18,12 @@ import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.server.protocol.response.FailureResponse;
 import com.scorpio.xml.Message;
-import org.w3c.dom.Node;
+
+/**
+ * 
+ * @author Apoorva
+ * Controller to handle game access modules
+ */
 
 public class GameAccessController implements IProtocolHandler {
 
@@ -31,9 +35,13 @@ public class GameAccessController implements IProtocolHandler {
 		switch (type) {
 		case "createGameRequest": {
 			String playerName = child.getAttributes().item(0).getNodeValue();
+			String password = null;
+			if (child.getAttributes().item(1) != null) {
+				password = child.getAttributes().item(1).getNodeName();
+			}
 			String gameUUID = UUID.randomUUID().toString();
 			try {
-				this.createGame(new Player(playerName, state), gameUUID);
+				this.createGame(new Player(playerName, state), gameUUID, password);
 				// Formulate a response and send it
 				BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
 				return new Message(br.toXML());
@@ -47,9 +55,13 @@ public class GameAccessController implements IProtocolHandler {
 			// Find the game
 			String targetGame = child.getAttributes().item(0).getNodeValue();
 			Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue(), state);
+			String password = null;
+			if (child.getAttributes().item(2) != null) {
+				password = child.getAttributes().item(2).getNodeValue();
+			}
 
 			try {
-				this.joinGame(newPlayer, targetGame);
+				this.joinGame(newPlayer, targetGame, password);
 			} catch (WordSweeperException ex) {
 				// If this occurs, we could not join the game
 				FailureResponse fr = new FailureResponse(ex.toString(), request.id());
@@ -92,8 +104,10 @@ public class GameAccessController implements IProtocolHandler {
 	 *            Player to add to game
 	 * @param gameID
 	 *            Target game
+	 * @param password
+	 *            Password for the game
 	 */
-	public void joinGame(Player player, String gameID) throws WordSweeperException {
+	public void joinGame(Player player, String gameID, String password) throws WordSweeperException {
 		Game game = GameManager.getInstance().findGameById(gameID);
 		if (game == null) {
 			throw new WordSweeperException("Game doesn't exist");
@@ -103,6 +117,10 @@ public class GameAccessController implements IProtocolHandler {
 			throw new WordSweeperException("Player already in game");
 		}
 
+		// Check if game has a password
+		if ((game.getPassword() != null) && !(game.getPassword().equals(password))) {
+			throw new WordSweeperException("Password for the game does not match");
+		}
 		// We may need to resize the board
 		if ((16 * game.getPlayers().size() > (3 * (game.getBoard().getSize() ^ 2)))) {
 			game.getBoard().grow(game.getBoard().getSize() + 1);
@@ -121,10 +139,12 @@ public class GameAccessController implements IProtocolHandler {
 
 	/**
 	 * Creates the game with appropriate values
-	 * 
 	 * @param player
+	 * @param gameID
+	 * @param password
+	 * @throws WordSweeperException
 	 */
-	public void createGame(Player player, String gameID) throws WordSweeperException {
+	public void createGame(Player player, String gameID, String password) throws WordSweeperException {
 		if (GameManager.getInstance().findGameById(gameID) != null) {
 			throw new WordSweeperException("Game exists");
 		}
@@ -133,6 +153,8 @@ public class GameAccessController implements IProtocolHandler {
 		game.setBoard(new RandomBoard(7));
 		game.setId(gameID);
 		game.setLocked(false);
+		if (password != null)
+			game.setPassword(password);
 
 		int playerBoardSize = 4;
 		int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);

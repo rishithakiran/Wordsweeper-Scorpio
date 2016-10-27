@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?><request id="e3b52914-fa5a-45d1-9fcc-a38ca0e6fcae"><createGameRequest name="samplePlayer"/></request>
+<?xml version="1.0" encoding="UTF-8"?><request id="e3b52914-fa5a-45d1-9fcc-a38ca0e6fcae"><createGameRequest name="samplePlayer" password="abc"/></request>
