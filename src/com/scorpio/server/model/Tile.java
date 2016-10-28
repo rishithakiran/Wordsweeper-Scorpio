@@ -8,35 +8,38 @@ import com.scorpio.server.accessory.Coordinate;
 public class Tile implements IModel {
 
 	final String characters = "ABCDEFGHIJKLMONPQRSTUVWXYZ";
+	
+	/**
+	 * Stores the score for each character in the form of Hash Table
+	 */
 	private static final Hashtable<String, Integer> scoreforChar = new Hashtable<String, Integer>() {
 		{
-			put("A", 1);
-			put("B", 256);
+			put("A", 2);
+			put("B", 4);
 			put("C", 3);
-			put("D", 27);
-			put("E", 32);
-			put("F", 65536);
-			put("G", 1);
-			put("H", 256);
-			put("I", 3);
-			put("J", 27);
-			put("K", 32);
-			put("L", 65536);
-			put("M", 1);
-			put("N", 256);
-			put("O", 3);
-			put("P", 27);
-			put("Q", 32);
-			put("R", 65536);
-			put("S", 65536);
+			put("D", 3);
+			put("E", 1);
+			put("F", 4);
+			put("G", 4);
+			put("H", 2);
+			put("I", 2);
+			put("J", 7);
+			put("K", 5);
+			put("L", 3);
+			put("M", 3);
+			put("N", 2);
+			put("O", 2);
+			put("P", 4);
+			put("Q", 8);
+			put("R", 2);
+			put("S", 2);
 			put("T", 1);
-			put("U", 256);
-			put("V", 3);
-			put("W", 27);
-			put("X", 32);
-			put("Y", 65536);
-			put("Z", 65536);
-
+			put("U", 3);
+			put("V", 5);
+			put("W", 3);
+			put("X", 7);
+			put("Y", 4);
+			put("Z", 8);
 		}
 	};
 	final int N = characters.length();
