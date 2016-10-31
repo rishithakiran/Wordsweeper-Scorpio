@@ -22,7 +22,6 @@ public class Board implements IModel {
 		this.size = size;
 	}
 
-
 	/**
 	 * Get a square board that is a subset of this board
 	 * @param start Location of the top-left corner of the sub board
@@ -120,6 +119,7 @@ public class Board implements IModel {
 				return false;
 			}
 
+		
 
 	/**
 	 * Grows the board to match the given size. The board will always be
