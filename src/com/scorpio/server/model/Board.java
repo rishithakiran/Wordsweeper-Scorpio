@@ -2,6 +2,7 @@ package com.scorpio.server.model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -97,19 +98,27 @@ public class Board implements IModel {
 	 * The word formed by the player is validating by comparing to the file
 	 * WordTable.sort - which contains the dictionary words
 	 */
+	
 	public boolean isValidWord(Word w) {
-		String input="C:/Users/Saranya/Documents/GitHub/Wordsweeper-Scorpio/resources/WordTable.sort";
-		BufferedReader br = new BufferedReader(new FileReader(input));
-        String line; 
-        
-        while ((line=br.readLine()) != null) {
-           if(line.contains(w)) 
-        	   return true;
-           else
-        	   return false;  
-        }	
-		return false;
-	}
+		 try {
+				String input="C:/Users/Saranya/Documents/GitHub/Wordsweeper-Scorpio/resources/WordTable.sort";
+				BufferedReader br = new BufferedReader(new FileReader(input));
+		        String line; 
+		        
+					while ((line=br.readLine()) != null) {
+					   if(line.contains((CharSequence) w)) 
+						   return true;
+					   else
+						   return false;  
+					}
+					
+					br.close();
+				} 
+			 catch (IOException e) {
+					e.printStackTrace();
+				}	
+				return false;
+			}
 
 
 	/**
