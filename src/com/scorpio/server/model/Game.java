@@ -1,6 +1,7 @@
 package com.scorpio.server.model;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.exception.WordSweeperException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,7 @@ public class Game implements IModel {
 		return new Coordinate(0,0);
 	}
 
-	private Player getPlayer(String name){
+	public Player getPlayer(String name){
 		List<Player> l = this.players.stream().filter((s) -> s.getName().equals(name)).collect(Collectors.toList());
 		if(l.size() != 1){
 			return null;
@@ -97,6 +98,21 @@ public class Game implements IModel {
 	public Board getPlayerBoard(String player){
 		Coordinate playerLoc = this.getPlayer(player).getLocation();
 		return this.board.getSubBoard(playerLoc, 4);
+	}
+
+	public void repositionPlayer(String player, int rowChange, int colChange) throws WordSweeperException{
+		// Verify that the proposed change is in bounds
+		int playerBoardSize = 4;
+		Player p = this.getPlayer(player);
+		Coordinate currentLoc = p.getLocation();
+		if(currentLoc.y + playerBoardSize + rowChange >= this.getBoard().getSize() ||
+				currentLoc.x + playerBoardSize + colChange >= this.getBoard().getSize()){
+
+			throw new WordSweeperException("Player move out of bounds");
+		}
+
+		// Do the move
+		p.setLocation(new Coordinate(currentLoc.x + colChange, currentLoc.y + rowChange));
 	}
 
 }
