@@ -99,4 +99,8 @@ public class Game implements IModel {
 		return this.board.getSubBoard(playerLoc, 4);
 	}
 
+	public void deletePlayer(String name){
+        this.players = (ArrayList<Player>) this.players.stream().filter((s) -> !s.getName().equals(name)).collect(Collectors.toList());
+    }
+
 }

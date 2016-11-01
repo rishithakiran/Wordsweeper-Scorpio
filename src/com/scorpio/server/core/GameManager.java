@@ -28,6 +28,9 @@ public class GameManager implements IModel {
 
 	}
 
+	public void deleteGame(String gameId){
+		this.games.remove(gameId);
+	}
 	public int numberOfGames(){
 		return games.size();
 	}

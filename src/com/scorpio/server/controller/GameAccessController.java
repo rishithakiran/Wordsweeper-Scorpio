@@ -1,5 +1,6 @@
 package com.scorpio.server.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -90,6 +91,46 @@ public class GameAccessController implements IProtocolHandler {
 			BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), false);
 			return new Message(br.toXML());
 		}
+		case "exitGameRequest" : {
+			// Find the game
+			String targetGame = child.getAttributes().item(0).getNodeValue();
+			String targetPlayer = child.getAttributes().item(1).getNodeValue();
+
+			try{
+				this.exitGame(targetPlayer, targetGame);
+			} catch (WordSweeperException ex) {
+				// If this occurs, we could not join the game
+				FailureResponse fr = new FailureResponse(ex.toString(), request.id());
+				return new Message(fr.toXML());
+			}
+
+
+			// If the game still exists, notify all remaining players
+			if(GameManager.getInstance().findGameById(targetGame) != null) {
+				// Notify all players that the game has changed
+				List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
+				// Filter out the player that just joined the game (they'll get
+				// their own request)
+				players = players.stream().filter((s) -> !(s.getName().equals(targetPlayer)))
+						.collect(Collectors.toList());
+				for (Player p : players) {
+					// If we've lost the client state, pass
+					if (p.getClientState() == null) {
+						continue;
+					}
+
+					String requestID = p.getClientState().id();
+					BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
+					Message brm = new Message(br.toXML());
+					p.getClientState().sendMessage(brm);
+				}
+
+				// Finally, send the response to the player that just joined
+				BoardResponse br = new BoardResponse(targetPlayer, targetGame, request.id(), false);
+				return new Message(br.toXML());
+			}
+			return null;
+		}
 		default: {
 			return null;
 		}
@@ -168,8 +209,28 @@ public class GameAccessController implements IProtocolHandler {
 		GameManager.getInstance().games.put(game.getId(), game);
 	}
 
-	public void exitGame(Player player, int gameId) {
+	public void exitGame(String playerId, String gameId) throws WordSweeperException{
+		Game g;
+		if ((g = GameManager.getInstance().findGameById(gameId)) == null) {
+			throw new WordSweeperException("Game does not exist");
+		}
 
+		// There's only one player left, and we're deleting them
+		// No need to delete the player, just delete the game
+		ArrayList<Player> pl = g.getPlayers();
+		if(pl.size() == 1 && pl.get(0).getName().equals(playerId)){
+
+			GameManager.getInstance().deleteGame(gameId);
+			return;
+		}
+
+		// Delete this user from the game
+		g.deletePlayer(playerId);
+
+		// If that player was the managing user, select someone else at random
+		if(g.getManagingPlayer() == null){
+			int randomIndex = (new Random()).nextInt(g.getPlayers().size());
+			g.getPlayers().get(randomIndex).setManagingUser(true);
+		}
 	}
-
 }
