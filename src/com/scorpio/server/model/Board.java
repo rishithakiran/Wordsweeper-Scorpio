@@ -163,6 +163,7 @@ public class Board implements IModel {
 			for(int j = c.y + 1; j < size ; j++)
 			{
 				Tile tile = new Tile();
+
 				/**
 				 * Assign the location to the below tile (as of object tile) and set contents of 
 				 * those to the above tile (as of object t)
