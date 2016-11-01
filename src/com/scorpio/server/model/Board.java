@@ -144,9 +144,36 @@ public class Board implements IModel {
 	}
 	
 	/**
-	 * After the player forms the word, the word tile below the formed
-	 * word will float upwards and fill the gap created by 
-	 * the formed word
+	 * After the player formed the word, the tiles below the formed
+	 * wordTile will float upwards and fill the gap created by 
+	 * the formed word.
 	 **/
+	public void updateBoard(Coordinate c)
+	{
+		/**
+		 * Creating a new tile while points to the initial coordinates of the 
+		 * players location x and y
+		 */
+		Tile t =  new Tile();
+		t.setLocation(new Coordinate(c.x,c.y));
+		
+		//For loop to update the contents in the below tile to the above tile
+		for(int i = c.x  ; i < size ; i++)
+		{
+			for(int j = c.y + 1; j < size ; j++)
+			{
+				Tile tile = new Tile();
+				
+				/**
+				 * Assign the location to the below tile (as of object tile) and set contents of 
+				 * those to the above tile (as of object t)
+				 */
+				tile.setLocation(new Coordinate(i,j));
+				t.setContents(tile.getContents());
+				t.setPoints(tile.getPoints());
+				t.setMultiplier(tile.getMultiplier());
+			}
+		}
+	}
 
 }
