@@ -24,8 +24,7 @@ public class ConnectionControllerTest {
 		mapping.put("createGameRequest", TestHandler.class);
 
 		ConnectionController router = new ConnectionController(mapping);
-		Message msg = xml.createMessageFromFile(
-				"C:/Users/Apoorva/AppData/Local/GitHub/Wordsweeper-Scorpio/resources/testxml/createGameRequest.xml");
+		Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
 		TestHandler.t = new Trigger();
 
 		router.process(null, msg);
@@ -43,7 +42,7 @@ public class ConnectionControllerTest {
 		HashMap<String, Class> mapping = new HashMap<String, Class>();
 
 		ConnectionController router = new ConnectionController(mapping);
-		Message msg = xml.createMessageFromFile("C:/Users/Apoorva/AppData/Local/GitHub/Wordsweeper-Scorpio/resources/testxml/createGameRequest.xml");
+		Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
 
 		assert (router.process(null, msg) == null);
 	}
@@ -66,7 +65,7 @@ public class ConnectionControllerTest {
 		mapping.put("createGameRequest", BadClass.class);
 
 		ConnectionController router = new ConnectionController(mapping);
-		Message msg = xml.createMessageFromFile("C:/Users/Apoorva/AppData/Local/GitHub/Wordsweeper-Scorpio/resources/testxml/createGameRequest.xml");
+		Message msg = xml.createMessageFromFile("testxml/createGameRequest.xml");
 
 		assert (null == router.process(null, msg));
 	}
