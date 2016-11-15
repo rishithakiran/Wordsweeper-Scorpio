@@ -131,6 +131,7 @@ public class GameAccessController implements IProtocolHandler {
 			}
 			return null;
 		}
+				
 		default: {
 			return null;
 		}
@@ -208,6 +209,13 @@ public class GameAccessController implements IProtocolHandler {
 
 		GameManager.getInstance().games.put(game.getId(), game);
 	}
+	
+	/**
+	 * Exits game for a particular player
+	 * @param playerId
+	 * @param gameId
+	 * @throws WordSweeperException
+	 */
 
 	public void exitGame(String playerId, String gameId) throws WordSweeperException{
 		Game g;
