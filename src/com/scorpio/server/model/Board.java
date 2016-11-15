@@ -123,44 +123,6 @@ public class Board implements IModel {
 		return out;
 	}
 
-<<<<<<< HEAD
-	/**
-	 * The word formed by the player is validating by comparing to the file
-	 * WordTable.sort - which contains the dictionary words
-	 * @param Input Word
-	 * @return True - valid word, False - invalid word
-	 */
-	
-	public boolean isValidWord(Word w) {
-
-		 try {
-				String input="resources/WordTable.sort";
-			//	BufferedReader br = new BufferedReader(new FileReader(input));
-		        String line; 
-		        StringBuilder words = new StringBuilder(w.tiles.size());
-		        
-		        for ( int i = 0; i < w.tiles.size() ; i++)
-		        {
-		        	words.append(w.tiles.get(i).getContents().toLowerCase());
-		        }
-		       Scanner sc = new Scanner (new FileInputStream(input));
-		       while (sc.hasNext()){
-		    	   line = sc.next();
-		    	   line  = line.toLowerCase();
-		      	if(line.contentEquals(words))
-					return true;
-				else 
-					continue;
-			   }
-		    //   br.close();
-		     }
-			 catch (IOException e) {
-					e.printStackTrace();
-				}	
-				return false;
-			}
-		        
-=======
 
 	public boolean hasWord(Word w) {
 		/* We affirm that the tiles included in w match with what is described
@@ -192,9 +154,6 @@ public class Board implements IModel {
 		return Dictionary.getInstance().isWord(w.toString());
 	}
 
-		
-
->>>>>>> 6515560d23f9ed9f13c21d17526addca8abdc56b
 	/**
 	 * Grows the board to match the given size. The board will always be
 	 * a square. If this new size is smaller than the current board, there
