@@ -124,7 +124,6 @@ public class Board implements IModel {
 		return out;
 	}
 
-
 	public boolean hasWord(Word w) {
 		/* We affirm that the tiles included in w match with what is described
 		 * by this board state. Additionally, we consult the dictionary to ensure
@@ -154,7 +153,7 @@ public class Board implements IModel {
 
 		return Dictionary.getInstance().isWord(w.toString());
 	}
-    
+
 	/**
 	 * Grows the board to match the given size. The board will always be
 	 * a square. If this new size is smaller than the current board, there
