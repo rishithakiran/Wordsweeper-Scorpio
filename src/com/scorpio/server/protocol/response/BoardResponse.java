@@ -1,14 +1,12 @@
 package com.scorpio.server.protocol.response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
-import com.scorpio.xml.Message;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class BoardResponse {
     private final String playerID;
