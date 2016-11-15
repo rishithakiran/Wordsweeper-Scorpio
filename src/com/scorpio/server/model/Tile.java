@@ -80,17 +80,6 @@ public class Tile implements IModel {
 		if(!otherTile.getContents().equals(this.getContents())){
 			return false;
 		}
-		/*
-		if(otherTile.getMultiplier() != this.getMultiplier()){
-			return false;
-		}
-		if(otherTile.getPoints() != this.getPoints()){
-			return false;
-		}
-		if(otherTile.getSharedBy() != this.getSharedBy()){
-			return false;
-		}
-		*/
 		return true;
 	}
 

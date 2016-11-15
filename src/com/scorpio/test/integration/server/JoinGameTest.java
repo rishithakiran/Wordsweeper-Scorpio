@@ -15,6 +15,7 @@ import static org.junit.Assert.fail;
 
 public class JoinGameTest {
     private XMLUtil xml = new XMLUtil();
+
     @Before
     public void reset(){
         GameManager.reset();

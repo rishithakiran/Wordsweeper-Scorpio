@@ -11,20 +11,17 @@ import com.scorpio.server.core.ClientState;
 import com.scorpio.server.model.Player;
 
 public class PlayerTest {
-	
-	ClientState state;
-	String name;
 	@Test
 	public void testSetPlayerName() {
 	    String name="abc";
-	    Player p = new Player(name, state);
+	    Player p = new Player(name, null);
 	    p.setName(name);
 	    assertEquals(p.getName(), name);
 	}
 	
 	@Test
 	public void testGetPlayerName() {
-		Player p = new Player(name ,state);
+		Player p = new Player("abc" ,null);
 		String name="abc";
 		p.setName(name);
 	    String result = p.getName();;
@@ -39,7 +36,7 @@ public class PlayerTest {
 	@Test
 	public void testSetLocation(){
 		Coordinate location= new Coordinate(0, 1) ;
-		Player p = new Player(name, state);
+		Player p = new Player("abc", null);
 		p.setLocation(location);
 		assert(location==p.getLocation());	
 	}
@@ -47,7 +44,7 @@ public class PlayerTest {
 	@Test
 	public void testGetLocation(){
 		Coordinate location=new Coordinate(0, 1);
-		Player p = new Player(name, state);
+		Player p = new Player("abc", null);
 		p.setLocation(location);
 		Coordinate result=p.getLocation();
 		assert(location==result);
@@ -56,15 +53,15 @@ public class PlayerTest {
 	@Test
 	public void testSetScore(){
 		int score=100;
-		Player p = new Player(name, state);
+		Player p = new Player("abc", null);
 		p.setScore(score);
-		assert(score==p.getScore());		
-	}
+		assert(score==p.getScore());
+}
 	
 	@Test
 	public void testGetScore(){
 		int score=100;
-		Player p = new Player(name, state);
+		Player p = new Player("abc", null);
 		p.setScore(score);
 		int result=p.getScore();
 		assert(score==result);
@@ -73,7 +70,7 @@ public class PlayerTest {
 	@Test
 	public void testSetisManagingUser(){
 		boolean isManagingUser=true;
-		Player p = new Player(name, state);
+		Player p = new Player("abc", null);
 		p.setManagingUser(isManagingUser);
 		assert(isManagingUser==p.isManagingUser());		
 	}
@@ -81,7 +78,7 @@ public class PlayerTest {
 	@Test
 	public void testGetisManagingUser(){
 		boolean isManagingUser=true;
-		Player p = new Player(name, state);
+		Player p = new Player("abc", null);
 		p.setManagingUser(isManagingUser);
 		boolean result=p.isManagingUser();
 		assert(isManagingUser==result);		
