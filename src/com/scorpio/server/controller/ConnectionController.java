@@ -28,6 +28,8 @@ public class ConnectionController implements IShutdownHandler {
         this.requestMapping.put("exitGameRequest", GameAccessController.class);
         this.requestMapping.put("repositionBoardRequest", GameActionController.class);
         this.requestMapping.put("resetGameRequest", GameManagementController.class);
+        this.requestMapping.put("findWordRequest", GameActionController.class);
+
     }
 
     /**
