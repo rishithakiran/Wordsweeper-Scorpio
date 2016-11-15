@@ -9,7 +9,7 @@ import com.scorpio.server.model.*;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.xml.Message;
-import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
+//import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
