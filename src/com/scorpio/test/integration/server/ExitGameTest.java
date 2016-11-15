@@ -95,4 +95,14 @@ public class ExitGameTest {
         assert(g.getPlayers().size() == 2);
         assert(g.getManagingPlayer().getName().equals("bPlayer"));
     }
+
+    @Test
+    public void resiliency_NoGame(){
+        ConnectionController router = new ConnectionController();
+
+        Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
+        Message out = router.process(null, msg);
+        assert(!out.success());
+
+    }
 }

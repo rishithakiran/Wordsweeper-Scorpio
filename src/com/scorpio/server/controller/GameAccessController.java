@@ -97,8 +97,8 @@ public class GameAccessController implements IProtocolHandler {
                     this.exitGame(targetPlayer, targetGame);
                 } catch (WordSweeperException ex) {
                     // If this occurs, we could not join the game
-                    FailureResponse fr = new FailureResponse(ex.toString(), request.id());
-                    return new Message(fr.toXML());
+                    ExitGameResponse egr = new ExitGameResponse(targetGame, request.id(), ex.toString());
+                    return new Message(egr.toXML());
                 }
 
                 // If the game still exists, notify all remaining players
@@ -140,7 +140,8 @@ public class GameAccessController implements IProtocolHandler {
                                             .getClientState()
                                             .id();
                 if(!managingUserId.equals(state.id())){
-                    // You aren't the managing user! Ignored.
+                    LockGameResponse lgr = new LockGameResponse(targetGame, request.id(), "Not managing user");
+                    return new Message(lgr.toXML());
                 }
 
                 try {
