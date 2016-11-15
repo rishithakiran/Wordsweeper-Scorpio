@@ -123,7 +123,6 @@ public class Board implements IModel {
 		return out;
 	}
 
-<<<<<<< HEAD
 	/**
 	 * The word formed by the player is validating by comparing to the file
 	 * WordTable.sort - which contains the dictionary words
@@ -160,7 +159,6 @@ public class Board implements IModel {
 				return false;
 			}
 		        
-=======
 
 	public boolean hasWord(Word w) {
 		/* We affirm that the tiles included in w match with what is described
@@ -194,7 +192,6 @@ public class Board implements IModel {
 
 		
 
->>>>>>> 6515560d23f9ed9f13c21d17526addca8abdc56b
 	/**
 	 * Grows the board to match the given size. The board will always be
 	 * a square. If this new size is smaller than the current board, there

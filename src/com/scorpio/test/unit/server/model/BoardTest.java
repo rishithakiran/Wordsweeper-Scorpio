@@ -1,24 +1,13 @@
 package com.scorpio.test.unit.server.model;
+import java.util.ArrayList;
+
+import org.junit.Test;
+
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.model.Tile;
 import com.scorpio.server.model.Word;
-<<<<<<< HEAD
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-=======
->>>>>>> 6515560d23f9ed9f13c21d17526addca8abdc56b
-import org.junit.Test;
-
-import java.util.ArrayList;
 
 
 public class BoardTest {
