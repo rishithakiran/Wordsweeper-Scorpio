@@ -46,9 +46,7 @@ public class GameManagementController implements IProtocolHandler {
 
                 // Finally, send a resetGameResponse to the initiator
                 ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id());
-                Message rgrm = new Message(rgr.toXML());
-                state.sendMessage(rgrm);
-                return null;
+                return new Message(rgr.toXML());
 
             }
         }

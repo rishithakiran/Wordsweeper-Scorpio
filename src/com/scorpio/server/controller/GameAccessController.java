@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.scorpio.server.protocol.response.JoinGameResponse;
 import org.w3c.dom.Node;
 
 import com.scorpio.server.accessory.Coordinate;
@@ -65,8 +66,8 @@ public class GameAccessController implements IProtocolHandler {
 				this.joinGame(newPlayer, targetGame, password);
 			} catch (WordSweeperException ex) {
 				// If this occurs, we could not join the game
-				FailureResponse fr = new FailureResponse(ex.toString(), request.id());
-				return new Message(fr.toXML());
+				JoinGameResponse jgr = new JoinGameResponse(targetGame, state.id(), ex.toString());
+				return new Message(jgr.toXML());
 			}
 
 			// Notify all players that the game has changed

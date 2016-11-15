@@ -30,7 +30,8 @@ public class GameActionController implements IProtocolHandler {
                 try{
                     this.repositionBoard(playerName, targetGame, Integer.parseInt(colChange), Integer.parseInt(rowChange));
                 }catch(WordSweeperException ex){
-                    // Send a repositionBoardResponse with failure
+                    BoardResponse br = new BoardResponse(playerName, targetGame, request.id(), false, ex.toString());
+                    return new Message(br.toXML());
                 }
 
                 // Notify everyone
