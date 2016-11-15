@@ -3,11 +3,11 @@ package com.scorpio.server.protocol.response;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.model.Game;
 
-public class LockResponse {
+public class LockGameResponse {
 		//private final String reason;
 	    private final String requestID;
 	    private final String gameID;
-	    public LockResponse(String gameID, String requestID){
+	    public LockGameResponse(String gameID, String requestID){
 	       // this.reason = reason;
 	        this.requestID = requestID;
 	        this.gameID=gameID;

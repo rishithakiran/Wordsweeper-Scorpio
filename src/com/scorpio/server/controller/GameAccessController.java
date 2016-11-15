@@ -1,13 +1,12 @@
 package com.scorpio.server.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.scorpio.server.protocol.response.JoinGameResponse;
+import com.scorpio.server.protocol.response.*;
 import org.w3c.dom.Node;
 
 import com.scorpio.server.accessory.Coordinate;
@@ -18,149 +17,153 @@ import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.protocol.IProtocolHandler;
-import com.scorpio.server.protocol.response.BoardResponse;
-import com.scorpio.server.protocol.response.FailureResponse;
-import com.scorpio.server.protocol.response.LockResponse;
-import com.scorpio.server.protocol.response.ListOfGamesResponse;
+import com.scorpio.server.protocol.response.LockGameResponse;
 import com.scorpio.xml.Message;
 
 /**
  * 
  * @author Apoorva Controller to handle game access modules
  */
-
 public class GameAccessController implements IProtocolHandler {
 
 	@Override
 	public Message process(ClientState state, Message request) {
-
-
 		Node child = request.contents.getFirstChild();
 		String type = child.getLocalName();
 		switch (type) {
-		case "createGameRequest": {
-			String playerName = child.getAttributes().item(0).getNodeValue();
-			String password = null;
-			if (child.getAttributes().item(1) != null) {
-				password = child.getAttributes().item(1).getNodeName();
-			}
-			String gameUUID = UUID.randomUUID().toString();
-			try {
-				this.createGame(new Player(playerName, state), gameUUID, password);
-				// Formulate a response and send it
-				BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
-				return new Message(br.toXML());
-			} catch (WordSweeperException ex) {
-				// If this occurs, we could not create a new game
-				FailureResponse fr = new FailureResponse(ex.toString(), request.id());
-				return new Message(fr.toXML());
-			}
-		}
-		case "joinGameRequest": {
-			// Find the game
-			String targetGame = child.getAttributes().item(0).getNodeValue();
-			Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue(), state);
-			String password = null;
-			if (child.getAttributes().item(2) != null) {
-				password = child.getAttributes().item(2).getNodeValue();
-			}
+            case "createGameRequest": {
+                String playerName = child.getAttributes().item(0).getNodeValue();
+                String password = null;
+                if (child.getAttributes().item(1) != null) {
+                    password = child.getAttributes().item(1).getNodeName();
+                }
+                String gameUUID = UUID.randomUUID().toString();
+                try {
+                    this.createGame(new Player(playerName, state), gameUUID, password);
+                    // Formulate a response and send it
+                    BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
+                    return new Message(br.toXML());
+                } catch (WordSweeperException ex) {
+                    // If this occurs, we could not create a new game
+                    FailureResponse fr = new FailureResponse(ex.toString(), request.id());
+                    return new Message(fr.toXML());
+                }
+            }
+            case "joinGameRequest": {
+                // Find the game
+                String targetGame = child.getAttributes().item(0).getNodeValue();
+                Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue(), state);
+                String password = null;
+                if (child.getAttributes().item(2) != null) {
+                    password = child.getAttributes().item(2).getNodeValue();
+                }
 
-			try {
-				this.joinGame(newPlayer, targetGame, password);
-			} catch (WordSweeperException ex) {
-				// If this occurs, we could not join the game
-				JoinGameResponse jgr = new JoinGameResponse(targetGame, state.id(), ex.toString());
-				return new Message(jgr.toXML());
-			}
+                try {
+                    this.joinGame(newPlayer, targetGame, password);
+                } catch (WordSweeperException ex) {
+                    // If this occurs, we could not join the game
+                    JoinGameResponse jgr = new JoinGameResponse(targetGame, state.id(), ex.toString());
+                    return new Message(jgr.toXML());
+                }
 
-			// Notify all players that the game has changed
-			List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
-			// Filter out the player that just joined the game (they'll get
-			// their own request)
-			players = players.stream().filter((s) -> !(s.getName().equals(newPlayer.getName())))
-					.collect(Collectors.toList());
-			for (Player p : players) {
-				// If we've lost the client state, pass
-				if (p.getClientState() == null) {
-					continue;
-				}
+                // Notify all players that the game has changed
+                List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
+                // Filter out the player that just joined the game (they'll get
+                // their own request)
+                players = players.stream().filter((s) -> !(s.getName().equals(newPlayer.getName())))
+                        .collect(Collectors.toList());
+                for (Player p : players) {
+                    // If we've lost the client state, pass
+                    if (p.getClientState() == null) {
+                        continue;
+                    }
 
-				String requestID = p.getClientState().id();
-				BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
-				Message brm = new Message(br.toXML());
-				p.getClientState().sendMessage(brm);
-			}
+                    String requestID = p.getClientState().id();
+                    BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
+                    Message brm = new Message(br.toXML());
+                    p.getClientState().sendMessage(brm);
+                }
 
-			// Finally, send the response to the player that just joined
-			BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), false);
-			return new Message(br.toXML());
-		}
-		case "exitGameRequest": {
-			// Find the game
-			String targetGame = child.getAttributes().item(0).getNodeValue();
-			String targetPlayer = child.getAttributes().item(1).getNodeValue();
+                // Finally, send the response to the player that just joined
+                BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), false);
+                return new Message(br.toXML());
+            }
+            case "exitGameRequest": {
+                // Find the game
+                String targetGame = child.getAttributes().item(0).getNodeValue();
+                String targetPlayer = child.getAttributes().item(1).getNodeValue();
 
-			try {
-				this.exitGame(targetPlayer, targetGame);
-			} catch (WordSweeperException ex) {
-				// If this occurs, we could not join the game
-				FailureResponse fr = new FailureResponse(ex.toString(), request.id());
-				return new Message(fr.toXML());
-			}
+                try {
+                    this.exitGame(targetPlayer, targetGame);
+                } catch (WordSweeperException ex) {
+                    // If this occurs, we could not join the game
+                    FailureResponse fr = new FailureResponse(ex.toString(), request.id());
+                    return new Message(fr.toXML());
+                }
 
-			// If the game still exists, notify all remaining players
-			if (GameManager.getInstance().findGameById(targetGame) != null) {
-				// Notify all players that the game has changed
-				List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
-				// Filter out the player that just joined the game (they'll get
-				// their own request)
-				players = players.stream().filter((s) -> !(s.getName().equals(targetPlayer)))
-						.collect(Collectors.toList());
-				for (Player p : players) {
-					// If we've lost the client state, pass
-					if (p.getClientState() == null) {
-						continue;
-					}
+                // If the game still exists, notify all remaining players
+                if (GameManager.getInstance().findGameById(targetGame) != null) {
+                    // Notify all players that the game has changed
+                    List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
+                    // Filter out the player that just joined the game (they'll get
+                    // their own request)
+                    players = players.stream().filter((s) -> !(s.getName().equals(targetPlayer)))
+                            .collect(Collectors.toList());
+                    for (Player p : players) {
+                        // If we've lost the client state, pass
+                        if (p.getClientState() == null) {
+                            continue;
+                        }
 
-					String requestID = p.getClientState().id();
-					BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
-					Message brm = new Message(br.toXML());
-					p.getClientState().sendMessage(brm);
-				}
+                        String requestID = p.getClientState().id();
+                        BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
+                        Message brm = new Message(br.toXML());
+                        p.getClientState().sendMessage(brm);
+                    }
 
-				// Finally, send the response to the player that just joined
-				BoardResponse br = new BoardResponse(targetPlayer, targetGame, request.id(), false);
-				return new Message(br.toXML());
-			}
-			return null;
-		}
-		case "lockGameRequest": {
-       	 // Find the game
-           String targetGame = child.getAttributes().item(0).getNodeValue();
-           
-          
-           try {
-           		this.lockGame(targetGame);
-           } catch (WordSweeperException ex) {
-               	// If this occurs, we cannot not lock the game
-        	   	FailureResponse fr = new FailureResponse(ex.toString(), request.id());
-				return new Message(fr.toXML());
-           }
-           LockResponse lr = new LockResponse (targetGame, request.id());
-           return new Message(lr.toXML());
-          
-       }
+                    // Finally, send the response to the player that just joined
+                    BoardResponse br = new BoardResponse(targetPlayer, targetGame, request.id(), false);
+                    return new Message(br.toXML());
+                }
+                return null;
+            }
+            case "lockGameRequest": {
+                // Find the game
+                String targetGame = child.getAttributes().item(0).getNodeValue();
 
 
-		case "listGamesRequest": {
-			// this.getGames();
-			ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
-			return new Message(listOfGamesResponse.toXML());
-		}
+                // Figure out if the request to lock the game came from the
+                // the same ID as the one associated with the managing user
+                String managingUserId = GameManager.getInstance()
+                                            .findGameById(targetGame)
+                                            .getManagingPlayer()
+                                            .getClientState()
+                                            .id();
+                if(!managingUserId.equals(state.id())){
+                    // You aren't the managing user! Ignored.
+                }
 
-		default: {
-			return null;
-		}
+                try {
+                    this.lockGame(targetGame);
+                } catch (WordSweeperException ex) {
+                    // If this occurs, we cannot not lock the game
+                    FailureResponse fr = new FailureResponse(ex.toString(), request.id());
+                    return new Message(fr.toXML());
+                }
+                LockGameResponse lr = new LockGameResponse(targetGame, request.id());
+                return new Message(lr.toXML());
+            }
+
+
+            case "listGamesRequest": {
+                // this.getGames();
+                ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
+                return new Message(listOfGamesResponse.toXML());
+            }
+
+            default: {
+                return null;
+            }
 		}
 	}
 
@@ -255,15 +258,8 @@ public class GameAccessController implements IProtocolHandler {
         if(game.isLocked()==true){
             throw new WordSweeperException("Game already locked");
         }
-        // We need to verify this player is the managing user of the game
-       // if(player.isManagingUser()==false){
-           // throw new WordSweeperException("Player is not a managing user of the game");
-       // }
-        
         game.setLocked(true);
-        
-       
-        }
+    }
     
 
 
@@ -291,7 +287,5 @@ public class GameAccessController implements IProtocolHandler {
 			g.getPlayers().get(randomIndex).setManagingUser(true);
 		}
 	}
-
-	
 }
 
