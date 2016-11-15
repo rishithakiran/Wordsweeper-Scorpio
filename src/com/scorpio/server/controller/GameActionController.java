@@ -37,7 +37,7 @@ public class GameActionController implements IProtocolHandler {
                 // Notify all players that the game has changed
                 List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
                 // Filter out the player that just joined the game (they'll get
-                // their own request)
+                // their own response)
                 players = players.stream().filter((s) -> !(s.getName().equals(playerName)))
                         .collect(Collectors.toList());
                 for (Player p : players) {
