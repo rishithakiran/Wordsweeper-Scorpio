@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.accessory.Dictionary;
+import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.test.util.XMLUtil;
 import com.scorpio.xml.Message;
 
@@ -177,11 +178,17 @@ public class Board implements IModel {
 
 
     /**
-     * We trust that the word is valid and exists in the board, as we don't
-     * do any of those checks here
+     * After confirming that the given word exists in this board,
+     * remove it from the board and update surrounding tiles
+     * accordingly
      * @param w The word to remove from the board
      */
-	public void removeWord(Word w){
+	public void removeWord(Word w) throws WordSweeperException{
+        if(!this.hasWord(w)){
+            throw new WordSweeperException("Word does not exist");
+        }
+
+
         for(Tile t : w.tiles){
             this.getTileAt(t.getLocation()).markedForDelete = true;
         }
@@ -210,38 +217,4 @@ public class Board implements IModel {
 
         this.tiles = rebuiltBoard.tiles;
     }
-
-
-	/**
-	 * After the player formed the word, the tiles below the formed
-	 * wordTile will float upwards and fill the gap created by 
-	 * the formed word.
-	 **/
-	public void updateBoard(Coordinate c)
-	{
-		/**
-		 * Creating a new tile while points to the initial coordinates of the 
-		 * players location x and y
-		 */
-		Tile t =  new Tile();
-		t.setLocation(new Coordinate(c.x,c.y));
-		
-		//For loop to update the contents in the below tile to the above tile
-		for(int i = c.x  ; i < size ; i++)
-		{
-			for(int j = c.y + 1; j < size ; j++)
-			{
-				Tile tile = new Tile();
-				/**
-				 * Assign the location to the below tile (as of object tile) and set contents of 
-				 * those to the above tile (as of object t)
-				 */
-				tile.setLocation(new Coordinate(i,j));
-				t.setContents(tile.getContents());
-				t.setPoints(tile.getPoints());
-				t.setMultiplier(tile.getMultiplier());
-			}
-		}
-	}
-
 }

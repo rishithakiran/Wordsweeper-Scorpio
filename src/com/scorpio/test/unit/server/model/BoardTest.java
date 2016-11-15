@@ -1,5 +1,6 @@
 package com.scorpio.test.unit.server.model;
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.model.Tile;
@@ -18,14 +19,41 @@ public class BoardTest {
         assert(b.getTileAt(new Coordinate(2,1)).getContents().equals("q"));
     }
 
-
-    @Test
-    public void functionality_RemoveWord(){
+    @Test(expected = WordSweeperException.class)
+    public void resiliency_InvalidWord() throws WordSweeperException{
         Board b = new RandomBoard(7);
         String boardString =("a b c d e f g" +
                              "h i j k l m n" +
                              "o p q r s t u" +
                              "v w x y z a b" +
+                             "c d e f g h i" +
+                             "j k l m n o p" +
+                             "q r s t u v w")
+                            .replaceAll("\\s+","");
+        for(int x = 0; x < b.getSize(); x++){
+            for(int y = 0; y < b.getSize(); y++){
+                b.getTileAt(new Coordinate(x,y)).setContents(String.valueOf(boardString.charAt((7 * y) + x)));
+            }
+        }
+
+        ArrayList<Tile> targets = new ArrayList<>();
+        targets.add(new Tile("z", new Coordinate(0,0)));
+        targets.add(new Tile("z", new Coordinate(0,1)));
+        targets.add(new Tile("z", new Coordinate(0,2)));
+        targets.add(new Tile("z", new Coordinate(0,3)));
+        targets.add(new Tile("z", new Coordinate(0,4)));
+        Word tWord = new Word(targets);
+
+        b.removeWord(tWord);
+    }
+
+    @Test
+    public void functionality_RemoveWord() throws WordSweeperException{
+        Board b = new RandomBoard(7);
+        String boardString =("a b c d e f g" +
+                             "h i g k l m n" +
+                             "o p a m e t u" +
+                             "v w x y s a b" +
                              "c d e f g h i" +
                              "j k l m n o p" +
                              "q r s t u v w")
@@ -37,11 +65,11 @@ public class BoardTest {
         }
 
         ArrayList<Tile> targets = new ArrayList<>();
-        targets.add(new Tile("j", new Coordinate(2,1)));
-        targets.add(new Tile("q", new Coordinate(2,2)));
-        targets.add(new Tile("r", new Coordinate(3,2)));
-        targets.add(new Tile("s", new Coordinate(4,2)));
-        targets.add(new Tile("z", new Coordinate(4,3)));
+        targets.add(new Tile("g", new Coordinate(2,1)));
+        targets.add(new Tile("a", new Coordinate(2,2)));
+        targets.add(new Tile("m", new Coordinate(3,2)));
+        targets.add(new Tile("e", new Coordinate(4,2)));
+        targets.add(new Tile("s", new Coordinate(4,3)));
         Word tWord = new Word(targets);
 
         b.removeWord(tWord);

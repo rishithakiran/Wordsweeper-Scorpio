@@ -108,9 +108,17 @@ public class GameActionController implements IProtocolHandler {
         }
         Word relativeW = new Word(relativeTiles);
 
+        // Affirm that word exists in the player's board, and then remove it from the global board
         if(pb.hasWord(relativeW)){
+            // Calculate the point value of word submitted
 
+
+            g.getBoard().removeWord(w);
+        }else{
+            throw new WordSweeperException("Word is not available in your board!");
         }
+
+
 
     }
 

@@ -130,4 +130,8 @@ public class Tile implements IModel {
 		return sharedBy;
 	}
 
+	public String toString(){
+		return this.contents;
+	}
+
 }
