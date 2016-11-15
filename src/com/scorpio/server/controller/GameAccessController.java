@@ -147,14 +147,12 @@ public class GameAccessController implements IProtocolHandler {
                     this.lockGame(targetGame);
                 } catch (WordSweeperException ex) {
                     // If this occurs, we cannot not lock the game
-                    FailureResponse fr = new FailureResponse(ex.toString(), request.id());
-                    return new Message(fr.toXML());
+                    LockGameResponse lgr = new LockGameResponse(targetGame, request.id(), ex.toString());
+                    return new Message(lgr.toXML());
                 }
                 LockGameResponse lr = new LockGameResponse(targetGame, request.id());
                 return new Message(lr.toXML());
             }
-
-
             case "listGamesRequest": {
                 // this.getGames();
                 ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
