@@ -13,11 +13,21 @@ public class BoardResponse {
     private final String gameID;
     private final String requestID;
     private final boolean isAdminResponse;
+    private final String error;
     public BoardResponse(String playerID, String gameID, String requestID, boolean isAdminResponse){
         this.playerID = playerID;
         this.gameID = gameID;
         this.requestID = requestID;
         this.isAdminResponse = isAdminResponse;
+        this.error = null;
+    }
+
+    public BoardResponse(String playerID, String gameID, String requestID, boolean isAdminResponse, String error){
+        this.playerID = playerID;
+        this.gameID = gameID;
+        this.requestID = requestID;
+        this.isAdminResponse = isAdminResponse;
+        this.error = error;
     }
 
     private List<String> getPlayerXMLObjects(){
@@ -40,7 +50,12 @@ public class BoardResponse {
         Game g = GameManager.getInstance().findGameById(gameID);
 
         String managingUser = g.getManagingPlayer().getName();
-        String header = "<response id='" + requestID + "' success='true'>";
+        String header;
+        if(this.error != null){
+            header = "<response id='" + requestID + "' success='false' reason='" + this.error +"'>";
+        }else {
+            header = "<response id='" + requestID + "' success='true'>";
+        }
         String boardResponseHeader = String.format("<boardResponse gameId='%s' managingUser='%s' bonus='%s'", gameID, managingUser, g.getBonus().toString());
         if(this.isAdminResponse){
             Board b = g.getBoard();

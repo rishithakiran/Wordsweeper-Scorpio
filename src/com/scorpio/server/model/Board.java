@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.Dictionary;
 import com.scorpio.test.util.XMLUtil;
 import com.scorpio.xml.Message;
 
@@ -70,6 +71,17 @@ public class Board implements IModel {
 		return l.get(0);
 	}
 
+	public void setTileAt(Coordinate c, Tile newTile){
+        List<Tile> l = this.tiles.stream().filter((t) -> !t.getLocation().equals(c)).collect(Collectors.toList());
+        if(l.size() != (this.getSize() * this.getSize()) - 1){
+            return;
+        }
+        this.tiles = new ArrayList<>(l);
+        if(newTile != null) {
+            this.tiles.add(newTile);
+        }
+    }
+
 	/**
 	 * @return Current height/width of the board (it's a square)
 	 */
@@ -78,6 +90,18 @@ public class Board implements IModel {
 	}
 
 
+
+	public void pp(){
+        for(int y = 0; y < this.size; y++){
+            for(int x = 0; x < this.size; x++){
+                Tile t = this.getTileAt(new Coordinate(x,y));
+                if(t != null) {
+                    System.out.print(t.getContents());
+                }
+            }
+            System.out.println();
+        }
+    }
 
 
 	/**
@@ -88,7 +112,10 @@ public class Board implements IModel {
 		String out = "";
 		for(int x = 0; x < this.size; x++){
 			for(int y = 0; y < this.size; y++){
-				out += this.getTileAt(new Coordinate(x,y)).getContents() + ",";
+                Tile t = this.getTileAt(new Coordinate(x,y));
+                if(t != null) {
+                    out += t.getContents() + ",";
+                }
 			}
 		}
 		// Strip the trailing comma
@@ -96,6 +123,7 @@ public class Board implements IModel {
 		return out;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * The word formed by the player is validating by comparing to the file
 	 * WordTable.sort - which contains the dictionary words
@@ -132,6 +160,41 @@ public class Board implements IModel {
 				return false;
 			}
 		        
+=======
+
+	public boolean hasWord(Word w) {
+		/* We affirm that the tiles included in w match with what is described
+		 * by this board state. Additionally, we consult the dictionary to ensure
+		 * that the word is real. Finally, we ensure that each tile is adjacent to
+		 * the previous one.
+		 */
+		for(int i = 0; i <  w.tiles.size(); ++i){
+            Tile t = w.tiles.get(i);
+			Tile trueTile = this.getTileAt(t.getLocation());
+			if(!trueTile.equals(t)){
+				return false;
+			}
+
+			// Ensure adjacency
+			if(i > 0){
+                Coordinate priorCoords = w.tiles.get(i-1).getLocation();
+                Coordinate currentCoords = w.tiles.get(i).getLocation();
+
+                int xdiff = Math.abs(priorCoords.x - currentCoords.x);
+                int ydiff = Math.abs(priorCoords.y - currentCoords.y);
+
+                if(xdiff + ydiff != 1){
+                    return false;
+                }
+            }
+		}
+
+		return Dictionary.getInstance().isWord(w.toString());
+	}
+
+		
+
+>>>>>>> 6515560d23f9ed9f13c21d17526addca8abdc56b
 	/**
 	 * Grows the board to match the given size. The board will always be
 	 * a square. If this new size is smaller than the current board, there
@@ -153,7 +216,44 @@ public class Board implements IModel {
 		}
 
 	}
-	
+
+
+    /**
+     * We trust that the word is valid and exists in the board, as we don't
+     * do any of those checks here
+     * @param w The word to remove from the board
+     */
+	public void removeWord(Word w){
+        for(Tile t : w.tiles){
+            this.getTileAt(t.getLocation()).markedForDelete = true;
+        }
+
+        Board rebuiltBoard = new Board(this.size);
+
+        for(int x = 0; x < this.size; ++x){
+            int offset = 0;
+            for(int y = 0; y < this.size; ++y){
+                // Read all tiles not marked for deletion
+                Tile t = this.getTileAt(new Coordinate(x,y));
+                if(t.markedForDelete){
+                    ++offset;
+                }else{
+                    t.setLocation(new Coordinate(t.getLocation().x, t.getLocation().y - offset));
+                    rebuiltBoard.tiles.add(t);
+                }
+            }
+            // Populate with new random tiles
+            for(int y = this.getSize() - offset; y < this.size; ++y){
+                Tile newTile = new Tile();
+                newTile.setLocation(new Coordinate(x, y));
+                rebuiltBoard.tiles.add(newTile);
+            }
+        }
+
+        this.tiles = rebuiltBoard.tiles;
+    }
+
+
 	/**
 	 * After the player formed the word, the tiles below the formed
 	 * wordTile will float upwards and fill the gap created by 

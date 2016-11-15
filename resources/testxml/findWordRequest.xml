@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request id="e3b52914-fa5a-45d1-9fcc-a38ca0e6fcae">
+    <findWordRequest name="aPlayer" word="record" gameId="mygame">
+        <cell position="0,0" letter="r"/>
+        <cell position="0,1" letter="e"/>
+        <cell position="0,2" letter="c"/>
+        <cell position="0,3" letter="o"/>
+        <cell position="1,3" letter="r"/>
+        <cell position="2,3" letter="d"/>
+    </findWordRequest>
+</request>

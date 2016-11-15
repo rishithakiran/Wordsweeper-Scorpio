@@ -4,6 +4,7 @@ import com.scorpio.server.model.Board;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.model.Tile;
 import com.scorpio.server.model.Word;
+<<<<<<< HEAD
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,10 +14,59 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+=======
+>>>>>>> 6515560d23f9ed9f13c21d17526addca8abdc56b
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 
 public class BoardTest {
+    @Test
+    public void funtionality_SetTileAt() {
+        Board b = new RandomBoard(7);
+        Tile testTile = new Tile("q", new Coordinate(2, 1));
+        b.setTileAt(new Coordinate(2,1), testTile);
+        assert(b.getTileAt(new Coordinate(2,1)).getContents().equals("q"));
+    }
+
+
+    @Test
+    public void functionality_RemoveWord(){
+        Board b = new RandomBoard(7);
+        String boardString =("a b c d e f g" +
+                             "h i j k l m n" +
+                             "o p q r s t u" +
+                             "v w x y z a b" +
+                             "c d e f g h i" +
+                             "j k l m n o p" +
+                             "q r s t u v w")
+                .replaceAll("\\s+","");
+        for(int x = 0; x < b.getSize(); x++){
+            for(int y = 0; y < b.getSize(); y++){
+                b.getTileAt(new Coordinate(x,y)).setContents(String.valueOf(boardString.charAt((7 * y) + x)));
+            }
+        }
+
+        ArrayList<Tile> targets = new ArrayList<>();
+        targets.add(new Tile("j", new Coordinate(2,1)));
+        targets.add(new Tile("q", new Coordinate(2,2)));
+        targets.add(new Tile("r", new Coordinate(3,2)));
+        targets.add(new Tile("s", new Coordinate(4,2)));
+        targets.add(new Tile("z", new Coordinate(4,3)));
+        Word tWord = new Word(targets);
+
+        b.removeWord(tWord);
+        b.pp();
+        assert(b.getTileAt(new Coordinate(2, 1)).getContents().equals("x"));
+        assert(b.getTileAt(new Coordinate(2, 2)).getContents().equals("e"));
+        assert(b.getTileAt(new Coordinate(3, 2)).getContents().equals("y"));
+        assert(b.getTileAt(new Coordinate(4, 2)).getContents().equals("g"));
+        assert(b.getTileAt(new Coordinate(4, 3)).getContents().equals("n"));
+    }
+
+
+
     @Test
     public void resiliency_SubBoardTooBig(){
         RandomBoard b = new RandomBoard(7);
