@@ -134,6 +134,7 @@ public class GameAccessController implements IProtocolHandler {
 			}
 			return null;
 		}
+<<<<<<< HEAD
 		case "lockGameRequest": {
        	 // Find the game
            String targetGame = child.getAttributes().item(0).getNodeValue();
@@ -157,6 +158,9 @@ public class GameAccessController implements IProtocolHandler {
 			ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
 			return new Message(listOfGamesResponse.toXML());
 		}
+=======
+				
+>>>>>>> local
 		default: {
 			return null;
 		}
@@ -236,6 +240,15 @@ public class GameAccessController implements IProtocolHandler {
 		GameManager.getInstance().games.put(game.getId(), game);
 	}
 	
+<<<<<<< HEAD
+=======
+	/**
+	 * Exits game for a particular player
+	 * @param playerId
+	 * @param gameId
+	 * @throws WordSweeperException
+	 */
+>>>>>>> local
 
 	/**
 	 * Locks the game with 
@@ -289,6 +302,10 @@ public class GameAccessController implements IProtocolHandler {
 			g.getPlayers().get(randomIndex).setManagingUser(true);
 		}
 	}
+<<<<<<< HEAD
 
 	
 }
+=======
+}
+>>>>>>> local

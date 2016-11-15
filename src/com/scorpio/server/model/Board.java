@@ -1,11 +1,14 @@
 package com.scorpio.server.model;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
@@ -151,9 +154,7 @@ public class Board implements IModel {
 
 		return Dictionary.getInstance().isWord(w.toString());
 	}
-
-		
-
+    
 	/**
 	 * Grows the board to match the given size. The board will always be
 	 * a square. If this new size is smaller than the current board, there
@@ -217,4 +218,5 @@ public class Board implements IModel {
 
         this.tiles = rebuiltBoard.tiles;
     }
+
 }
