@@ -6,6 +6,7 @@ import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
+import com.scorpio.server.model.Word;
 import com.scorpio.test.util.TestHandler;
 import com.scorpio.test.util.Trigger;
 import com.scorpio.test.util.XMLUtil;
@@ -41,6 +42,44 @@ public class GameAccessControllerTest {
 		assert (testGame.getPlayers().size() == 1);
 		assert (testGame.getBoard().getSize() == 7);
 
+	}
+
+	@Test(expected = WordSweeperException.class)
+	public void error_LockGameDoesNotExist() throws WordSweeperException {
+		GameAccessController gac = new GameAccessController();
+		gac.lockGame("foo");
+
+	}
+
+	@Test(expected = WordSweeperException.class)
+	public void error_GameAlreadyLocked() throws WordSweeperException{
+		GameAccessController gac = new GameAccessController();
+		Player owner = new Player("test", null);
+		String gameId = "abc";
+		try {
+			gac.createGame(owner, gameId, null);
+		}catch(WordSweeperException ex){
+			fail();
+		}
+		Game testGame = GameManager.getInstance().findGameById("abc");
+		testGame.setLocked(true);
+		gac.lockGame(gameId);
+	}
+
+	@Test
+	public void functionality_LockGame() throws WordSweeperException{
+		GameAccessController gac = new GameAccessController();
+		Player owner = new Player("test", null);
+		String gameId = "abc";
+		try {
+			gac.createGame(owner, gameId, null);
+		}catch(WordSweeperException ex){
+			fail();
+		}
+		Game testGame = GameManager.getInstance().findGameById("abc");
+		gac.lockGame(gameId);
+
+		assert(testGame.isLocked());
 	}
 
 	@Test
@@ -90,7 +129,7 @@ public class GameAccessControllerTest {
 	}
 
 	@Test(expected = WordSweeperException.class)
-	public void error_GameDoesNotExist() throws WordSweeperException {
+	public void error_JoinGameDoesNotExist() throws WordSweeperException {
 		GameAccessController gac = new GameAccessController();
 		Player owner = new Player("test", null);
 		String gameId = "abc";

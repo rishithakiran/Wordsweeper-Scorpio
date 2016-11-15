@@ -24,18 +24,18 @@ public class LockGameResponse {
 	        Game g = GameManager.getInstance().findGameById(gameID);
 	        String managingUser = g.getManagingPlayer().getName();
             String header;
-            if(this.error == null){
+            if(this.error != null){
                 header = "<response id='" + requestID + "' success='false' reason='" + error + "'>";
             }else{
                 header = "<response id='" + requestID + "' success='true'>";
             }
-	        String lockResponseHeader = String.format("<lockResponse gameId='%s' managingUser='%s'", gameID, managingUser);
+	        String lockResponseHeader = String.format("<lockGameResponse gameId='%s'>", gameID, managingUser);
 
 	        return header + lockResponseHeader;
 	    }
 	    
 	    private String getFooter(){
-	        String lockResponseFooter = "</lockResponse>";
+	        String lockResponseFooter = "</lockGameResponse>";
 	        String footer = "</response>";
 
 	        return lockResponseFooter + footer;

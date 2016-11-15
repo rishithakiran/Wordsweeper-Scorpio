@@ -21,7 +21,7 @@ public class ServerThread extends Thread implements ClientState {
 	Object data;               		 // User-defined object associated with each thread.
 	
 	/** Create objects to handle input/output to client. */
-	ServerThread (Server srv, Socket s, IProtocolHandler h) throws IOException {
+	public ServerThread (Server srv, Socket s, IProtocolHandler h) throws IOException {
 		server = srv;
 		fromClient = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		toClient = new PrintWriter (s.getOutputStream(), true);

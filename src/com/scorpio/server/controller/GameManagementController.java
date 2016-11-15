@@ -24,9 +24,13 @@ public class GameManagementController implements IProtocolHandler {
         String type = child.getLocalName();
         switch (type) {
             case "resetGameRequest": {
-                String targetGame = child.getAttributes().item(1).getNodeValue();
-
-                resetGame(targetGame);
+                String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
+                try {
+                    resetGame(targetGame);
+                }catch(WordSweeperException ex){
+                    ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id(), ex.toString());
+                    return new Message(rgr.toXML());
+                }
 
                 // Notify everyone
                 // Notify all players that the game has changed
@@ -55,8 +59,11 @@ public class GameManagementController implements IProtocolHandler {
     }
 
 
-    public void resetGame(String gameId){
+    public void resetGame(String gameId) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(gameId);
+        if(g == null){
+            throw new WordSweeperException("Game does not exist");
+        }
         int boardSize = g.getBoard().getSize();
         Board b = new RandomBoard(boardSize);
         g.setBoard(b);

@@ -31,7 +31,7 @@ public class ResetGameResponse {
         }else {
             header = "<response id='" + requestID + "' success='true'>";
         }
-        String resetGameResponseHeader = String.format("<resetGameResponse gameId='%s'", gameID);
+        String resetGameResponseHeader = String.format("<resetGameResponse gameId='%s'>", gameID);
         return header + resetGameResponseHeader;
     }
 

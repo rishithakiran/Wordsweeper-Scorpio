@@ -74,7 +74,6 @@ public class BoardTest {
         Word tWord = new Word(targets);
 
         b.removeWord(tWord);
-        b.pp();
         assert(b.getTileAt(new Coordinate(2, 1)).getContents().equals("x"));
         assert(b.getTileAt(new Coordinate(2, 2)).getContents().equals("e"));
         assert(b.getTileAt(new Coordinate(3, 2)).getContents().equals("y"));
