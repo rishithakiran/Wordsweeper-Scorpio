@@ -4,9 +4,13 @@ package com.scorpio.server.controller;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
+import com.scorpio.server.model.Board;
+import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
+import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
+import com.scorpio.server.protocol.response.ResetGameResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
@@ -22,11 +26,7 @@ public class GameManagementController implements IProtocolHandler {
             case "resetGameRequest": {
                 String targetGame = child.getAttributes().item(1).getNodeValue();
 
-                try{
-                    throw new WordSweeperException("...");
-                }catch(WordSweeperException ex){
-
-                }
+                resetGame(targetGame);
 
                 // Notify everyone
                 // Notify all players that the game has changed
@@ -45,7 +45,9 @@ public class GameManagementController implements IProtocolHandler {
                 }
 
                 // Finally, send a resetGameResponse to the initiator
-                // TODO
+                ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id());
+                Message rgrm = new Message(rgr.toXML());
+                state.sendMessage(rgrm);
                 return null;
 
             }
@@ -56,7 +58,13 @@ public class GameManagementController implements IProtocolHandler {
 
 
     public void resetGame(String gameId){
-
-
+        Game g = GameManager.getInstance().findGameById(gameId);
+        int boardSize = g.getBoard().getSize();
+        Board b = new RandomBoard(boardSize);
+        g.setBoard(b);
+        // Mutate all players to have a zero score
+        for(Player p : g.getPlayers()) {
+            p.setScore(0);
+        }
     }
 }

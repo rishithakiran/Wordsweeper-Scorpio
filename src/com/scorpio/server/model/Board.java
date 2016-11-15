@@ -101,7 +101,7 @@ public class Board implements IModel {
 	
 	public boolean isValidWord(Word w) {
 		 try {
-				String input="C:/Users/Saranya/Documents/GitHub/Wordsweeper-Scorpio/resources/WordTable.sort";
+				String input="resources/WordTable.sort";
 				BufferedReader br = new BufferedReader(new FileReader(input));
 		        String line; 
 		        
