@@ -18,6 +18,7 @@ import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.server.protocol.response.FailureResponse;
+import com.scorpio.server.protocol.response.LockResponse;
 import com.scorpio.xml.Message;
 
 /**
@@ -30,6 +31,7 @@ public class GameAccessController implements IProtocolHandler {
 
 	@Override
 	public Message process(ClientState state, Message request) {
+
 
 		Node child = request.contents.getFirstChild();
 		String type = child.getLocalName();
@@ -131,6 +133,22 @@ public class GameAccessController implements IProtocolHandler {
 			}
 			return null;
 		}
+		case "lockGameRequest": {
+       	 // Find the game
+           String targetGame = child.getAttributes().item(0).getNodeValue();
+           
+          
+           try {
+           	this.lockGame(targetGame);
+           } catch (WordSweeperException ex) {
+               // If this occurs, we cannot not lock the game
+        	   FailureResponse fr = new FailureResponse(ex.toString(), request.id());
+				return new Message(fr.toXML());
+           }
+           LockResponse lr = new LockResponse (targetGame, request.id());
+           return new Message(lr.toXML());
+          
+       }
 		default: {
 			return null;
 		}
@@ -208,13 +226,42 @@ public class GameAccessController implements IProtocolHandler {
 
 		GameManager.getInstance().games.put(game.getId(), game);
 	}
+	
+
+	/**
+	 * Locks the game with 
+	 * 
+	 * @param gameID Target game
+	 */
+	public void lockGame(String gameID) throws WordSweeperException{
+        Game game = GameManager.getInstance().findGameById(gameID);
+        //String managingUser = game.getManagingPlayer().getName();
+        //We need to verify this game exists
+        if(game == null){
+            throw new WordSweeperException("Game doesn't exist");
+        }
+        // We need to verify that this game is not locked already
+        if(game.isLocked()==true){
+            throw new WordSweeperException("Game already locked");
+        }
+        // We need to verify this player is the managing user of the game
+       // if(player.isManagingUser()==false){
+           // throw new WordSweeperException("Player is not a managing user of the game");
+       // }
+        
+        game.setLocked(true);
+        
+       
+        }
+    
+
 
 	public void exitGame(String playerId, String gameId) throws WordSweeperException{
 		Game g;
 		if ((g = GameManager.getInstance().findGameById(gameId)) == null) {
 			throw new WordSweeperException("Game does not exist");
 		}
-
+ 
 		// There's only one player left, and we're deleting them
 		// No need to delete the player, just delete the game
 		ArrayList<Player> pl = g.getPlayers();
