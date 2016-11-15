@@ -1,6 +1,11 @@
 package com.scorpio.server.controller;
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.w3c.dom.Node;
+
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
@@ -9,11 +14,6 @@ import com.scorpio.server.model.Player;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.xml.Message;
-//import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
-import org.w3c.dom.Node;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GameActionController implements IProtocolHandler {
     @Override

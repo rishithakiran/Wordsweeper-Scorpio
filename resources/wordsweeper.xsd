@@ -32,6 +32,7 @@
       
     </xs:choice>
     <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="version" default="1.0" type="xs:string" use="optional"/>
   </xs:complexType>
 </xs:element>
 
@@ -55,6 +56,7 @@
     <xs:attribute name="id"      type="xs:string"  use="required"/>
     <xs:attribute name='success' type='xs:boolean' use='required'/>
     <xs:attribute name='reason'  type='xs:string'  use='optional'/>  <!-- Only on failure -->
+    <xs:attribute name="version" default="1.0" type="xs:string" use="optional"/>
   </xs:complexType>
 </xs:element>
 
@@ -241,4 +243,13 @@
      * note that the boardResponse to admin clients has a 'contents' which is only sent
        to admin clients. Regular boardResponse messages sent to clients have this as the
        empty string.
+       
+  1.3 Changed/Refined Version [11-8-2016]
+     * ResetGameResponse should only be sent to client in unlikely occurence of Failure. Otherwise
+       in response to a ResetGameRequest, the server should send BoardResponse to all players in game.
+     * Given LockGameRequest, server can choose to ignore subsequent requests to lock a game that 
+       has already been locked. Managing user is the only one who gets the LockGameResponse.
+       
 -->
+
+

@@ -1,6 +1,7 @@
 package com.scorpio.server.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -19,12 +20,12 @@ import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.server.protocol.response.FailureResponse;
 import com.scorpio.server.protocol.response.LockResponse;
+import com.scorpio.server.protocol.response.ListOfGamesResponse;
 import com.scorpio.xml.Message;
 
 /**
  * 
- * @author Apoorva
- * Controller to handle game access modules
+ * @author Apoorva Controller to handle game access modules
  */
 
 public class GameAccessController implements IProtocolHandler {
@@ -93,12 +94,12 @@ public class GameAccessController implements IProtocolHandler {
 			BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), false);
 			return new Message(br.toXML());
 		}
-		case "exitGameRequest" : {
+		case "exitGameRequest": {
 			// Find the game
 			String targetGame = child.getAttributes().item(0).getNodeValue();
 			String targetPlayer = child.getAttributes().item(1).getNodeValue();
 
-			try{
+			try {
 				this.exitGame(targetPlayer, targetGame);
 			} catch (WordSweeperException ex) {
 				// If this occurs, we could not join the game
@@ -106,9 +107,8 @@ public class GameAccessController implements IProtocolHandler {
 				return new Message(fr.toXML());
 			}
 
-
 			// If the game still exists, notify all remaining players
-			if(GameManager.getInstance().findGameById(targetGame) != null) {
+			if (GameManager.getInstance().findGameById(targetGame) != null) {
 				// Notify all players that the game has changed
 				List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
 				// Filter out the player that just joined the game (they'll get
@@ -149,6 +149,13 @@ public class GameAccessController implements IProtocolHandler {
            return new Message(lr.toXML());
           
        }
+
+
+		case "listGamesRequest": {
+			// this.getGames();
+			ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
+			return new Message(listOfGamesResponse.toXML());
+		}
 		default: {
 			return null;
 		}
@@ -198,6 +205,7 @@ public class GameAccessController implements IProtocolHandler {
 
 	/**
 	 * Creates the game with appropriate values
+	 * 
 	 * @param player
 	 * @param gameID
 	 * @param password
@@ -256,7 +264,7 @@ public class GameAccessController implements IProtocolHandler {
     
 
 
-	public void exitGame(String playerId, String gameId) throws WordSweeperException{
+	public void exitGame(String playerId, String gameId) throws WordSweeperException {
 		Game g;
 		if ((g = GameManager.getInstance().findGameById(gameId)) == null) {
 			throw new WordSweeperException("Game does not exist");
@@ -265,7 +273,7 @@ public class GameAccessController implements IProtocolHandler {
 		// There's only one player left, and we're deleting them
 		// No need to delete the player, just delete the game
 		ArrayList<Player> pl = g.getPlayers();
-		if(pl.size() == 1 && pl.get(0).getName().equals(playerId)){
+		if (pl.size() == 1 && pl.get(0).getName().equals(playerId)) {
 
 			GameManager.getInstance().deleteGame(gameId);
 			return;
@@ -275,9 +283,11 @@ public class GameAccessController implements IProtocolHandler {
 		g.deletePlayer(playerId);
 
 		// If that player was the managing user, select someone else at random
-		if(g.getManagingPlayer() == null){
+		if (g.getManagingPlayer() == null) {
 			int randomIndex = (new Random()).nextInt(g.getPlayers().size());
 			g.getPlayers().get(randomIndex).setManagingUser(true);
 		}
 	}
+
+	
 }
