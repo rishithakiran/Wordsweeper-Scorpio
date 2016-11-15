@@ -1,11 +1,14 @@
 package com.scorpio.server.model;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
@@ -96,31 +99,38 @@ public class Board implements IModel {
 	/**
 	 * The word formed by the player is validating by comparing to the file
 	 * WordTable.sort - which contains the dictionary words
+	 * @param Input Word
+	 * @return True - valid word, False - invalid word
 	 */
 	
 	public boolean isValidWord(Word w) {
-		 try {
+		try {
 				String input="C:/Users/Saranya/Documents/GitHub/Wordsweeper-Scorpio/resources/WordTable.sort";
-				BufferedReader br = new BufferedReader(new FileReader(input));
+			//	BufferedReader br = new BufferedReader(new FileReader(input));
 		        String line; 
+		        StringBuilder words = new StringBuilder(w.tiles.size());
 		        
-					while ((line=br.readLine()) != null) {
-					   if(line.contains((CharSequence) w)) 
-						   return true;
-					   else
-						   return false;  
-					}
-					
-					br.close();
-				} 
+		        for ( int i = 0; i < w.tiles.size() ; i++)
+		        {
+		        	words.append(w.tiles.get(i).getContents().toLowerCase());
+		        }
+		       Scanner sc = new Scanner (new FileInputStream(input));
+		       while (sc.hasNext()){
+		    	   line = sc.next();
+		    	   line  = line.toLowerCase();
+		      	if(line.contentEquals(words))
+					return true;
+				else 
+					continue;
+			   }
+		    //   br.close();
+		     }
 			 catch (IOException e) {
 					e.printStackTrace();
 				}	
 				return false;
 			}
-
-		
-
+		        
 	/**
 	 * Grows the board to match the given size. The board will always be
 	 * a square. If this new size is smaller than the current board, there
@@ -147,32 +157,37 @@ public class Board implements IModel {
 	 * After the player formed the word, the tiles below the formed
 	 * wordTile will float upwards and fill the gap created by 
 	 * the formed word.
+	 * @param c The location of the player
+	 * @return updateBoard Updated board with new contents
 	 **/
-	public void updateBoard(Coordinate c)
+	public Board updateBoard(ArrayList<Tile> tiles, int size)
 	{
-		/**
-		 * Creating a new tile while points to the initial coordinates of the 
-		 * players location x and y
-		 */
-		Tile t =  new Tile();
-		t.setLocation(new Coordinate(c.x,c.y));
+		Board updated = new Board(size);
+		Tile tilesMain = new Tile();
 		
-		//For loop to update the contents in the below tile to the above tile
-		for(int i = c.x  ; i < size ; i++)
-		{
-			for(int j = c.y + 1; j < size ; j++)
-			{
-				Tile tile = new Tile();
-				/**
-				 * Assign the location to the below tile (as of object tile) and set contents of 
-				 * those to the above tile (as of object t)
-				 */
-				tile.setLocation(new Coordinate(i,j));
-				t.setContents(tile.getContents());
-				t.setPoints(tile.getPoints());
-				t.setMultiplier(tile.getMultiplier());
-			}
-		}
+		int xCoord = 0 , yCoord = 0;
+		
+		for ( int iValue = 0; iValue < tiles.size() ; iValue++)
+        {
+			//tilesMain.setLocation(new Coordinate(xCoord,yCoord));
+        	xCoord = tiles.get(iValue).getLocation().x;
+        	yCoord = tiles.get(iValue).getLocation().y;
+        	
+        	//For loop to update the contents in the below tile to the above tile
+        	for(int i = xCoord + 1 ; i < this.size ; i++)
+        	{
+        		for(int j = yCoord; j < this.size ; j++)
+        		{
+        			// Updating the from below tile
+        			Tile t = new Tile();
+        			t.setLocation(new Coordinate(i,j));
+        			tilesMain.setContents(t.getContents());
+        			tilesMain.setPoints(t.getPoints());
+        			tilesMain.setMultiplier(t.getMultiplier());
+        			updated.tiles.add(tilesMain);
+           		}
+        	}
+        }
+		return updated;
 	}
-
 }

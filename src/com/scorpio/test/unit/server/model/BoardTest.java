@@ -3,6 +3,16 @@ import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.model.Tile;
+import com.scorpio.server.model.Word;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.Test;
 
 
@@ -81,4 +91,88 @@ public class BoardTest {
         assert(b.getTileAt(new Coordinate(3,3)).equals(sub.getTileAt(new Coordinate(3,3))));
 
     }
+    
+    @Test
+    public void functionality_validateWordTrue(){
+    	     		
+    	RandomBoard b = new RandomBoard(7);
+        Board newBoard = b.getSubBoard(new Coordinate(0,0), 4);
+        assert(newBoard.getSize() == 4);
+       
+        Tile t1 = new Tile();
+        Tile t2 = new Tile();
+        Tile t3 = new Tile();
+        Tile t4 = new Tile();
+        Tile t5 = new Tile();
+        
+        t1.setContents("a");
+        t2.setContents("b");
+        t3.setContents("o");
+        t4.setContents("v");
+        t5.setContents("e");
+        
+        ArrayList<Tile> collection = new ArrayList<Tile>();
+        collection.add(t1);
+        collection.add(t2);
+        collection.add(t3);
+        collection.add(t4);
+        collection.add(t5);
+        
+        Word word = new Word(collection);
+        boolean result = newBoard.isValidWord(word);
+        assert(result == true);
+       }
+    
+    @Test
+    public void functionality_validateWordFalse(){
+    	     		
+    	RandomBoard b = new RandomBoard(7);
+        Board newBoard = b.getSubBoard(new Coordinate(0,0), 4);
+        assert(newBoard.getSize() == 4);
+       
+        Tile t1 = new Tile();
+        Tile t2 = new Tile();
+        Tile t3 = new Tile();
+        
+        //Input invalid word
+        t1.setContents("A");
+        t2.setContents("B");
+        t3.setContents("B");
+        
+        ArrayList<Tile> collection = new ArrayList<Tile>();
+        collection.add(t1);
+        collection.add(t2);
+        collection.add(t3);
+        
+        Word word = new Word(collection);
+        boolean result = newBoard.isValidWord(word);
+        assert(result == false);
+       }
+        
+    @Test
+    public void functionality_updateBoard(){
+    	     		
+    	RandomBoard b = new RandomBoard(7);
+        Board newBoard = b.getSubBoard(new Coordinate(0,0), 4);
+        assert(newBoard.getSize() == 4);
+       
+        String[] tiles = newBoard.toString().split(",");
+        assert(tiles.length == 16);
+        
+        Tile t1 = new Tile();
+        Tile t2 = new Tile();
+        
+        t1.setLocation(new Coordinate(0,0));
+        t2.setLocation(new Coordinate(0,1));
+         
+        ArrayList<Tile> collection = new ArrayList<Tile>();
+        collection.add(t1);
+        collection.add(t2);
+        
+        newBoard.updateBoard(collection , 4);        
+        
+        assert(b.getTileAt(new Coordinate(0,0)).equals(newBoard.getTileAt(new Coordinate(0,0))));
+        assert(b.getTileAt(new Coordinate(0,1)).equals(newBoard.getTileAt(new Coordinate(0,1))));
+        
+       }
 }
