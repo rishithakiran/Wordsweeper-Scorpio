@@ -1,5 +1,6 @@
-package com.scorpio.server.core;
+package com.scorpio.serverbase;
 
+import com.scorpio.server.core.ClientState;
 import com.scorpio.server.protocol.IProtocolHandler;
 
 import java.io.*;
@@ -14,7 +15,7 @@ public class Server {
 	final int serverPort;                /* Default server port. */
 	
 	/** Hold onto references to all threads actively managed by server. */
-	static Hashtable<String, ClientState> ids = new Hashtable<String, ClientState>(); 
+	static Hashtable<String, ClientState> ids = new Hashtable<String, ClientState>();
 
 	public Server(IProtocolHandler ph, int port) {
 		this.protocolHandler = ph;

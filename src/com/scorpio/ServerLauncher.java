@@ -3,8 +3,7 @@ package com.scorpio;
 import java.io.*;
 
 import com.scorpio.server.controller.ConnectionController;
-import com.scorpio.server.core.Server;
-import com.scorpio.server.core.GameManager;
+import com.scorpio.serverbase.Server;
 import com.scorpio.xml.Message;
 
 /** Code to launch Server from the command line. */

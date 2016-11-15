@@ -1,9 +1,10 @@
-package com.scorpio.server.core;
+package com.scorpio.serverbase;
 
 import java.io.*;
 import java.net.*;
 import java.util.UUID;
 
+import com.scorpio.server.core.ClientState;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.IShutdownHandler;
 import org.w3c.dom.*;
