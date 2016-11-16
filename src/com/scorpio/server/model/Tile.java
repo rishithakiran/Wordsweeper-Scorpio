@@ -7,7 +7,7 @@ import com.scorpio.server.accessory.Coordinate;
 
 public class Tile implements IModel {
 
-	final String characters = "abcdefghijklmnopqrstuvwxyz";
+	final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public boolean markedForDelete = false;
 
@@ -16,32 +16,33 @@ public class Tile implements IModel {
 	 */
 	private static final Hashtable<String, Integer> scoreforChar = new Hashtable<String, Integer>() {
 		{
-			put("a", 2);
-			put("b", 4);
-			put("c", 3);
-			put("d", 3);
-			put("e", 1);
-			put("f", 4);
-			put("g", 4);
-			put("h", 2);
-			put("i", 2);
-			put("j", 7);
-			put("k", 5);
-			put("l", 3);
-			put("m", 3);
-			put("n", 2);
-			put("o", 2);
-			put("p", 4);
-			put("q", 8);
-			put("r", 2);
-			put("s", 2);
-			put("t", 1);
-			put("u", 3);
-			put("v", 5);
-			put("w", 3);
-			put("x", 7);
-			put("y", 4);
-			put("z", 8);
+			put("A", 2);
+			put("B", 4);
+			put("C", 3);
+			put("D", 3);
+			put("E", 1);
+			put("F", 4);
+			put("G", 4);
+			put("H", 2);
+			put("I", 2);
+			put("J", 7);
+			put("K", 5);
+			put("L", 3);
+			put("M", 3);
+			put("N", 2);
+			put("O", 2);
+			put("P", 4);
+			put("Q", 8);
+			put("R", 2);
+			put("S", 2);
+			put("T", 1);
+			put("U", 3);
+			put("V", 5);
+			put("W", 3);
+			put("X", 7);
+			put("Y", 4);
+			put("Z", 8);
+			put("QU", 11);
 		}
 	};
 	final int N = characters.length();

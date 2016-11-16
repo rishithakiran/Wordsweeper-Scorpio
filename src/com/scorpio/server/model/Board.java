@@ -151,7 +151,7 @@ public class Board implements IModel {
             }
 		}
 
-		return Dictionary.getInstance().isWord(w.toString());
+		return Dictionary.getInstance().isWord(w.toString().toLowerCase());
 	}
 
 	/**

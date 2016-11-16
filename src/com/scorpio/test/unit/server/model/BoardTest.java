@@ -15,21 +15,21 @@ public class BoardTest {
     @Test
     public void funtionality_SetTileAt() {
         Board b = new RandomBoard(7);
-        Tile testTile = new Tile("q", new Coordinate(2, 1));
+        Tile testTile = new Tile("Q", new Coordinate(2, 1));
         b.setTileAt(new Coordinate(2,1), testTile);
-        assert(b.getTileAt(new Coordinate(2,1)).getContents().equals("q"));
+        assert(b.getTileAt(new Coordinate(2,1)).getContents().equals("Q"));
     }
 
     @Test(expected = WordSweeperException.class)
     public void resiliency_InvalidWord() throws WordSweeperException{
         Board b = new RandomBoard(7);
-        String boardString =("a b c d e f g" +
-                             "h i j k l m n" +
-                             "o p q r s t u" +
-                             "v w x y z a b" +
-                             "c d e f g h i" +
-                             "j k l m n o p" +
-                             "q r s t u v w")
+        String boardString =("A B C D E F G" +
+                             "H I J K L M N" +
+                             "O P Q R S T U" +
+                             "V W X Y Z A B" +
+                             "C D E F G H I" +
+                             "J K L M N O P" +
+                             "Q R S T U V W")
                             .replaceAll("\\s+","");
         for(int x = 0; x < b.getSize(); x++){
             for(int y = 0; y < b.getSize(); y++){
@@ -38,11 +38,11 @@ public class BoardTest {
         }
 
         ArrayList<Tile> targets = new ArrayList<>();
-        targets.add(new Tile("z", new Coordinate(0,0)));
-        targets.add(new Tile("z", new Coordinate(0,1)));
-        targets.add(new Tile("z", new Coordinate(0,2)));
-        targets.add(new Tile("z", new Coordinate(0,3)));
-        targets.add(new Tile("z", new Coordinate(0,4)));
+        targets.add(new Tile("Z", new Coordinate(0,0)));
+        targets.add(new Tile("Z", new Coordinate(0,1)));
+        targets.add(new Tile("Z", new Coordinate(0,2)));
+        targets.add(new Tile("Z", new Coordinate(0,3)));
+        targets.add(new Tile("Z", new Coordinate(0,4)));
         Word tWord = new Word(targets);
 
         b.removeWord(tWord);
@@ -51,13 +51,13 @@ public class BoardTest {
     @Test
     public void functionality_RemoveWord() throws WordSweeperException{
         Board b = new RandomBoard(7);
-        String boardString =("a b c d e f g" +
-                             "h i g k l m n" +
-                             "o p a m e t u" +
-                             "v w x y s a b" +
-                             "c d e f g h i" +
-                             "j k l m n o p" +
-                             "q r s t u v w")
+        String boardString =("A B C D E F G" +
+                             "H I J K L M N" +
+                             "O P Q R S T U" +
+                             "V W X Y Z A B" +
+                             "C D E F G H I" +
+                             "J K L M N O P" +
+                             "Q R S T U V W")
                 .replaceAll("\\s+","");
         for(int x = 0; x < b.getSize(); x++){
             for(int y = 0; y < b.getSize(); y++){
@@ -66,19 +66,19 @@ public class BoardTest {
         }
 
         ArrayList<Tile> targets = new ArrayList<>();
-        targets.add(new Tile("g", new Coordinate(2,1)));
-        targets.add(new Tile("a", new Coordinate(2,2)));
-        targets.add(new Tile("m", new Coordinate(3,2)));
-        targets.add(new Tile("e", new Coordinate(4,2)));
-        targets.add(new Tile("s", new Coordinate(4,3)));
+        targets.add(new Tile("G", new Coordinate(2,1)));
+        targets.add(new Tile("A", new Coordinate(2,2)));
+        targets.add(new Tile("M", new Coordinate(3,2)));
+        targets.add(new Tile("E", new Coordinate(4,2)));
+        targets.add(new Tile("S", new Coordinate(4,3)));
         Word tWord = new Word(targets);
 
         b.removeWord(tWord);
-        assert(b.getTileAt(new Coordinate(2, 1)).getContents().equals("x"));
-        assert(b.getTileAt(new Coordinate(2, 2)).getContents().equals("e"));
-        assert(b.getTileAt(new Coordinate(3, 2)).getContents().equals("y"));
-        assert(b.getTileAt(new Coordinate(4, 2)).getContents().equals("g"));
-        assert(b.getTileAt(new Coordinate(4, 3)).getContents().equals("n"));
+        assert(b.getTileAt(new Coordinate(2, 1)).getContents().equals("X"));
+        assert(b.getTileAt(new Coordinate(2, 2)).getContents().equals("E"));
+        assert(b.getTileAt(new Coordinate(3, 2)).getContents().equals("Y"));
+        assert(b.getTileAt(new Coordinate(4, 2)).getContents().equals("G"));
+        assert(b.getTileAt(new Coordinate(4, 3)).getContents().equals("N"));
     }
 
 
