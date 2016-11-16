@@ -52,9 +52,9 @@ public class BoardTest {
     public void functionality_RemoveWord() throws WordSweeperException{
         Board b = new RandomBoard(7);
         String boardString =("A B C D E F G" +
-                             "H I J K L M N" +
-                             "O P Q R S T U" +
-                             "V W X Y Z A B" +
+                             "H I G K L M N" +
+                             "O P A M E T U" +
+                             "V W X Y S A B" +
                              "C D E F G H I" +
                              "J K L M N O P" +
                              "Q R S T U V W")
