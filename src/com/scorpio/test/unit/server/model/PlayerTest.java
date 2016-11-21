@@ -13,19 +13,17 @@ import com.scorpio.server.model.Player;
 public class PlayerTest {
 	@Test
 	public void testSetPlayerName() {
-	    String name="abc";
-	    Player p = new Player(name, null);
-	    p.setName(name);
-	    assertEquals(p.getName(), name);
+	    Player p = new Player("abc", null);
+	    p.setName("abc");
+	    assertEquals(p.getName(), "abc");
 	}
 	
 	@Test
 	public void testGetPlayerName() {
 		Player p = new Player("abc" ,null);
-		String name="abc";
-		p.setName(name);
+		p.setName("abc");
 	    String result = p.getName();;
-	    assertEquals(name, result);
+	    assertEquals("abc", result);
 	}
 	
 	@Test
@@ -52,36 +50,32 @@ public class PlayerTest {
 	
 	@Test
 	public void testSetScore(){
-		int score=100;
 		Player p = new Player("abc", null);
-		p.setScore(score);
-		assert(score==p.getScore());
+		p.setScore(100);
+		assert(100==p.getScore());
 }
 	
 	@Test
 	public void testGetScore(){
-		int score=100;
 		Player p = new Player("abc", null);
-		p.setScore(score);
+		p.setScore(100);
 		int result=p.getScore();
-		assert(score==result);
+		assert(100==result);
 	}
 	
 	@Test
 	public void testSetisManagingUser(){
-		boolean isManagingUser=true;
 		Player p = new Player("abc", null);
-		p.setManagingUser(isManagingUser);
-		assert(isManagingUser==p.isManagingUser());		
+		p.setManagingUser(true);
+		assert(true==p.isManagingUser());		
 	}
 	
 	@Test
 	public void testGetisManagingUser(){
-		boolean isManagingUser=true;
 		Player p = new Player("abc", null);
-		p.setManagingUser(isManagingUser);
+		p.setManagingUser(true);
 		boolean result=p.isManagingUser();
-		assert(isManagingUser==result);		
+		assert(true==result);		
 	}
 
 
