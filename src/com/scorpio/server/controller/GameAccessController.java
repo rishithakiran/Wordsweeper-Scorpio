@@ -159,10 +159,18 @@ public class GameAccessController implements IProtocolHandler {
                 ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
                 return new Message(listOfGamesResponse.toXML());
             }
+            
+            case "showGameStateRequest" : {
+    			String gameId = child.getAttributes().item(0).getNodeValue();
+    			BoardResponse boardResponse = new BoardResponse(null, gameId, request.id(), true);
+    			return new Message(boardResponse.toXML());
+    		}
+
 
             default: {
                 return null;
             }
+
 		}
 	}
 
@@ -235,7 +243,6 @@ public class GameAccessController implements IProtocolHandler {
 		// server assigns player as a managing user and a participating user
 		player.setManagingUser(true);
 		game.addPlayer(player);
-
 		GameManager.getInstance().games.put(game.getId(), game);
 	}
 	

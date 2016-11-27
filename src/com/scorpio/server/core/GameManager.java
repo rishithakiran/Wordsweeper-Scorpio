@@ -11,6 +11,8 @@ import java.util.UUID;
 	The server model is a singleton
  */
 public class GameManager implements IModel {
+	
+
 	public HashMap<String, Game> games = new HashMap<String, Game>();
 	private static GameManager instance = null;
 
@@ -38,4 +40,6 @@ public class GameManager implements IModel {
 	public Game findGameById(String gameId){
 		return this.games.get(gameId);
 	}
+	
+	
 }
