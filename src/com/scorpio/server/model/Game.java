@@ -67,11 +67,18 @@ public class Game implements IModel {
 	public int computeScore(String player, Word word) {
 		int tile_score = 0;
 		int word_score = 0;
+		int total_score=0;
 		ArrayList<Tile> tiles = word.tiles;
 		for (Tile tile : tiles) {
-			tile_score = (tile.getPoints() * tile.getMultiplier()) * tile.getSharedBy();
+			int m=tile.getSharedBy();
+			tile_score = (tile.getPoints() * tile.getMultiplier()) *(int)Math.pow(2, m);
 			word_score = word_score + tile_score;
 		}
+		if(tiles.size()>3){
+			total_score=(int)Math.pow(2,tiles.size())*10*word_score;
+			return total_score;
+		}
+		else
 		return word_score;
 	}
 
