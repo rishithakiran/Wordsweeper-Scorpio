@@ -28,7 +28,7 @@ public class ResetGameRequestTest {
         ConnectionController router = new ConnectionController();
         GameAccessController gac = new GameAccessController();
         try {
-            gac.createGame(new Player("testPlayer", null), "somePlace",null);
+            gac.createGame(new Player("testPlayer", new FakeClientState("a")), "somePlace",null);
         }catch(WordSweeperException ex){
             fail();
         }

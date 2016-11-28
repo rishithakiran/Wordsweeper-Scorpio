@@ -8,6 +8,7 @@ import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
+import com.scorpio.test.util.FakeClientState;
 import com.scorpio.test.util.XMLUtil;
 import com.scorpio.xml.Message;
 import org.junit.Before;
@@ -28,7 +29,7 @@ public class RepositionBoardTest {
         GameActionController gact = new GameActionController();
         GameAccessController gacc = new GameAccessController();
 
-        Player aPlayer = new Player("aPlayer", null);
+        Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
         try {
             gacc.createGame(aPlayer, "mygame", null);
         }catch(WordSweeperException ex){

@@ -69,30 +69,5 @@ public class GameTest {
 	    String result=g.getPassword();
 	    assertEquals("password",result);
 	}
-	@Test
-	public void testComputeScore() {
-	    Game g = new Game();
-	    Coordinate location= new Coordinate(1, 1) ;
-	    Coordinate location1= new Coordinate(1, 2) ;
-	    Coordinate location2= new Coordinate(1, 3) ;
-	    Coordinate location3= new Coordinate(1, 4) ;
-	    Coordinate location4= new Coordinate(2, 4) ;
-	    Tile t= new Tile("C",location);
-	    Tile t1= new Tile("R",location1);
-	    Tile t2= new Tile("O",location2);
-	    Tile t3= new Tile("S", location3);
-	    Tile t4= new Tile("S", location4);
-	    ArrayList<Tile> al = new ArrayList<Tile>();
-	    al.add(t);
-	    al.add(t1);
-	    al.add(t2);
-	    al.add(t3);
-	    al.add(t4);
-	    Word w2=new Word(al);
-	    Word w=new Word(null);
-	    assertEquals(0,g.computeScore("abc", w));
-		assertEquals(1600,g.computeScore("abc", w2));
-	}
-	
 
 }

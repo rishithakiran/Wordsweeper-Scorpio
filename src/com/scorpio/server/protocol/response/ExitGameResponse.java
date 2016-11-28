@@ -12,6 +12,11 @@ public class ExitGameResponse {
         this.error = error;
     }
 
+    public ExitGameResponse(String gameId, String requestID){
+        this.gameId = gameId;
+        this.requestID = requestID;
+        this.error = null;
+    }
 
     private String getHeader(){
 

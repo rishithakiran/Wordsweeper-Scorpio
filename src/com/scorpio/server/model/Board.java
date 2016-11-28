@@ -47,7 +47,6 @@ public class Board implements IModel {
 				// the issue
 				Tile tCopy = new Tile();
 				tCopy.setContents(t.getContents());
-				tCopy.setPoints(t.getPoints());
 				tCopy.setMultiplier(t.getMultiplier());
 				// Readdress the coordinate
 				tCopy.setLocation(new Coordinate(x,y));

@@ -7,6 +7,7 @@ import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.*;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
+import com.scorpio.server.protocol.response.FindWordResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
@@ -33,28 +34,11 @@ public class GameActionController implements IProtocolHandler {
                     return new Message(br.toXML());
                 }
 
-                // Notify everyone
-                // Notify all players that the game has changed
-                List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
-                // Filter out the player that just joined the game (they'll get
-                // their own response)
-                players = players.stream().filter((s) -> !(s.getName().equals(playerName)))
-                        .collect(Collectors.toList());
-                for (Player p : players) {
-                    // If we've lost the client state, pass
-                    if (p.getClientState() == null) {
-                        continue;
-                    }
+                GameManager.getInstance().findGameById(targetGame).notifyPlayers();
 
-                    String requestID = p.getClientState().id();
-                    BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
-                    Message brm = new Message(br.toXML());
-                    p.getClientState().sendMessage(brm);
-                }
-
-                // Finally, send the response to the player that sent the original request
-                BoardResponse br = new BoardResponse(playerName, targetGame, request.id(), false);
-                return new Message(br.toXML());
+                // We can return null here because notifyPlayers will notify everyone; including
+                // the person who jsut joined!
+                return null;
 
             }
             case "findWordRequest": {
@@ -66,7 +50,7 @@ public class GameActionController implements IProtocolHandler {
                     String loc = nextChild.getAttributes().item(1).getNodeValue();
                     // Parse the CSV loc into an x and y value
                     String[] xy = loc.split(",");
-                    Tile t = new Tile(s, new Coordinate(Integer.parseInt(xy[0]), Integer.parseInt(xy[1])));
+                    Tile t = new Tile(s, new Coordinate(Integer.parseInt(xy[0]) - 1, Integer.parseInt(xy[1]) - 1));
                     tiles.add(t);
                     nextChild = nextChild.getNextSibling();
                 }
@@ -78,8 +62,24 @@ public class GameActionController implements IProtocolHandler {
                 try {
                     this.findWord(w, playerId, gameId);
                 }catch(WordSweeperException ex){
-                    /// zzz
+                    FindWordResponse fwr = new FindWordResponse(
+                            playerId,gameId,request.id(),
+                            ex.toString()
+                    );
+                    return new Message(fwr.toXML());
                 }
+
+
+                // Notify all players of chnage to board state
+                GameManager.getInstance().findGameById(gameId).notifyPlayers();
+
+
+                // Send findWordResponse
+                FindWordResponse fwr = new FindWordResponse(
+                        playerId,gameId,request.id(),
+                        GameManager.getInstance().findGameById(gameId).getPlayer(playerId).getScore()
+                );
+                return new Message(fwr.toXML());
             }
         }
 
@@ -87,9 +87,10 @@ public class GameActionController implements IProtocolHandler {
     }
 
 
-    public void findWord(Word w, String player, String game) throws WordSweeperException{
+    public void findWord(Word w, String playerName, String game) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(game);
-        Board pb = g.getPlayerBoard(player);
+        Board pb = g.getPlayerBoard(playerName);
+        Player player = g.getPlayer(playerName);
 
         // We also need to normalize w based on the player's current location, as w uses
         // absolute coordinates, while pb uses a relative system
@@ -97,18 +98,22 @@ public class GameActionController implements IProtocolHandler {
         for(Tile t : w.tiles){
             Tile nT = new Tile();
             Coordinate current = t.getLocation();
-            Coordinate player0Point = g.getPlayer(player).getLocation();
+            Coordinate player0Point = g.getPlayer(playerName).getLocation();
             Coordinate newLoc = new Coordinate(current.x - player0Point.x, current.y - player0Point.y);
             nT.setLocation(newLoc);
             nT.setContents(t.getContents());
+            nT.setMultiplier(t.getMultiplier());
+            nT.setSharedBy(t.getSharedBy());
             relativeTiles.add(nT);
         }
         Word relativeW = new Word(relativeTiles);
 
         // Affirm that word exists in the player's board, and then remove it from the global board
         if(pb.hasWord(relativeW)){
-            // Calculate the point value of word submitted
-            // TODO on hold
+            // Calculate the point value of word submitted and grant the
+            // points to the player
+            int score = relativeW.computeScore();
+            player.setScore(player.getScore() + score);
 
             g.getBoard().removeWord(w);
         }else{

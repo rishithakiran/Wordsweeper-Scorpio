@@ -2,6 +2,8 @@ package com.scorpio.server.model;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.exception.WordSweeperException;
+import com.scorpio.server.protocol.response.BoardResponse;
+import com.scorpio.xml.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,24 +66,6 @@ public class Game implements IModel {
 		this.password = password;
 	}
 
-	public int computeScore(String player, Word word) {
-		int tile_score = 0;
-		int word_score = 0;
-		int total_score=0;
-		ArrayList<Tile> tiles = word.tiles;
-		for (Tile tile : tiles) {
-			int m=tile.getSharedBy();
-			tile_score = (tile.getPoints() * tile.getMultiplier()) *(int)Math.pow(2, m);
-			word_score = word_score + tile_score;
-		}
-		if(tiles.size()>3){
-			total_score=(int)Math.pow(2,tiles.size())*10*word_score;
-			return total_score;
-		}
-		else
-		return word_score;
-	}
-
 	public Player getManagingPlayer() {
 		for (Player player : players) {
 			if (player.isManagingUser() == true)
@@ -90,6 +74,18 @@ public class Game implements IModel {
 		return null;
 	}
 
+
+    /**
+     * Notify all players in this game of a change by sending each a boardResponse message
+     */
+	public void notifyPlayers(){
+        for (Player p : players) {
+            String requestID = p.getClientState().id();
+            BoardResponse br = new BoardResponse(p.getName(), this.getId(), requestID, false);
+            Message brm = new Message(br.toXML());
+            p.getClientState().sendMessage(brm);
+        }
+    }
 
 	public Coordinate getBonus(){
 		return new Coordinate(0,0);

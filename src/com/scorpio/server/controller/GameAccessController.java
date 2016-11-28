@@ -73,11 +73,6 @@ public class GameAccessController implements IProtocolHandler {
                 players = players.stream().filter((s) -> !(s.getName().equals(newPlayer.getName())))
                         .collect(Collectors.toList());
                 for (Player p : players) {
-                    // If we've lost the client state, pass
-                    if (p.getClientState() == null) {
-                        continue;
-                    }
-
                     String requestID = p.getClientState().id();
                     BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
                     Message brm = new Message(br.toXML());
@@ -103,29 +98,11 @@ public class GameAccessController implements IProtocolHandler {
 
                 // If the game still exists, notify all remaining players
                 if (GameManager.getInstance().findGameById(targetGame) != null) {
-                    // Notify all players that the game has changed
-                    List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
-                    // Filter out the player that just joined the game (they'll get
-                    // their own request)
-                    players = players.stream().filter((s) -> !(s.getName().equals(targetPlayer)))
-                            .collect(Collectors.toList());
-                    for (Player p : players) {
-                        // If we've lost the client state, pass
-                        if (p.getClientState() == null) {
-                            continue;
-                        }
-
-                        String requestID = p.getClientState().id();
-                        BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
-                        Message brm = new Message(br.toXML());
-                        p.getClientState().sendMessage(brm);
-                    }
-
-                    // Finally, send the response to the player that just joined
-                    BoardResponse br = new BoardResponse(targetPlayer, targetGame, request.id(), false);
-                    return new Message(br.toXML());
+                    // Notify all players of chaage to board state
+                    GameManager.getInstance().findGameById(targetGame).notifyPlayers();
                 }
-                return null;
+                ExitGameResponse egr = new ExitGameResponse(targetGame, request.id());
+                return new Message(egr.toXML());
             }
             case "lockGameRequest": {
                 // Find the game

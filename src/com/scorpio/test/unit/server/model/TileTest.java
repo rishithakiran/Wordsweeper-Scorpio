@@ -38,14 +38,10 @@ public class TileTest {
 	    String result=t.getContents();
 	    assertEquals("A",result);
 	}
-	public void testSetPoints() {
-		Tile t= new Tile();
-	    t.setPoints(2);
-	    assertEquals(2,t.getPoints());
-	}
+
 	public void testGetPoints() {
 		Tile t= new Tile();
-	    t.setPoints(2);
+	    t.setContents("R");
 	    int result=t.getPoints();
 	    assertEquals(2,result);
 	}

@@ -7,6 +7,7 @@ import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
+import com.scorpio.test.util.FakeClientState;
 import com.scorpio.test.util.XMLUtil;
 import com.scorpio.xml.Message;
 import org.junit.Before;
@@ -49,8 +50,8 @@ public class ExitGameTest {
         ConnectionController router = new ConnectionController();
         GameAccessController gac = new GameAccessController();
 
-        Player p1 = new Player("aPlayer", null);
-        Player p2 = new Player("bPlayer", null);
+        Player p1 = new Player("aPlayer", new FakeClientState("a"));
+        Player p2 = new Player("bPlayer", new FakeClientState("b"));
         try {
             gac.createGame(p1, "mygame", null);
             gac.joinGame(p2, "mygame", null);
@@ -74,9 +75,9 @@ public class ExitGameTest {
         ConnectionController router = new ConnectionController();
         GameAccessController gac = new GameAccessController();
 
-        Player p1 = new Player("bPlayer", null);
-        Player p2 = new Player("aPlayer", null);
-        Player p3 = new Player("cPlayer", null);
+        Player p1 = new Player("bPlayer", new FakeClientState("a"));
+        Player p2 = new Player("aPlayer", new FakeClientState("b"));
+        Player p3 = new Player("cPlayer", new FakeClientState("c"));
 
         try {
             gac.createGame(p1, "mygame", null);
@@ -92,8 +93,14 @@ public class ExitGameTest {
 
         Game g = GameManager.getInstance().findGameById("mygame");
 
+
         assert(g.getPlayers().size() == 2);
         assert(g.getManagingPlayer().getName().equals("bPlayer"));
+
+        // Ensure that b and c got a new boardResponse notifying them that a left
+        assert(((FakeClientState)p1.getClientState()).getLastMessage() != null);
+        assert(((FakeClientState)p3.getClientState()).getLastMessage() != null);
+
     }
 
     @Test

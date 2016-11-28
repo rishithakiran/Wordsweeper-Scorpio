@@ -32,21 +32,8 @@ public class GameManagementController implements IProtocolHandler {
                     return new Message(rgr.toXML());
                 }
 
-                // Notify everyone
-                // Notify all players that the game has changed
-                List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
-
-                for (Player p : players) {
-                    // If we've lost the client state, pass
-                    if (p.getClientState() == null) {
-                        continue;
-                    }
-
-                    String requestID = p.getClientState().id();
-                    BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
-                    Message brm = new Message(br.toXML());
-                    p.getClientState().sendMessage(brm);
-                }
+                // Notify all players of chnage to board state
+                GameManager.getInstance().findGameById(targetGame).notifyPlayers();
 
                 // Finally, send a resetGameResponse to the initiator
                 ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id());
