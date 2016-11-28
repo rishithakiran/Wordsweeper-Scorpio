@@ -35,7 +35,7 @@ public class JoinGameTest {
         Game g = GameManager.getInstance().findGameById("somePlace");
         int playersBefore = g.getPlayers().size();
         Message msg = xml.createMessageFromFile("testxml/joinGameRequest.xml");
-        router.process(null, msg);
+        router.process(new FakeClientState("b"), msg);
         int playersAfter = g.getPlayers().size();
 
         assert(playersBefore + 1 == playersAfter);

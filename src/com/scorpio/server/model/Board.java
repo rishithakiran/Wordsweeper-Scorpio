@@ -90,20 +90,6 @@ public class Board implements IModel {
 	}
 
 
-
-	public void pp(){
-        for(int y = 0; y < this.size; y++){
-            for(int x = 0; x < this.size; x++){
-                Tile t = this.getTileAt(new Coordinate(x,y));
-                if(t != null) {
-                    System.out.print(t.getContents());
-                }
-            }
-            System.out.println();
-        }
-    }
-
-
 	/**
 	 * Serialize the board in preparation to be sent through a boardResponse message
 	 * @return Board represented as a comma separated string

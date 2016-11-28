@@ -50,10 +50,6 @@ public class Game implements IModel {
 		return players;
 	}
 
-	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
-	}
-
 	public void addPlayer(Player p){
 		this.players.add(p);
 	}

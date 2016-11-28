@@ -89,8 +89,19 @@ public class GameActionController implements IProtocolHandler {
 
     public void findWord(Word w, String playerName, String game) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(game);
-        Board pb = g.getPlayerBoard(playerName);
+        if(g == null){
+            throw new WordSweeperException("Game does not exist");
+        }
+
         Player player = g.getPlayer(playerName);
+        if(player == null){
+            throw new WordSweeperException("Who are you?!");
+        }
+
+        Board pb = g.getPlayerBoard(playerName);
+        if(pb == null){
+            throw new WordSweeperException("Internal error");
+        }
 
         // We also need to normalize w based on the player's current location, as w uses
         // absolute coordinates, while pb uses a relative system

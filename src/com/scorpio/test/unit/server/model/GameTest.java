@@ -13,6 +13,12 @@ import com.scorpio.server.model.Tile;
 import com.scorpio.server.model.Word;
 
 public class GameTest {
+	@Test
+	public void testGetNonExistentPlayer(){
+		Game g = new Game();
+		assert(g.getPlayer("I'm not real") == null);
+	}
+
 
 	@Test
 	public void testSetId() {

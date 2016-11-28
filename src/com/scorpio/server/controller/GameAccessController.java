@@ -37,7 +37,9 @@ public class GameAccessController implements IProtocolHandler {
                 if (child.getAttributes().item(1) != null) {
                     password = child.getAttributes().item(1).getNodeName();
                 }
+
                 String gameUUID = UUID.randomUUID().toString();
+
                 try {
                     this.createGame(new Player(playerName, state), gameUUID, password);
                     // Formulate a response and send it
@@ -67,21 +69,9 @@ public class GameAccessController implements IProtocolHandler {
                 }
 
                 // Notify all players that the game has changed
-                List<Player> players = GameManager.getInstance().findGameById(targetGame).getPlayers();
-                // Filter out the player that just joined the game (they'll get
-                // their own request)
-                players = players.stream().filter((s) -> !(s.getName().equals(newPlayer.getName())))
-                        .collect(Collectors.toList());
-                for (Player p : players) {
-                    String requestID = p.getClientState().id();
-                    BoardResponse br = new BoardResponse(p.getName(), targetGame, requestID, false);
-                    Message brm = new Message(br.toXML());
-                    p.getClientState().sendMessage(brm);
-                }
+				GameManager.getInstance().findGameById(targetGame).notifyPlayers();
 
-                // Finally, send the response to the player that just joined
-                BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), false);
-                return new Message(br.toXML());
+				return null;
             }
             case "exitGameRequest": {
                 // Find the game
@@ -101,13 +91,13 @@ public class GameAccessController implements IProtocolHandler {
                     // Notify all players of chaage to board state
                     GameManager.getInstance().findGameById(targetGame).notifyPlayers();
                 }
+
                 ExitGameResponse egr = new ExitGameResponse(targetGame, request.id());
                 return new Message(egr.toXML());
             }
             case "lockGameRequest": {
                 // Find the game
                 String targetGame = child.getAttributes().item(0).getNodeValue();
-
 
                 // Figure out if the request to lock the game came from the
                 // the same ID as the one associated with the managing user
@@ -116,6 +106,7 @@ public class GameAccessController implements IProtocolHandler {
                                             .getManagingPlayer()
                                             .getClientState()
                                             .id();
+
                 if(!managingUserId.equals(state.id())){
                     LockGameResponse lgr = new LockGameResponse(targetGame, request.id(), "Not managing user");
                     return new Message(lgr.toXML());
@@ -131,6 +122,7 @@ public class GameAccessController implements IProtocolHandler {
                 LockGameResponse lr = new LockGameResponse(targetGame, request.id());
                 return new Message(lr.toXML());
             }
+
             case "listGamesRequest": {
                 // this.getGames();
                 ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
@@ -143,11 +135,9 @@ public class GameAccessController implements IProtocolHandler {
     			return new Message(boardResponse.toXML());
     		}
 
-
             default: {
                 return null;
             }
-
 		}
 	}
 
@@ -243,8 +233,6 @@ public class GameAccessController implements IProtocolHandler {
         }
         game.setLocked(true);
     }
-    
-
 
 	public void exitGame(String playerId, String gameId) throws WordSweeperException {
 		Game g;
