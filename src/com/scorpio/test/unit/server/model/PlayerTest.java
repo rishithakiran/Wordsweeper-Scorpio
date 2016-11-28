@@ -2,6 +2,7 @@ package com.scorpio.test.unit.server.model;
 
 import static org.junit.Assert.*;
 
+import com.scorpio.test.util.FakeClientState;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +29,9 @@ public class PlayerTest {
 	
 	@Test
 	public void testgetClientState() {
-		fail("Not yet implemented");
+		FakeClientState fcs = new FakeClientState("p");
+		Player p = new Player("abc" ,fcs);
+		assert(fcs == p.getClientState());
 	}
 	
 	@Test
