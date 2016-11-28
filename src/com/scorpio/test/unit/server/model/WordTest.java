@@ -47,12 +47,13 @@ public class WordTest {
         Coordinate location2= new Coordinate(1, 3) ;
         Coordinate location3= new Coordinate(1, 4) ;
         Coordinate location4= new Coordinate(2, 4) ;
+        Coordinate location5 = new Coordinate(3, 4);
         Tile t= new Tile("R",location);
         Tile t1= new Tile("E",location1);
         Tile t2= new Tile("C",location2);
         Tile t3= new Tile("O", location3);
         Tile t4= new Tile("R", location4);
-        Tile t5= new Tile("D", location4);
+        Tile t5= new Tile("D", location5);
 
         ArrayList<Tile> al = new ArrayList<Tile>();
         al.add(t);
