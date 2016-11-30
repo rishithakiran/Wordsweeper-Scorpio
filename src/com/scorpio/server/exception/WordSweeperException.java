@@ -6,4 +6,8 @@ public class WordSweeperException extends Exception {
         super();
         this.reason = reason;
     }
+
+    public String toString(){
+        return reason;
+    }
 }

@@ -107,8 +107,8 @@ public class Game implements IModel {
 		int playerBoardSize = 4;
 		Player p = this.getPlayer(player);
 		Coordinate currentLoc = p.getLocation();
-		if(currentLoc.col + playerBoardSize + rowChange >= this.getBoard().getSize() ||
-				currentLoc.row + playerBoardSize + colChange >= this.getBoard().getSize()){
+		if(currentLoc.col + playerBoardSize + colChange > this.getBoard().getSize() ||
+				currentLoc.row + playerBoardSize + rowChange > this.getBoard().getSize()){
 
 			throw new WordSweeperException("Player move out of bounds");
 		}
