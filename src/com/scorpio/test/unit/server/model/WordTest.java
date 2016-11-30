@@ -1,7 +1,7 @@
 package com.scorpio.test.unit.server.model;
 
 import com.scorpio.server.accessory.Coordinate;
-import com.scorpio.server.model.Game;
+import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Tile;
 import com.scorpio.server.model.Word;
 import org.junit.Test;
@@ -13,8 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class WordTest {
 
     @Test
-    public void testComputeScore() {
-        Game g = new Game();
+    public void testComputeScore() throws WordSweeperException{
         Coordinate location= new Coordinate(1, 1) ;
         Coordinate location1= new Coordinate(1, 2) ;
         Coordinate location2= new Coordinate(1, 3) ;
@@ -40,8 +39,7 @@ public class WordTest {
     }
 
     @Test
-    public void testComputeScore2() {
-        Game g = new Game();
+    public void testComputeScore2() throws WordSweeperException{
         Coordinate location= new Coordinate(1, 1) ;
         Coordinate location1= new Coordinate(1, 2) ;
         Coordinate location2= new Coordinate(1, 3) ;

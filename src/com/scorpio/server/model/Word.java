@@ -1,4 +1,6 @@
 package com.scorpio.server.model;
+import com.scorpio.server.exception.WordSweeperException;
+
 import java.util.ArrayList;
 
 public class Word implements IModel{
@@ -18,12 +20,12 @@ public class Word implements IModel{
 	}
 
 
-	public int computeScore() {
+	public int computeScore() throws WordSweeperException{
 		if(tiles == null){
 			return 0;
 		}
 		if(tiles.size()<3) {
-			return 0;
+			throw new WordSweeperException("Word too short");
 		}
 
 		int word_score = 0;
