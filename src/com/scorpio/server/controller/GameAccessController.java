@@ -28,6 +28,7 @@ public class GameAccessController implements IProtocolHandler {
 
 	@Override
 	public Message process(ClientState state, Message request) {
+		System.out.println(request);
 		Node child = request.contents.getFirstChild();
 		String type = child.getLocalName();
 		switch (type) {
@@ -176,7 +177,7 @@ public class GameAccessController implements IProtocolHandler {
 		synchronized (game) {
 			int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
 			int y = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
-			player.setLocation(new Coordinate(x, y));
+			player.setLocation(new Coordinate(x + 1, y + 1));
 			// Add them to the board
 			game.addPlayer(player);
 		}
@@ -205,7 +206,7 @@ public class GameAccessController implements IProtocolHandler {
 		int playerBoardSize = 4;
 		int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
 		int y = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
-		player.setLocation(new Coordinate(x, y));
+		player.setLocation(new Coordinate(x + 1, y + 1));
 
 		// server assigns player as a managing user and a participating user
 		player.setManagingUser(true);

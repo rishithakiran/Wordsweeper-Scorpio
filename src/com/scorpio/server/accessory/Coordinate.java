@@ -1,16 +1,16 @@
 package com.scorpio.server.accessory;
 
 public class Coordinate {
-    public int x;
-    public int y;
+    public int row;
+    public int col;
 
-    public Coordinate(int x, int y){
-        this.x = x;
-        this.y = y;
+    public Coordinate(int col, int row){
+        this.row = row;
+        this.col = col;
     }
 
     public String toString(){
-        return String.format("%d,%d", x, y);
+        return String.format("%d,%d", col, row);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Coordinate {
         if (other == this) return true;
         if (!(other instanceof Coordinate))return false;
         Coordinate otherCoordinate = (Coordinate) other;
-        if(otherCoordinate.x == this.x && otherCoordinate.y == this.y){
+        if(otherCoordinate.row == this.row && otherCoordinate.col == this.col){
             return true;
         }
         return false;

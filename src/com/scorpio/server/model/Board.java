@@ -1,21 +1,12 @@
 package com.scorpio.server.model;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.accessory.Dictionary;
 import com.scorpio.server.exception.WordSweeperException;
-import com.scorpio.test.util.XMLUtil;
-import com.scorpio.xml.Message;
 
 public class Board implements IModel {
 
@@ -34,14 +25,17 @@ public class Board implements IModel {
 	 * @return The sub board
 	 */
 	public Board getSubBoard(Coordinate start, int size){
-		if(size + start.x > this.size || size + start.y > this.size){
+		if(size + start.row > this.size + 1 || size + start.col > this.size + 1){
+			return null;
+		}
+		if(start.row < 1 || start.col < 1){
 			return null;
 		}
 
 		Board subBoard = new Board(size);
-		for(int x = 0; x < size; x++){
-			for(int y = 0; y < size; y++){
-				Tile t = this.getTileAt(new Coordinate(start.x + x, start.y + y));
+		for(int col = 0; col < size; col++){
+			for(int row = 0; row < size; row++){
+				Tile t = this.getTileAt(new Coordinate(start.col + col, start.row + row));
 				// Make a fresh copy of this tile
 				// This is inelegant, but I can't think of a prettier way to handle
 				// the issue
@@ -49,7 +43,7 @@ public class Board implements IModel {
 				tCopy.setContents(t.getContents());
 				tCopy.setMultiplier(t.getMultiplier());
 				// Readdress the coordinate
-				tCopy.setLocation(new Coordinate(x,y));
+				tCopy.setLocation(new Coordinate(col+1,row+1));
 				subBoard.tiles.add(tCopy);
 			}
 		}
@@ -96,9 +90,9 @@ public class Board implements IModel {
 	 */
 	public String toString(){
 		String out = "";
-		for(int x = 0; x < this.size; x++){
-			for(int y = 0; y < this.size; y++){
-                Tile t = this.getTileAt(new Coordinate(x,y));
+		for(int row = 1; row <= this.size; row++){
+			for(int col = 1; col <= this.size; col++){
+                Tile t = this.getTileAt(new Coordinate(col,row));
                 if(t != null) {
                     out += t.getContents() + ",";
                 }
@@ -117,6 +111,10 @@ public class Board implements IModel {
 		 */
 		for(int i = 0; i <  w.tiles.size(); ++i){
             Tile t = w.tiles.get(i);
+			if(t.getLocation().col > this.size || t.getLocation().col < 1 ||
+					t.getLocation().row > this.size || t.getLocation().row < 1){
+				return false;
+			}
 			Tile trueTile = this.getTileAt(t.getLocation());
 			if(!trueTile.equals(t)){
 				return false;
@@ -127,8 +125,8 @@ public class Board implements IModel {
                 Coordinate priorCoords = w.tiles.get(i-1).getLocation();
                 Coordinate currentCoords = w.tiles.get(i).getLocation();
 
-                int xdiff = Math.abs(priorCoords.x - currentCoords.x);
-                int ydiff = Math.abs(priorCoords.y - currentCoords.y);
+                int xdiff = Math.abs(priorCoords.row - currentCoords.row);
+                int ydiff = Math.abs(priorCoords.col - currentCoords.col);
 
                 if(xdiff + ydiff != 1){
                     return false;
@@ -151,10 +149,10 @@ public class Board implements IModel {
 		}
 
 		// Create the required new tiles
-		for(int x = this.size; x < newsize; x++){
-			for(int y = this.size; y < newsize; y++){
+		for(int col = this.size; col < newsize; col++){
+			for(int row = this.size; row < newsize; row++){
 				Tile t = new Tile();
-				t.setLocation(new Coordinate(x, y));
+				t.setLocation(new Coordinate(col, row));
 				this.tiles.add(t);
 			}
 		}
@@ -180,22 +178,22 @@ public class Board implements IModel {
 
         Board rebuiltBoard = new Board(this.size);
 
-        for(int x = 0; x < this.size; ++x){
+        for(int col = 1; col <= this.size; ++col){
             int offset = 0;
-            for(int y = 0; y < this.size; ++y){
+            for(int row = 1; row <= this.size; ++row){
                 // Read all tiles not marked for deletion
-                Tile t = this.getTileAt(new Coordinate(x,y));
+                Tile t = this.getTileAt(new Coordinate(col,row));
                 if(t.markedForDelete){
                     ++offset;
                 }else{
-                    t.setLocation(new Coordinate(t.getLocation().x, t.getLocation().y - offset));
+                    t.setLocation(new Coordinate(t.getLocation().col, t.getLocation().row - offset));
                     rebuiltBoard.tiles.add(t);
                 }
             }
             // Populate with new random tiles
-            for(int y = this.getSize() - offset; y < this.size; ++y){
+            for(int row = this.getSize() - offset + 1; row <= this.size; ++row){
                 Tile newTile = new Tile();
-                newTile.setLocation(new Coordinate(x, y));
+                newTile.setLocation(new Coordinate(col, row));
                 rebuiltBoard.tiles.add(newTile);
             }
         }

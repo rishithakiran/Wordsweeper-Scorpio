@@ -3,6 +3,7 @@ package com.scorpio.server.protocol.response;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
@@ -36,8 +37,10 @@ public class BoardResponse {
 		List<Player> players = g.getPlayers();
 		ArrayList<String> playerXMLObjects = new ArrayList<String>();
 		for (Player p : players) {
+			Coordinate nc = new Coordinate(p.getLocation().col, p.getLocation().row);
+
 			String playerXMLObject = String.format("<player name='%s' position='%s' board='%s' score='%d'/>",
-					p.getName(), p.getLocation().toString(), g.getPlayerBoard(p.getName()).toString(), p.getScore());
+					p.getName(), nc.toString(), g.getPlayerBoard(p.getName()).toString(), p.getScore());
 			playerXMLObjects.add(playerXMLObject);
 		}
 

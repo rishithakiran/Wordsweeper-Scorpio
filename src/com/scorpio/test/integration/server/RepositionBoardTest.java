@@ -37,13 +37,13 @@ public class RepositionBoardTest {
         }
 
         // Set out test user to 0,0
-        GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").setLocation(new Coordinate(0,0));
+        GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").setLocation(new Coordinate(1,1));
         Message msg = xml.createMessageFromFile("testxml/repositionBoardRequest.xml");
         router.process(null, msg);
         Coordinate newLoc = GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").getLocation();
 
 
-        if(!newLoc.equals(new Coordinate(1,2))){
+        if(!newLoc.equals(new Coordinate(2,1))){
             fail();
         }
     }

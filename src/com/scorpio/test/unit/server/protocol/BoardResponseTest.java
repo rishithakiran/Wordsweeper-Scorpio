@@ -27,13 +27,13 @@ public class BoardResponseTest {
 		GameAccessController gac = new GameAccessController();
 		Player newPlayer = new Player(testPlayerName, null);
 		gac.createGame(newPlayer, gameUUID.toString(), password);
-		newPlayer.setLocation(new Coordinate(0, 0));
+		newPlayer.setLocation(new Coordinate(1, 1));
 		Game g = GameManager.getInstance().findGameById(gameUUID.toString());
 
 		String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), false).toXML();
 		String correctResp = String.format(
 				"<response id='%s' success='true'>" + "<boardResponse gameId='%s' managingUser='%s' bonus='0,0'>"
-						+ "<player name='%s' position='0,0' board='%s' score='0'/>" + "</boardResponse>"
+						+ "<player name='%s' position='1,1' board='%s' score='0'/>" + "</boardResponse>"
 						+ "</response>",
 				reqUUID.toString(), gameUUID.toString(), testPlayerName, testPlayerName,
 				g.getPlayerBoard(testPlayerName));
@@ -49,13 +49,13 @@ public class BoardResponseTest {
 		GameAccessController gac = new GameAccessController();
 		Player newPlayer = new Player(testPlayerName, null);
 		gac.createGame(newPlayer, gameUUID.toString(), password);
-		newPlayer.setLocation(new Coordinate(0, 0));
+		newPlayer.setLocation(new Coordinate(1, 1));
 		Game g = GameManager.getInstance().findGameById(gameUUID.toString());
 
 		String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), true).toXML();
 		String correctResp = String.format("<response id='%s' success='true'>"
 				+ "<boardResponse gameId='%s' managingUser='%s' bonus='0,0' size='%d' contents='%s'>"
-				+ "<player name='%s' position='0,0' board='%s' score='0'/>" + "</boardResponse>" + "</response>",
+				+ "<player name='%s' position='1,1' board='%s' score='0'/>" + "</boardResponse>" + "</response>",
 				reqUUID.toString(), gameUUID.toString(), testPlayerName, g.getBoard().getSize(),
 				g.getBoard().toString(), testPlayerName, g.getPlayerBoard(testPlayerName));
 		assert (br.equals(correctResp));

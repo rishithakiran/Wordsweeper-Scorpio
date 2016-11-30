@@ -9,13 +9,10 @@ import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.protocol.IProtocolHandler;
-import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.server.protocol.response.ResetGameResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GameManagementController implements IProtocolHandler {
     @Override
@@ -46,7 +43,7 @@ public class GameManagementController implements IProtocolHandler {
     }
 
 
-    public void resetGame(String gameId) throws WordSweeperException{
+    public static void resetGame(String gameId) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(gameId);
         if(g == null){
             throw new WordSweeperException("Game does not exist");

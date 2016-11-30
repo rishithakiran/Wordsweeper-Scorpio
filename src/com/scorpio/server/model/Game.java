@@ -7,8 +7,6 @@ import com.scorpio.xml.Message;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Game implements IModel {
@@ -79,6 +77,7 @@ public class Game implements IModel {
             String requestID = p.getClientState().id();
             BoardResponse br = new BoardResponse(p.getName(), this.getId(), requestID, false);
             Message brm = new Message(br.toXML());
+			System.out.println(brm);
             p.getClientState().sendMessage(brm);
         }
     }
@@ -103,18 +102,18 @@ public class Game implements IModel {
         this.players = (ArrayList<Player>) this.players.stream().filter((s) -> !s.getName().equals(name)).collect(Collectors.toList());
     }
 
-	public void repositionPlayer(String player, int rowChange, int colChange) throws WordSweeperException{
+	public void repositionPlayer(String player, int colChange, int rowChange) throws WordSweeperException{
 		// Verify that the proposed change is in bounds
 		int playerBoardSize = 4;
 		Player p = this.getPlayer(player);
 		Coordinate currentLoc = p.getLocation();
-		if(currentLoc.y + playerBoardSize + rowChange >= this.getBoard().getSize() ||
-				currentLoc.x + playerBoardSize + colChange >= this.getBoard().getSize()){
+		if(currentLoc.col + playerBoardSize + rowChange >= this.getBoard().getSize() ||
+				currentLoc.row + playerBoardSize + colChange >= this.getBoard().getSize()){
 
 			throw new WordSweeperException("Player move out of bounds");
 		}
 
 		// Do the move
-		p.setLocation(new Coordinate(currentLoc.x + colChange, currentLoc.y + rowChange));
+		p.setLocation(new Coordinate(currentLoc.col + colChange, currentLoc.row + rowChange));
 	}
 }

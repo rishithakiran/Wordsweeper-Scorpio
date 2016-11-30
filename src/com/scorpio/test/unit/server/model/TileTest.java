@@ -13,7 +13,7 @@ public class TileTest {
 
 	@Test
 	public void testSetLocation(){
-		Coordinate location= new Coordinate(0, 1) ;
+		Coordinate location= new Coordinate(1, 1) ;
 		Tile t= new Tile();
 		t.setLocation(location);
 		assert(location==t.getLocation());	
@@ -21,7 +21,7 @@ public class TileTest {
 	
 	@Test
 	public void testGetLocation(){
-		Coordinate location=new Coordinate(0, 1);
+		Coordinate location=new Coordinate(1, 1);
 		Tile t= new Tile();
 		t.setLocation(location);
 		Coordinate result=t.getLocation();

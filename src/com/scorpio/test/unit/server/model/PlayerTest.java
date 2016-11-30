@@ -36,7 +36,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testSetLocation(){
-		Coordinate location= new Coordinate(0, 1) ;
+		Coordinate location= new Coordinate(1, 1) ;
 		Player p = new Player("abc", null);
 		p.setLocation(location);
 		assert(location==p.getLocation());	
@@ -44,7 +44,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testGetLocation(){
-		Coordinate location=new Coordinate(0, 1);
+		Coordinate location=new Coordinate(1, 1);
 		Player p = new Player("abc", null);
 		p.setLocation(location);
 		Coordinate result=p.getLocation();

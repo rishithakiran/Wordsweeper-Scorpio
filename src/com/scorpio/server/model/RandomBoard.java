@@ -14,9 +14,9 @@ public class RandomBoard extends Board{
      * value
      */
     private void fillRandom(){
-        for (int row = 0; row < this.size; row++) {
-            for (int column = 0; column < this.size; column++) {
-                Coordinate coordinate = new Coordinate(row, column);
+        for (int row = 1; row <= this.size; row++) {
+            for (int col = 1; col <= this.size; col++) {
+                Coordinate coordinate = new Coordinate(col, row);
                 Tile tile = new Tile();
                 tile.setLocation(coordinate);
                 this.tiles.add(tile);

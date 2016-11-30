@@ -12,8 +12,6 @@ import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GameActionController implements IProtocolHandler {
     @Override
@@ -48,9 +46,9 @@ public class GameActionController implements IProtocolHandler {
                 while(nextChild != null){
                     String s = nextChild.getAttributes().item(0).getNodeValue();
                     String loc = nextChild.getAttributes().item(1).getNodeValue();
-                    // Parse the CSV loc into an x and y value
+                    // Parse the CSV loc into an row and col value
                     String[] xy = loc.split(",");
-                    Tile t = new Tile(s, new Coordinate(Integer.parseInt(xy[0]) - 1, Integer.parseInt(xy[1]) - 1));
+                    Tile t = new Tile(s, new Coordinate(Integer.parseInt(xy[0]), Integer.parseInt(xy[1])));
                     tiles.add(t);
                     nextChild = nextChild.getNextSibling();
                 }
@@ -110,7 +108,7 @@ public class GameActionController implements IProtocolHandler {
             Tile nT = new Tile();
             Coordinate current = t.getLocation();
             Coordinate player0Point = g.getPlayer(playerName).getLocation();
-            Coordinate newLoc = new Coordinate(current.x - player0Point.x, current.y - player0Point.y);
+            Coordinate newLoc = new Coordinate(current.col - (player0Point.col - 1), current.row - (player0Point.row - 1));
             nT.setLocation(newLoc);
             nT.setContents(t.getContents());
             nT.setMultiplier(t.getMultiplier());
