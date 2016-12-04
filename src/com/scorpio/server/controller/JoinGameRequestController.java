@@ -24,10 +24,10 @@ public class JoinGameRequestController implements IProtocolHandler{
         Node child = request.contents.getFirstChild();
 
         // Find the game
-        String targetGame = child.getAttributes().item(0).getNodeValue();
-        Player newPlayer = new Player(child.getAttributes().item(1).getNodeValue(), state);
+        String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
+        Player newPlayer = new Player(child.getAttributes().getNamedItem("name").getNodeValue(), state);
         String password = null;
-        if (child.getAttributes().item(2) != null) {
+        if (child.getAttributes().getNamedItem("password") != null) {
             password = child.getAttributes().item(2).getNodeValue();
         }
 

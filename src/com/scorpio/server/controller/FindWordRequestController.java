@@ -25,8 +25,8 @@ public class FindWordRequestController implements IProtocolHandler {
         ArrayList<Tile> tiles = new ArrayList<Tile>();
         Node nextChild = child.getFirstChild();
         while(nextChild != null){
-            String s = nextChild.getAttributes().item(0).getNodeValue();
-            String loc = nextChild.getAttributes().item(1).getNodeValue();
+            String s = nextChild.getAttributes().getNamedItem("letter").getNodeValue();
+            String loc = nextChild.getAttributes().getNamedItem("position").getNodeValue();
             // Parse the CSV loc into an row and col value
             String[] xy = loc.split(",");
             Tile t = new Tile(s, new Coordinate(Integer.parseInt(xy[0]), Integer.parseInt(xy[1])));

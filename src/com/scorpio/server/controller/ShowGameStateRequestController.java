@@ -12,7 +12,7 @@ public class ShowGameStateRequestController implements IProtocolHandler{
         System.out.println(request);
         Node child = request.contents.getFirstChild();
 
-        String gameId = child.getAttributes().item(0).getNodeValue();
+        String gameId = child.getAttributes().getNamedItem("gameId").getNodeValue();
         BoardResponse boardResponse = new BoardResponse(null, gameId, request.id(), true);
         return new Message(boardResponse.toXML());
 

@@ -20,7 +20,7 @@ public class LockGameRequestController implements IProtocolHandler{
         Node child = request.contents.getFirstChild();
 
         // Find the game
-        String targetGame = child.getAttributes().item(0).getNodeValue();
+        String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
 
         // Figure out if the request to lock the game came from the
         // the same ID as the one associated with the managing user

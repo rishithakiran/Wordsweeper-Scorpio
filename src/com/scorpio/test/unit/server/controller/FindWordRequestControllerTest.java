@@ -185,4 +185,70 @@ public class FindWordRequestControllerTest {
 		int score = aPlayer.getScore();
 		assert(score == 21760);
 	}
+	@Test
+	public void functionality_SharedBoardMultiplier3(){
+		CreateGameRequestController cgr = new CreateGameRequestController();
+		JoinGameRequestController jgr = new JoinGameRequestController();
+		FindWordRequestController fwr = new FindWordRequestController();
+
+		Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
+		Player bPlayer = new Player("bPlayer", new FakeClientState("b"));
+		Player cPlayer = new Player("cPlayer", new FakeClientState("c"));
+
+
+		try {
+			cgr.createGame(aPlayer, "mygame", null);
+			jgr.joinGame(bPlayer, "mygame", null);
+			jgr.joinGame(cPlayer, "mygame", null);
+
+		}catch(WordSweeperException ex){
+			fail();
+		}
+
+		aPlayer.setLocation(new Coordinate(1,1));
+		bPlayer.setLocation(new Coordinate(1,4));
+		cPlayer.setLocation(new Coordinate(3,4));
+
+		// Player B overlaps starting on row 4, so the tiles
+		// R, E, and C should only be shared by 1 player, while
+		// O and R are shared by 2, and D is shared by 3
+
+		Board b = new RandomBoard(7);
+		String boardString =("R B C D E F G" +
+				"E I J K L M N" +
+				"C P Q R S T U" +
+				"O R D Y Z A B" +
+				"C D E F G H I" +
+				"J K L M N O P" +
+				"Q R S T U V W")
+				.replaceAll("\\s+","");
+		for(int row = 0; row < b.getSize(); row++){
+			for(int col = 0; col < b.getSize(); col++){
+				b.getTileAt(new Coordinate(col+1,row+1)).setContents(String.valueOf(boardString.charAt((7 * row) + col)));
+			}
+		}
+
+		GameManager.getInstance().findGameById("mygame").setBoard(b);
+
+		assert(aPlayer.getScore() == 0);
+
+		ArrayList<Tile> tiles = new ArrayList<>();
+		tiles.add(new Tile("R", new Coordinate(1,1)));
+		tiles.add(new Tile("E", new Coordinate(1,2)));
+		tiles.add(new Tile("C", new Coordinate(1,3)));
+		tiles.add(new Tile("O", new Coordinate(1,4)));
+		tiles.add(new Tile("R", new Coordinate(2,4)));
+		tiles.add(new Tile("D", new Coordinate(3,4)));
+		Word w = new Word(tiles);
+
+		try {
+			fwr.findWord(w, aPlayer.getName(), "mygame");
+		}catch(WordSweeperException e){
+			fail();
+		}
+
+
+		int score = aPlayer.getScore();
+		assert(score == 29440);
+	}
 }

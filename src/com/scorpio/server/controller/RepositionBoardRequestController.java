@@ -21,10 +21,10 @@ public class RepositionBoardRequestController implements IProtocolHandler {
     public Message process(ClientState state, Message request) {
         Node child = request.contents.getFirstChild();
 
-        String playerName = child.getAttributes().item(2).getNodeValue();
-        String targetGame = child.getAttributes().item(1).getNodeValue();
-        String rowChange = child.getAttributes().item(3).getNodeValue();
-        String colChange = child.getAttributes().item(0).getNodeValue();
+        String playerName = child.getAttributes().getNamedItem("name").getNodeValue();
+        String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
+        String rowChange = child.getAttributes().getNamedItem("rowChange").getNodeValue();
+        String colChange = child.getAttributes().getNamedItem("colChange").getNodeValue();
 
         try{
             this.repositionBoard(playerName, targetGame, Integer.parseInt(colChange), Integer.parseInt(rowChange));

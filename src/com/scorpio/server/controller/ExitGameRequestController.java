@@ -23,8 +23,8 @@ public class ExitGameRequestController implements IProtocolHandler{
         Node child = request.contents.getFirstChild();
 
         // Find the game
-        String targetGame = child.getAttributes().item(0).getNodeValue();
-        String targetPlayer = child.getAttributes().item(1).getNodeValue();
+        String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
+        String targetPlayer = child.getAttributes().getNamedItem("name").getNodeValue();
 
         try {
             this.exitGame(targetPlayer, targetGame);
