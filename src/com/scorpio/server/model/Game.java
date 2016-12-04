@@ -25,7 +25,6 @@ public class Game implements IModel {
             String requestID = p.getClientState().id();
             BoardResponse br = new BoardResponse(p.getName(), this.getId(), requestID, false);
             Message brm = new Message(br.toXML());
-			System.out.println(brm);
             p.getClientState().sendMessage(brm);
         }
     }

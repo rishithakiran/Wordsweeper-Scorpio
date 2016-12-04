@@ -94,7 +94,7 @@ public class Board implements IModel {
          * While we're doing this anyway, we'll check to ensure that
          * there's only one bonus
          */
-        if(this.getTileAt(this.bonusCoord).isBonus()) {
+        if(!this.getTileAt(this.bonusCoord).isBonus()) {
             int bonusesFound = 0;
             for (int col = 1; col <= this.size; ++col) {
                 for (int row = 1; row <= this.size; ++row) {
@@ -288,5 +288,14 @@ public class Board implements IModel {
         }
 
         this.tiles = rebuiltBoard.tiles;
+    }
+
+
+    public void setBonus(Coordinate c){
+        if(this.bonusCoord != null){
+            this.getTileAt(this.bonusCoord).setBonus(false);
+        }
+        this.getTileAt(c).setBonus(true);
+        this.bonusCoord = c;
     }
 }

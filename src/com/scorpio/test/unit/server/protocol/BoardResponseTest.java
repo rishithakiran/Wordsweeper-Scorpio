@@ -29,7 +29,7 @@ public class BoardResponseTest {
 		cgr.createGame(newPlayer, gameUUID.toString(), password);
 		newPlayer.setLocation(new Coordinate(1, 1));
 		Game g = GameManager.getInstance().findGameById(gameUUID.toString());
-		g.getBoard().getTileAt(new Coordinate(1,1)).setBonus(true);
+		g.getBoard().setBonus(new Coordinate(1,1));
 
 		String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), false).toXML();
 
@@ -53,7 +53,7 @@ public class BoardResponseTest {
 		cgr.createGame(newPlayer, gameUUID.toString(), password);
 		newPlayer.setLocation(new Coordinate(1, 1));
 		Game g = GameManager.getInstance().findGameById(gameUUID.toString());
-		g.getBoard().getTileAt(new Coordinate(1,1)).setBonus(true);
+		g.getBoard().setBonus(new Coordinate(1,1));
 		String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), true).toXML();
 		String correctResp = String.format("<response id='%s' success='true'>"
 				+ "<boardResponse gameId='%s' managingUser='%s' bonus='1,1' size='%d' contents='%s'>"
