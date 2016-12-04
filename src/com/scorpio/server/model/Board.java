@@ -147,16 +147,16 @@ public class Board implements IModel {
 		if(this.size >= newsize){
 			return;
 		}
-
+		Board newBoard = new RandomBoard(newsize);
 		// Create the required new tiles
-		for(int col = this.size; col < newsize; col++){
-			for(int row = this.size; row < newsize; row++){
-				Tile t = new Tile();
-				t.setLocation(new Coordinate(col, row));
-				this.tiles.add(t);
+		for(int col = this.size; col < this.size; col++){
+			for(int row = this.size; row < this.size; row++){
+				Tile t = this.getTileAt(new Coordinate(col, row));
+				newBoard.setTileAt(new Coordinate(col, row), t);
 			}
 		}
-
+		this.tiles = newBoard.tiles;
+		this.size = newsize;
 	}
 
 

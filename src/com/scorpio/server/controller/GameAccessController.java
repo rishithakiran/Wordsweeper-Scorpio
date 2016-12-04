@@ -25,6 +25,7 @@ import com.scorpio.xml.Message;
  * @author Apoorva Controller to handle game access modules
  */
 public class GameAccessController implements IProtocolHandler {
+	static int id = 0;
 
 	@Override
 	public Message process(ClientState state, Message request) {
@@ -39,7 +40,8 @@ public class GameAccessController implements IProtocolHandler {
                     password = child.getAttributes().item(1).getNodeName();
                 }
 
-                String gameUUID = UUID.randomUUID().toString();
+                //String gameUUID = UUID.randomUUID().toString();
+				String gameUUID = String.valueOf(id++);
 
                 try {
                     this.createGame(new Player(playerName, state), gameUUID, password);
@@ -70,9 +72,11 @@ public class GameAccessController implements IProtocolHandler {
                 }
 
                 // Notify all players that the game has changed
-				GameManager.getInstance().findGameById(targetGame).notifyPlayers();
+				GameManager.getInstance().findGameById(targetGame).notifyEveryoneBut(newPlayer.getName());
 
-				return null;
+				String requestID = state.id();
+				BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, requestID, false);
+				return new Message(br.toXML());
             }
             case "exitGameRequest": {
                 // Find the game
@@ -158,9 +162,11 @@ public class GameAccessController implements IProtocolHandler {
 		if (game == null) {
 			throw new WordSweeperException("Game doesn't exist");
 		}
-		// We need to verify this player is not already in the game
-		if (game.getPlayers().contains(player)) {
-			throw new WordSweeperException("Player already in game");
+
+		for(Player p : game.getPlayers()){
+			if(p.getName().equals(player.getName())){
+				throw new WordSweeperException("Player already in game");
+			}
 		}
 
 		// Check if game has a password
@@ -168,7 +174,7 @@ public class GameAccessController implements IProtocolHandler {
 			throw new WordSweeperException("Password for the game does not match");
 		}
 		// We may need to resize the board
-		if ((16 * game.getPlayers().size() > (3 * (game.getBoard().getSize() ^ 2)))) {
+		if ((16 * (game.getPlayers().size() + 1) > (3 * (game.getBoard().getSize() ^ 2)))) {
 			game.getBoard().grow(game.getBoard().getSize() + 1);
 		}
 
@@ -200,9 +206,9 @@ public class GameAccessController implements IProtocolHandler {
 		game.setBoard(new RandomBoard(7));
 		game.setId(gameID);
 		game.setLocked(false);
-		if (password != null)
+		if (password != null) {
 			game.setPassword(password);
-
+		}
 		int playerBoardSize = 4;
 		int x = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);
 		int y = (new Random()).nextInt(game.getBoard().getSize() - playerBoardSize);

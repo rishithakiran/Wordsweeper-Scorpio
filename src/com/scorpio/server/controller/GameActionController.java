@@ -32,11 +32,11 @@ public class GameActionController implements IProtocolHandler {
                     return new Message(br.toXML());
                 }
 
-                GameManager.getInstance().findGameById(targetGame).notifyPlayers();
+                GameManager.getInstance().findGameById(targetGame).notifyEveryoneBut(playerName);
 
-                // We can return null here because notifyPlayers will notify everyone; including
-                // the person who jsut joined!
-                return null;
+                String requestID = state.id();
+                BoardResponse br = new BoardResponse(playerName, targetGame, requestID, false);
+                return new Message(br.toXML());
 
             }
             case "findWordRequest": {

@@ -7,7 +7,6 @@ import com.scorpio.server.accessory.Coordinate;
 
 public class Tile implements IModel {
 
-	final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public boolean markedForDelete = false;
 
@@ -32,7 +31,7 @@ public class Tile implements IModel {
 			put("N", 2);
 			put("O", 2);
 			put("P", 4);
-			put("Q", 8);
+			//put("Q", 8);
 			put("R", 2);
 			put("S", 2);
 			put("T", 1);
@@ -42,10 +41,9 @@ public class Tile implements IModel {
 			put("X", 7);
 			put("Y", 4);
 			put("Z", 8);
-			put("QU", 11);
+			put("Qu", 11);
 		}
 	};
-	final int N = characters.length();
 
 	private Coordinate location;
 
@@ -57,10 +55,12 @@ public class Tile implements IModel {
 
 	public Tile() {
 		Random random = new Random();
-		int randIndex = random.nextInt(N);
+		int randIndex = random.nextInt(scoreforChar.size());
 		this.multiplier = 1;
 		this.sharedBy = 1;
-		this.contents = characters.substring(randIndex, randIndex+1);
+
+
+		this.contents = (String)(scoreforChar.keySet().toArray())[randIndex];
 
 	}
 	public Tile(String value, Coordinate location){

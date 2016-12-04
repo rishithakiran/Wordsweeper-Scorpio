@@ -82,8 +82,24 @@ public class Game implements IModel {
         }
     }
 
+	/**
+	 * Notify all players in this game of a change by sending each a boardResponse message
+	 */
+	public void notifyEveryoneBut(String playerName){
+		for (Player p : players) {
+			if(p.getName().equals(playerName)){
+				continue;
+			}
+			String requestID = p.getClientState().id();
+			BoardResponse br = new BoardResponse(p.getName(), this.getId(), requestID, false);
+			Message brm = new Message(br.toXML());
+			System.out.println(brm);
+			p.getClientState().sendMessage(brm);
+		}
+	}
+
 	public Coordinate getBonus(){
-		return new Coordinate(0,0);
+		return new Coordinate(1,1);
 	}
 
 	public Player getPlayer(String name){

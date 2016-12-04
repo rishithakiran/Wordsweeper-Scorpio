@@ -88,6 +88,6 @@ public class ConnectionController implements IShutdownHandler {
 
     @Override
     public void logout(ClientState state) {
-
+        System.out.println("Logout?");
     }
 }
