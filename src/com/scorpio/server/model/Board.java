@@ -10,16 +10,15 @@ import com.scorpio.server.accessory.Dictionary;
 import com.scorpio.server.exception.WordSweeperException;
 
 public class Board implements IModel {
-
-	protected ArrayList<Tile> tiles;
+	protected ArrayList<Tile> tiles = new ArrayList<>();
 	protected int size;
-
     private Coordinate bonusCoord;
 
+
 	public Board(int size) {
-		this.tiles = new ArrayList<Tile>();
 		this.size = size;
 	}
+
 
 	/**
 	 * Get a square board that is a subset of this board
@@ -53,6 +52,7 @@ public class Board implements IModel {
 		return subBoard;
 	}
 
+
     /**
      * Selects a tile randomly from this board and marks it as a bonus tile. If
      * there is already a bonus tile, it will clear it first.
@@ -69,6 +69,7 @@ public class Board implements IModel {
         this.getTileAt(c).setBonus(true);
         this.bonusCoord = c;
     }
+
 
     /**
      * Try to use the cached value of the location of the bonus on this board.
@@ -126,6 +127,7 @@ public class Board implements IModel {
         return this.bonusCoord;
     }
 
+
 	/**
 	 * Given a coordinate, look at the board associated with this game an identify the
 	 * tile there
@@ -140,6 +142,7 @@ public class Board implements IModel {
 		return l.get(0);
 	}
 
+
 	public void setTileAt(Coordinate c, Tile newTile){
         List<Tile> l = this.tiles.stream().filter((t) -> !t.getLocation().equals(c)).collect(Collectors.toList());
         if(l.size() != (this.getSize() * this.getSize()) - 1){
@@ -150,6 +153,7 @@ public class Board implements IModel {
             this.tiles.add(newTile);
         }
     }
+
 
 	/**
 	 * @return Current height/width of the board (it's a square)
@@ -177,6 +181,7 @@ public class Board implements IModel {
 		out = out.substring(0, out.length() - 1);
 		return out;
 	}
+
 
     /**
      * Given a Word object, ensure that the tiles contained within it exist
@@ -219,6 +224,7 @@ public class Board implements IModel {
 
 		return Dictionary.getInstance().isWord(w.toString().toLowerCase());
 	}
+
 
 	/**
 	 * Grows the board to match the given size. The board will always be
@@ -283,5 +289,4 @@ public class Board implements IModel {
 
         this.tiles = rebuiltBoard.tiles;
     }
-
 }

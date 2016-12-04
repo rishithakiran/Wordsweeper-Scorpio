@@ -2,7 +2,6 @@ package com.scorpio.server.model;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
-import com.scorpio.xml.Message;
 
 public class Player implements IModel{
 	private String name;
@@ -12,6 +11,7 @@ public class Player implements IModel{
 
 	// Maintain the client state, so we can send this user messages
 	private ClientState state;
+
 
     public Player(String name, ClientState s){
 		this.state = s;
@@ -36,44 +36,35 @@ public class Player implements IModel{
 		}
 		return false;
 	}
-    public ClientState getClientState(){
+
+
+	// Simple Getters and Setters
+	//=====================================================
+	public ClientState getClientState(){
 		return this.state;
 	}
-
-    public String getName() {
-		return name;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	public String getName() {
+		return name;
+	}
 	public Coordinate getLocation() {
 		return location;
 	}
-
 	public void setLocation(Coordinate location) {
 		this.location = location;
 	}
-
 	public int getScore() {
 		return score;
 	}
-
 	public void setScore(int score) {
 		this.score = score;
 	}
-
 	public boolean isManagingUser() {
 		return isManagingUser;
 	}
-
 	public void setManagingUser(boolean isManagingUser) {
 		this.isManagingUser = isManagingUser;
 	}
-
-	
-
-   
-
 }

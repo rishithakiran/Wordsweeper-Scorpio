@@ -1,12 +1,10 @@
 package com.scorpio.server.controller;
 
-import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
-import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.*;
 import com.scorpio.xml.Message;
@@ -16,10 +14,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ExitGameRequestController implements IProtocolHandler{
-
     @Override
     public Message process(ClientState state, Message request) {
-        System.out.println(request);
         Node child = request.contents.getFirstChild();
 
         // Find the game

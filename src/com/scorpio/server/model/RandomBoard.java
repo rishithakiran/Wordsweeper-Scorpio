@@ -9,6 +9,7 @@ public class RandomBoard extends Board{
         this.fillRandom();
     }
 
+
     /**
      * When called, will fill all tiles on the board with a random
      * value

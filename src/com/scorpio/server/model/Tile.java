@@ -63,6 +63,7 @@ public class Tile implements IModel {
 
 	}
 
+
     /**
      * Construct the tile with a specific value and location. This is largely
      * used in creating subboards.
@@ -92,6 +93,7 @@ public class Tile implements IModel {
 		return true;
 	}
 
+
     /**
      * Setter for sharedBy value. You probably don't need this function.
      * It's used to store numbers for temporary tiles, so please don't
@@ -102,6 +104,7 @@ public class Tile implements IModel {
 		this.sharedBy = s;
 	}
 
+
     /**
      * Getter for location
      * @return location
@@ -109,6 +112,7 @@ public class Tile implements IModel {
 	public Coordinate getLocation() {
 		return location;
 	}
+
 
     /**
      * Setter for location
@@ -118,6 +122,7 @@ public class Tile implements IModel {
 		this.location = location;
 	}
 
+
     /**
      * Getter for string contents of this tile
      * @return the value of this tile
@@ -125,6 +130,7 @@ public class Tile implements IModel {
 	public String getContents() {
 		return contents;
 	}
+
 
     /**
      * Setter for tile contents
@@ -134,6 +140,7 @@ public class Tile implements IModel {
 		this.contents = contents;
 	}
 
+
     /**
      * Getter for the score of this tile based on its string contents
      * @return Raw point value of this tile
@@ -141,6 +148,7 @@ public class Tile implements IModel {
 	public int getPoints() {
 		return scoreforChar.get(this.contents);
 	}
+
 
     /**
      * Getter for whether or not this tile is a bonus tile
@@ -150,6 +158,7 @@ public class Tile implements IModel {
 		return this.isBonus;
 	}
 
+
     /**
      * Setter for bonus status of this tile
      * @param isBonus
@@ -157,6 +166,7 @@ public class Tile implements IModel {
 	public void setBonus(boolean isBonus) {
 		this.isBonus = isBonus;
 	}
+
 
     /**
      * Getter for sharedBy value. You really don't need this
@@ -166,6 +176,7 @@ public class Tile implements IModel {
 		return sharedBy;
 	}
 
+
     /**
      * Serializes this tile
      * @return See getContents()
@@ -173,5 +184,4 @@ public class Tile implements IModel {
 	public String toString(){
 		return this.contents;
 	}
-
 }

@@ -1,7 +1,6 @@
 package com.scorpio.server.controller;
 
 import com.scorpio.server.core.ClientState;
-import com.scorpio.server.core.GameManager;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.IShutdownHandler;
 import com.scorpio.xml.Message;
@@ -13,7 +12,6 @@ import java.util.HashMap;
  * Responsible for directing inbound connections to the appropriate
  * controller
  */
-
 public class ConnectionController implements IShutdownHandler {
     private final HashMap<String, Class> requestMapping;
 
@@ -21,7 +19,6 @@ public class ConnectionController implements IShutdownHandler {
      * Initialize this controller with the default mappings
      */
     public ConnectionController(){
-
         this.requestMapping = new HashMap<String, Class>();
         this.requestMapping.put("createGameRequest", CreateGameRequestController.class);
         this.requestMapping.put("joinGameRequest", JoinGameRequestController.class);
@@ -35,6 +32,7 @@ public class ConnectionController implements IShutdownHandler {
 
     }
 
+
     /**
      * Initialize this controller with a custom map of requests to
      * controllers
@@ -43,6 +41,7 @@ public class ConnectionController implements IShutdownHandler {
     public ConnectionController(HashMap<String, Class> map){
         this.requestMapping = map;
     }
+
 
     /**
      * Given a controller name, attempt to locate its class and
@@ -85,6 +84,7 @@ public class ConnectionController implements IShutdownHandler {
         // If this returns null, there's a problem with one of our mappings
         return cn==null ? null : cn.process(state, request);
     }
+
 
     @Override
     public void logout(ClientState state) {

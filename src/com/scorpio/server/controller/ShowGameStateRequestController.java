@@ -9,7 +9,6 @@ import org.w3c.dom.Node;
 public class ShowGameStateRequestController implements IProtocolHandler{
     @Override
     public Message process(ClientState state, Message request) {
-        System.out.println(request);
         Node child = request.contents.getFirstChild();
 
         String gameId = child.getAttributes().getNamedItem("gameId").getNodeValue();

@@ -20,7 +20,6 @@ public class CreateGameRequestController implements IProtocolHandler{
     private static int id = 0;
     @Override
     public Message process(ClientState state, Message request) {
-        System.out.println(request);
         Node child = request.contents.getFirstChild();
 
         String playerName = child.getAttributes().getNamedItem("name").getNodeValue();
@@ -42,7 +41,6 @@ public class CreateGameRequestController implements IProtocolHandler{
             FailureResponse fr = new FailureResponse(ex.toString(), request.id());
             return new Message(fr.toXML());
         }
-
     }
 
 

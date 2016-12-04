@@ -13,60 +13,8 @@ public class Game implements IModel {
 	private String id;
 	private boolean isLocked;
 	private Board board;
-	private ArrayList<Player> players;
+	private ArrayList<Player> players = new ArrayList<>();
 	private String password;
-
-	public Game(){
-		this.players = new ArrayList<Player>();
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public boolean isLocked() {
-		return isLocked;
-	}
-
-	public void setLocked(boolean isLocked) {
-		this.isLocked = isLocked;
-	}
-
-	public Board getBoard() {
-		return board;
-	}
-
-	public void setBoard(Board board) {
-		this.board = board;
-	}
-
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
-
-	public void addPlayer(Player p){
-		this.players.add(p);
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Player getManagingPlayer() {
-		for (Player player : players) {
-			if (player.isManagingUser() == true)
-				return player;
-		}
-		return null;
-	}
 
 
     /**
@@ -82,8 +30,11 @@ public class Game implements IModel {
         }
     }
 
+
 	/**
 	 * Notify all players in this game of a change by sending each a boardResponse message
+	 * (Except the specified player :()
+	 * @param playerName Player to ignore
 	 */
 	public void notifyEveryoneBut(String playerName){
 		for (Player p : players) {
@@ -98,26 +49,23 @@ public class Game implements IModel {
 		}
 	}
 
-	public Coordinate getBonus(){
-		return this.board.getBonusLocation();
-	}
-
-	public Player getPlayer(String name){
-		List<Player> l = this.players.stream().filter((s) -> s.getName().equals(name)).collect(Collectors.toList());
-		if(l.size() != 1){
-			return null;
-		}
-		return l.get(0);
-	}
-	public Board getPlayerBoard(String player){
-		Coordinate playerLoc = this.getPlayer(player).getLocation();
-		return this.board.getSubBoard(playerLoc, 4);
-	}
-
+	/**
+	 * Given a player, delete their entity from this game
+	 * @param name The name of the player to delete
+	 */
 	public void deletePlayer(String name){
         this.players = (ArrayList<Player>) this.players.stream().filter((s) -> !s.getName().equals(name)).collect(Collectors.toList());
     }
 
+
+	/**
+	 * Move a player within this game by the given amounts. This function enforces illegal moves,
+	 * and will throw exception if the player tries to do something not allowed
+	 * @param player The player to move
+	 * @param colChange Delta in column. Must be between -1 and 1
+	 * @param rowChange Delta in row. Must be between -1 and 1
+	 * @throws WordSweeperException If the player attempts to move illegally or off the board
+	 */
 	public void repositionPlayer(String player, int colChange, int rowChange) throws WordSweeperException{
 		// Verify that the proposed change is in bounds
 		int playerBoardSize = 4;
@@ -131,5 +79,67 @@ public class Game implements IModel {
 
 		// Do the move
 		p.setLocation(new Coordinate(currentLoc.col + colChange, currentLoc.row + rowChange));
+	}
+
+
+	// Complex Getters and Setters
+	//=====================================================
+	public Player getPlayer(String name){
+		List<Player> l = this.players.stream().filter((s) -> s.getName().equals(name)).collect(Collectors.toList());
+		if(l.size() != 1){
+			return null;
+		}
+		return l.get(0);
+	}
+
+
+	public Board getPlayerBoard(String player){
+		Coordinate playerLoc = this.getPlayer(player).getLocation();
+		return this.board.getSubBoard(playerLoc, 4);
+	}
+
+	public Player getManagingPlayer() {
+		for (Player player : players) {
+			if (player.isManagingUser() == true)
+				return player;
+		}
+		return null;
+	}
+
+
+	// Simple Getters and Setters
+	//=====================================================
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public boolean isLocked() {
+		return isLocked;
+	}
+	public void setLocked(boolean isLocked) {
+		this.isLocked = isLocked;
+	}
+	public Board getBoard() {
+		return board;
+	}
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	public void addPlayer(Player p){
+		this.players.add(p);
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public Coordinate getBonus(){
+		return this.board.getBonusLocation();
 	}
 }

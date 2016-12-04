@@ -9,6 +9,7 @@ public class Dictionary {
     private static Dictionary instance = null;
     private ArrayList<String> words = new ArrayList<String>();
 
+
     public static Dictionary getInstance(){
         if(instance == null){
             try {
@@ -19,6 +20,7 @@ public class Dictionary {
         }
         return instance;
     }
+
 
     private Dictionary() throws IOException{
         String input = "WordTable.sort";
@@ -31,6 +33,7 @@ public class Dictionary {
 
         br.close();
     }
+
 
     public boolean isWord(String word){
         return this.words.contains(word);

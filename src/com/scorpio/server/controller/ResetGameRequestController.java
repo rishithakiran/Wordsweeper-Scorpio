@@ -12,14 +12,10 @@ import com.scorpio.server.protocol.response.ResetGameResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
-/**
- * Created by spooky on 12/4/16.
- */
 public class ResetGameRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
         Node child = request.contents.getFirstChild();
-        String type = child.getLocalName();
 
         String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
         try {
@@ -36,6 +32,7 @@ public class ResetGameRequestController implements IProtocolHandler {
         ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id());
         return new Message(rgr.toXML());
     }
+
 
     public static void resetGame(String gameId) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(gameId);

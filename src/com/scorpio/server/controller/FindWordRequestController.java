@@ -6,16 +6,12 @@ import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.*;
 import com.scorpio.server.protocol.IProtocolHandler;
-import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.server.protocol.response.FindWordResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 
-/**
- * Created by spooky on 12/4/16.
- */
 public class FindWordRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
@@ -59,7 +55,6 @@ public class FindWordRequestController implements IProtocolHandler {
                 GameManager.getInstance().findGameById(gameId).getPlayer(playerId).getScore()
         );
         return new Message(fwr.toXML());
-
     }
 
 

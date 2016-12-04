@@ -4,14 +4,17 @@ public class Coordinate {
     public int row;
     public int col;
 
+
     public Coordinate(int col, int row){
         this.row = row;
         this.col = col;
     }
 
+
     public String toString(){
         return String.format("%d,%d", col, row);
     }
+
 
     @Override
     public boolean equals(Object other){
