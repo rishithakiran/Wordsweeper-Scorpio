@@ -71,9 +71,16 @@ public class Game implements IModel {
 		int playerBoardSize = 4;
 		Player p = this.getPlayer(player);
 		Coordinate currentLoc = p.getLocation();
+
+		// Check right and bottom edges of the board
 		if(currentLoc.col + playerBoardSize + colChange > this.getBoard().getSize() ||
 				currentLoc.row + playerBoardSize + rowChange > this.getBoard().getSize()){
 
+			throw new WordSweeperException("Player move out of bounds");
+		}
+
+		// Check top and left edges of the board
+		if(currentLoc.col + colChange < 1 || currentLoc.row + rowChange < 1){
 			throw new WordSweeperException("Player move out of bounds");
 		}
 

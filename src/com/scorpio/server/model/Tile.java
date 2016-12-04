@@ -31,6 +31,7 @@ public class Tile implements IModel {
 			put("N", 2);
 			put("O", 2);
 			put("P", 4);
+            // We don't pick Q. Ever.
 			//put("Q", 8);
 			put("R", 2);
 			put("S", 2);
