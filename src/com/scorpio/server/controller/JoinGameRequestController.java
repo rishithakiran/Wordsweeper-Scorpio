@@ -12,7 +12,11 @@ import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
 import java.util.Random;
-
+/**
+ * Modules that handles Join Game request.
+ * @author Josh
+ *
+ */
 public class JoinGameRequestController implements IProtocolHandler{
     @Override
     public Message process(ClientState state, Message request) {

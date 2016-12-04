@@ -4,10 +4,15 @@ import java.util.Hashtable;
 import java.util.Random;
 
 import com.scorpio.server.accessory.Coordinate;
-
+/**
+ * Includes functionalities associated with the Tiles of the board.
+ * @author Saranya, Josh
+ *
+ */
 public class Tile implements IModel {
 
-
+	final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	/**Value assigned for the Tiles, to know whether they are marked for deletion*/
 	public boolean markedForDelete = false;
 
 	/**
@@ -51,7 +56,6 @@ public class Tile implements IModel {
 	private boolean isBonus;
 	private int sharedBy;
 
-
     /**
      * Construct the tile with a random value
      */
@@ -64,8 +68,7 @@ public class Tile implements IModel {
 
 	}
 
-
-    /**
+	/**
      * Construct the tile with a specific value and location. This is largely
      * used in creating subboards.
      * @param value Character value to be stored in this tile
@@ -78,7 +81,7 @@ public class Tile implements IModel {
 		this.location = location;
 	}
 
-
+	/**Indicates whether some other object is "equal to" this one.*/
 	@Override
 	public boolean equals(Object other){
 		if (other == null) return false;
@@ -94,8 +97,7 @@ public class Tile implements IModel {
 		return true;
 	}
 
-
-    /**
+	/**
      * Setter for sharedBy value. You probably don't need this function.
      * It's used to store numbers for temporary tiles, so please don't
      * use it on tiles of the main board of a game. Just leave them as 0.
@@ -105,7 +107,6 @@ public class Tile implements IModel {
 		this.sharedBy = s;
 	}
 
-
     /**
      * Getter for location
      * @return location
@@ -113,7 +114,6 @@ public class Tile implements IModel {
 	public Coordinate getLocation() {
 		return location;
 	}
-
 
     /**
      * Setter for location
@@ -123,15 +123,13 @@ public class Tile implements IModel {
 		this.location = location;
 	}
 
-
-    /**
+	/**
      * Getter for string contents of this tile
      * @return the value of this tile
      */
 	public String getContents() {
 		return contents;
 	}
-
 
     /**
      * Setter for tile contents
@@ -141,7 +139,6 @@ public class Tile implements IModel {
 		this.contents = contents;
 	}
 
-
     /**
      * Getter for the score of this tile based on its string contents
      * @return Raw point value of this tile
@@ -149,7 +146,6 @@ public class Tile implements IModel {
 	public int getPoints() {
 		return scoreforChar.get(this.contents);
 	}
-
 
     /**
      * Getter for whether or not this tile is a bonus tile
@@ -159,15 +155,13 @@ public class Tile implements IModel {
 		return this.isBonus;
 	}
 
-
-    /**
+	/**
      * Setter for bonus status of this tile
      * @param isBonus
      */
 	public void setBonus(boolean isBonus) {
 		this.isBonus = isBonus;
 	}
-
 
     /**
      * Getter for sharedBy value. You really don't need this
@@ -176,7 +170,6 @@ public class Tile implements IModel {
 	public int getSharedBy() {
 		return sharedBy;
 	}
-
 
     /**
      * Serializes this tile

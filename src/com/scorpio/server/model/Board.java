@@ -8,23 +8,29 @@ import java.util.stream.Collectors;
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.accessory.Dictionary;
 import com.scorpio.server.exception.WordSweeperException;
-
+/**
+ * The Board entity class which handles the functionalities of board.
+ * @author Saranya, Josh, Rishitha
+ */
 public class Board implements IModel {
 	protected ArrayList<Tile> tiles = new ArrayList<>();
 	protected int size;
     private Coordinate bonusCoord;
 
 
+	/** Constructor of class Board.
+	 * @param size	The size of the board.
+	 */
 	public Board(int size) {
 		this.size = size;
 	}
 
 
 	/**
-	 * Get a square board that is a subset of this board
-	 * @param start Location of the top-left corner of the sub board
-	 * @param size Size of the sub board (it's a square)
-	 * @return The sub board
+	 * Get a square board that is a subset of this board.
+	 * @param start Location of the top-left corner of the sub board.
+	 * @param size Size of the sub board (it's a square).
+	 * @return The sub board.
 	 */
 	public Board getSubBoard(Coordinate start, int size){
 		if(size + start.row > this.size + 1 || size + start.col > this.size + 1){
@@ -130,9 +136,9 @@ public class Board implements IModel {
 
 	/**
 	 * Given a coordinate, look at the board associated with this game an identify the
-	 * tile there
-	 * @param c The coordinate to use for lookup
-	 * @return Tile at that location
+	 * tile there.
+	 * @param c The coordinate to use for lookup.
+	 * @return Tile at that location.
 	 */
 	public Tile getTileAt(Coordinate c){
 		List<Tile> l = this.tiles.stream().filter((t) -> t.getLocation().equals(c)).collect(Collectors.toList());
@@ -142,7 +148,11 @@ public class Board implements IModel {
 		return l.get(0);
 	}
 
-
+	/**
+	 * Sets the new tile with its associated coordinate to the board.
+	 * @param c	The coordinate location of the tile.
+	 * @param newTile	Tile to be added to the board.
+	 */
 	public void setTileAt(Coordinate c, Tile newTile){
         List<Tile> l = this.tiles.stream().filter((t) -> !t.getLocation().equals(c)).collect(Collectors.toList());
         if(l.size() != (this.getSize() * this.getSize()) - 1){
@@ -156,6 +166,7 @@ public class Board implements IModel {
 
 
 	/**
+	 * Returns the size of the board.
 	 * @return Current height/width of the board (it's a square)
 	 */
 	public int getSize() {
@@ -182,22 +193,16 @@ public class Board implements IModel {
 		return out;
 	}
 
-
     /**
      * Given a Word object, ensure that the tiles contained within it exist
      * on this board. Additionally, this checks to ensure that the Word is in
      * fact an English word, and that all tiles are adjacent to one another
      * in the order they appear
      * @param w The Word object to check
-     * @return true if the word exists and is valid, false otherwise
+     * @return true: Valid word <p>false: Invalid word </p>
      */
 	public boolean hasWord(Word w) {
-		/* We affirm that the tiles included in w match with what is described
-		 * by this board state. Additionally, we consult the dictionary to ensure
-		 * that the word is real. Finally, we ensure that each tile is adjacent to
-		 * the previous one.
-		 */
-		for(int i = 0; i <  w.tiles.size(); ++i){
+			for(int i = 0; i <  w.tiles.size(); ++i){
             Tile t = w.tiles.get(i);
 			if(t.getLocation().col > this.size || t.getLocation().col < 1 ||
 					t.getLocation().row > this.size || t.getLocation().row < 1){
@@ -229,8 +234,8 @@ public class Board implements IModel {
 	/**
 	 * Grows the board to match the given size. The board will always be
 	 * a square. If this new size is smaller than the current board, there
-	 * will be no effect
-	 * @param newsize The new size to grow to
+	 * will be no effect.
+	 * @param newsize The new size to grow to.
 	 */
 	public void grow(int newsize) {
 		if(this.size >= newsize){
@@ -249,18 +254,17 @@ public class Board implements IModel {
 
 	}
 
-
-    /**
+	/**
      * After confirming that the given word exists in this board,
      * remove it from the board and update surrounding tiles
-     * accordingly
+     * accordingly.
      * @param w The word to remove from the board
+     * @throws WordSweeperException	Throws appropriate WordSweper Exception.
      */
 	public void removeWord(Word w) throws WordSweeperException{
         if(!this.hasWord(w)){
             throw new WordSweeperException("Word does not exist");
         }
-
 
         for(Tile t : w.tiles){
             this.getTileAt(t.getLocation()).markedForDelete = true;

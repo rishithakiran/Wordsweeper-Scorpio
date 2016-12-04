@@ -2,15 +2,25 @@ package com.scorpio.server.model;
 import com.scorpio.server.exception.WordSweeperException;
 
 import java.util.ArrayList;
-
+/**
+ * Includes functionalities for Word class.
+ * @author Saranya, Josh, Rishitha
+ *
+ */
 public class Word implements IModel{
     public ArrayList<Tile> tiles;
 
+    /**
+     * Constructor of Word class.
+     * @param tiles Array List of tiles.
+     */
 	public Word(ArrayList<Tile> tiles) {
 		super();
 		this.tiles = tiles;
 	}
-
+	/**
+	 * Serializes the tiles.
+	 */
 	public String toString(){
 		String s = "";
 		for(Tile t : this.tiles){
@@ -18,7 +28,7 @@ public class Word implements IModel{
 		}
 		return s;
 	}
-
+	/**Returns boolean values of whether a tile has bonus value or not*/
 	public boolean hasBonus(){
 		for(Tile t : this.tiles){
 			if(t.isBonus()){
@@ -27,7 +37,11 @@ public class Word implements IModel{
 		}
 		return false;
 	}
-
+	/**
+	 * Calculates the value for input word.
+	 * @return	word score
+	 * @throws WordSweeperException	Throws appropriate Word Sweeper Exception.
+	 */
 	public int computeScore() throws WordSweeperException{
 		if(tiles == null){
 			return 0;

@@ -12,7 +12,11 @@ import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.Random;
-
+/**
+ * Module that handles Exit game request.
+ * @author Josh
+ *
+ */
 public class ExitGameRequestController implements IProtocolHandler{
     @Override
     public Message process(ClientState state, Message request) {
@@ -40,7 +44,12 @@ public class ExitGameRequestController implements IProtocolHandler{
         return new Message(egr.toXML());
     }
 
-
+    /**
+	 * Exits the player form the current playing game.
+	 * @param playerId	Player who requests to exit the game.
+	 * @param gameId	The game which is currently played by the player.
+	 * @throws WordSweeperException		Throws appropriate Exception results.
+	 */
     public void exitGame(String playerId, String gameId) throws WordSweeperException {
         Game g;
         if ((g = GameManager.getInstance().findGameById(gameId)) == null) {

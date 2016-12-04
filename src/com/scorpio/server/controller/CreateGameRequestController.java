@@ -1,6 +1,5 @@
 package com.scorpio.server.controller;
 
-
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
@@ -13,9 +12,13 @@ import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.*;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
-
 import java.util.Random;
 
+/**
+ * Module that handles creating game request.
+ * @author Josh
+ *
+ */
 public class CreateGameRequestController implements IProtocolHandler{
     private static int id = 0;
     @Override
@@ -45,13 +48,13 @@ public class CreateGameRequestController implements IProtocolHandler{
 
 
     /**
-     * Creates the game with appropriate values
-     *
-     * @param player
-     * @param gameID
-     * @param password
-     * @throws WordSweeperException
-     */
+	 * Creates a new game with appropriate values.
+	 * 
+	 * @param 	player	Player to create a new game.
+	 * @param	gameID	The ID generated create a new game.
+	 * @param	password	Password for the game.
+	 * @throws WordSweeperException	Throws appropriate Exception results.
+	 */
     public void createGame(Player player, String gameID, String password) throws WordSweeperException {
         if (GameManager.getInstance().findGameById(gameID) != null) {
             throw new WordSweeperException("Game exists");

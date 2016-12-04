@@ -5,7 +5,11 @@ import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.*;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
-
+/**
+ * Module that handles Show game state request.
+ * @author Apoorva
+ *
+ */
 public class ShowGameStateRequestController implements IProtocolHandler{
     @Override
     public Message process(ClientState state, Message request) {

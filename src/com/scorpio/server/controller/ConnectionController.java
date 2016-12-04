@@ -11,6 +11,7 @@ import java.util.HashMap;
 /**
  * Responsible for directing inbound connections to the appropriate
  * controller
+ * @author Josh, Apoorva, Rishitha, Saranya
  */
 public class ConnectionController implements IShutdownHandler {
     private final HashMap<String, Class> requestMapping;
@@ -85,7 +86,9 @@ public class ConnectionController implements IShutdownHandler {
         return cn==null ? null : cn.process(state, request);
     }
 
-
+    /**
+     * Logout.
+     */
     @Override
     public void logout(ClientState state) {
         System.out.println("Logout?");

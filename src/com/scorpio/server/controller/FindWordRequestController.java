@@ -11,7 +11,11 @@ import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
-
+/**
+ * Module that handles Find word request.
+ * @author Saranya
+ *
+ */
 public class FindWordRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
@@ -57,7 +61,15 @@ public class FindWordRequestController implements IProtocolHandler {
         return new Message(fwr.toXML());
     }
 
-
+    /**
+     * The location of the tile related to the input word from the players board 
+     * is retrieved and associated with the global board where the word is validated
+     * and valid word is removed and board is updated. 
+     * @param 	w	The input word to be validated.	
+     * @param 	playerName	Name of the player requesting for validating the word.
+     * @param 	game	The current game of the player.
+     * @throws 	WordSweeperException	Throws appropriate WordSweeper exception.
+     */
     public void findWord(Word w, String playerName, String game) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(game);
         if(g == null){

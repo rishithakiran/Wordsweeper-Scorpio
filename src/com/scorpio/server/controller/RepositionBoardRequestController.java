@@ -9,7 +9,11 @@ import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
-
+/**
+ * Module that handles Reposition board request.
+ * @author Josh
+ *
+ */
 public class RepositionBoardRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {

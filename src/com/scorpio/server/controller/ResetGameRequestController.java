@@ -12,7 +12,11 @@ import com.scorpio.server.protocol.response.BoardResponse;
 import com.scorpio.server.protocol.response.ResetGameResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
-
+/**
+ * Module that handles Reset game request.
+ * @author Josh
+ *
+ */
 public class ResetGameRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
