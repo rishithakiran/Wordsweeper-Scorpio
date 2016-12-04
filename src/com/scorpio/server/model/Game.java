@@ -72,8 +72,8 @@ public class Game implements IModel {
 		Coordinate currentLoc = p.getLocation();
 
 		// Check right and bottom edges of the board
-		if(currentLoc.col + playerBoardSize + colChange > this.getBoard().getSize() ||
-				currentLoc.row + playerBoardSize + rowChange > this.getBoard().getSize()){
+		if(currentLoc.col + playerBoardSize + colChange > this.getBoard().getSize() + 1 ||
+				currentLoc.row + playerBoardSize + rowChange >= this.getBoard().getSize() + 1){
 			throw new WordSweeperException("Player move out of bounds");
 		}
 
