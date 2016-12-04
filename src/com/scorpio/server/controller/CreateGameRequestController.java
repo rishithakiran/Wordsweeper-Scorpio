@@ -24,8 +24,8 @@ public class CreateGameRequestController implements IProtocolHandler{
 
         String playerName = child.getAttributes().getNamedItem("name").getNodeValue();
         String password = null;
-        if (child.getAttributes().item(1) != null) {
-            password = child.getAttributes().getNamedItem("password").getNodeName();
+        if (child.getAttributes().getNamedItem("password") != null) {
+            password = child.getAttributes().getNamedItem("password").getNodeValue();
         }
 
         //String gameUUID = UUID.randomUUID().toString();

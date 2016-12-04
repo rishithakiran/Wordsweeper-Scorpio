@@ -42,9 +42,8 @@ public class Game implements IModel {
 				continue;
 			}
 			String requestID = p.getClientState().id();
-			BoardResponse br = new BoardResponse(p.getName(), this.getId(), requestID, false);
+			BoardResponse br = new BoardResponse(p.getName(), id, requestID, false);
 			Message brm = new Message(br.toXML());
-			System.out.println(brm);
 			p.getClientState().sendMessage(brm);
 		}
 	}
@@ -54,7 +53,7 @@ public class Game implements IModel {
 	 * @param name The name of the player to delete
 	 */
 	public void deletePlayer(String name){
-        this.players = (ArrayList<Player>) this.players.stream().filter((s) -> !s.getName().equals(name)).collect(Collectors.toList());
+        this.players = (ArrayList<Player>) this.players.stream().filter(s -> !s.getName().equals(name)).collect(Collectors.toList());
     }
 
 
@@ -75,7 +74,6 @@ public class Game implements IModel {
 		// Check right and bottom edges of the board
 		if(currentLoc.col + playerBoardSize + colChange > this.getBoard().getSize() ||
 				currentLoc.row + playerBoardSize + rowChange > this.getBoard().getSize()){
-
 			throw new WordSweeperException("Player move out of bounds");
 		}
 
@@ -92,7 +90,7 @@ public class Game implements IModel {
 	// Complex Getters and Setters
 	//=====================================================
 	public Player getPlayer(String name){
-		List<Player> l = this.players.stream().filter((s) -> s.getName().equals(name)).collect(Collectors.toList());
+		List<Player> l = this.players.stream().filter(s -> s.getName().equals(name)).collect(Collectors.toList());
 		if(l.size() != 1){
 			return null;
 		}
@@ -107,8 +105,9 @@ public class Game implements IModel {
 
 	public Player getManagingPlayer() {
 		for (Player player : players) {
-			if (player.isManagingUser() == true)
-				return player;
+			if(player.isManagingUser()) {
+                return player;
+            }
 		}
 		return null;
 	}
