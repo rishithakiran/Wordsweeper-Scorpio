@@ -1,6 +1,5 @@
 package com.scorpio.server.controller;
 
-
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
@@ -13,35 +12,30 @@ import com.scorpio.server.protocol.response.ResetGameResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
 
-
-public class GameManagementController implements IProtocolHandler {
+/**
+ * Created by spooky on 12/4/16.
+ */
+public class ResetGameRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
         Node child = request.contents.getFirstChild();
         String type = child.getLocalName();
-        switch (type) {
-            case "resetGameRequest": {
-                String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
-                try {
-                    resetGame(targetGame);
-                }catch(WordSweeperException ex){
-                    ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id(), ex.toString());
-                    return new Message(rgr.toXML());
-                }
 
-                // Notify all players of chnage to board state
-                GameManager.getInstance().findGameById(targetGame).notifyPlayers();
-
-                // Finally, send a resetGameResponse to the initiator
-                ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id());
-                return new Message(rgr.toXML());
-
-            }
+        String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
+        try {
+            resetGame(targetGame);
+        }catch(WordSweeperException ex){
+            ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id(), ex.toString());
+            return new Message(rgr.toXML());
         }
 
-        return null;
-    }
+        // Notify all players of chnage to board state
+        GameManager.getInstance().findGameById(targetGame).notifyPlayers();
 
+        // Finally, send a resetGameResponse to the initiator
+        ResetGameResponse rgr = new ResetGameResponse(targetGame, state.id());
+        return new Message(rgr.toXML());
+    }
 
     public static void resetGame(String gameId) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(gameId);

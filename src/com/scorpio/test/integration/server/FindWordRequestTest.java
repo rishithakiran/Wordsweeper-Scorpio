@@ -2,8 +2,8 @@ package com.scorpio.test.integration.server;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.controller.ConnectionController;
-import com.scorpio.server.controller.GameAccessController;
-import com.scorpio.server.controller.GameActionController;
+import com.scorpio.server.controller.CreateGameRequestController;
+import com.scorpio.server.controller.JoinGameRequestController;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Board;
@@ -28,14 +28,15 @@ public class FindWordRequestTest {
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
-        GameAccessController gacc = new GameAccessController();
+        CreateGameRequestController cgr = new CreateGameRequestController();
+        JoinGameRequestController jgr = new JoinGameRequestController();
 
         Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
         Player bPlayer = new Player("bPlayer", new FakeClientState("b"));
 
         try {
-            gacc.createGame(aPlayer, "mygame", null);
-            gacc.joinGame(bPlayer, "mygame", null);
+            cgr.createGame(aPlayer, "mygame", null);
+            jgr.joinGame(bPlayer, "mygame", null);
         }catch(WordSweeperException ex){
             fail();
         }

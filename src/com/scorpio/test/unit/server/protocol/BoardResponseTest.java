@@ -1,7 +1,7 @@
 package com.scorpio.test.unit.server.protocol;
 
 import com.scorpio.server.accessory.Coordinate;
-import com.scorpio.server.controller.GameAccessController;
+import com.scorpio.server.controller.CreateGameRequestController;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
@@ -24,15 +24,15 @@ public class BoardResponseTest {
 		UUID reqUUID = UUID.randomUUID();
 		String testPlayerName = "testPlayer";
 		String password = null;
-		GameAccessController gac = new GameAccessController();
+		CreateGameRequestController cgr = new CreateGameRequestController();
 		Player newPlayer = new Player(testPlayerName, null);
-		gac.createGame(newPlayer, gameUUID.toString(), password);
+		cgr.createGame(newPlayer, gameUUID.toString(), password);
 		newPlayer.setLocation(new Coordinate(1, 1));
 		Game g = GameManager.getInstance().findGameById(gameUUID.toString());
 
 		String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), false).toXML();
 		String correctResp = String.format(
-				"<response id='%s' success='true'>" + "<boardResponse gameId='%s' managingUser='%s' bonus='0,0'>"
+				"<response id='%s' success='true'>" + "<boardResponse gameId='%s' managingUser='%s' bonus='1,1'>"
 						+ "<player name='%s' position='1,1' board='%s' score='0'/>" + "</boardResponse>"
 						+ "</response>",
 				reqUUID.toString(), gameUUID.toString(), testPlayerName, testPlayerName,
@@ -46,15 +46,15 @@ public class BoardResponseTest {
 		UUID reqUUID = UUID.randomUUID();
 		String testPlayerName = "testPlayer";
 		String password = null;
-		GameAccessController gac = new GameAccessController();
+		CreateGameRequestController cgr = new CreateGameRequestController();
 		Player newPlayer = new Player(testPlayerName, null);
-		gac.createGame(newPlayer, gameUUID.toString(), password);
+		cgr.createGame(newPlayer, gameUUID.toString(), password);
 		newPlayer.setLocation(new Coordinate(1, 1));
 		Game g = GameManager.getInstance().findGameById(gameUUID.toString());
 
 		String br = new BoardResponse(testPlayerName, gameUUID.toString(), reqUUID.toString(), true).toXML();
 		String correctResp = String.format("<response id='%s' success='true'>"
-				+ "<boardResponse gameId='%s' managingUser='%s' bonus='0,0' size='%d' contents='%s'>"
+				+ "<boardResponse gameId='%s' managingUser='%s' bonus='1,1' size='%d' contents='%s'>"
 				+ "<player name='%s' position='1,1' board='%s' score='0'/>" + "</boardResponse>" + "</response>",
 				reqUUID.toString(), gameUUID.toString(), testPlayerName, g.getBoard().getSize(),
 				g.getBoard().toString(), testPlayerName, g.getPlayerBoard(testPlayerName));

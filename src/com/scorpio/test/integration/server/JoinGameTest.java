@@ -1,7 +1,7 @@
 package com.scorpio.test.integration.server;
 
 import com.scorpio.server.controller.ConnectionController;
-import com.scorpio.server.controller.GameAccessController;
+import com.scorpio.server.controller.CreateGameRequestController;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
@@ -25,9 +25,9 @@ public class JoinGameTest {
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
-        GameAccessController gac = new GameAccessController();
+        CreateGameRequestController cgr = new CreateGameRequestController();
         try {
-            gac.createGame(new Player("testPlayer", new FakeClientState("a")), "somePlace","abc");
+            cgr.createGame(new Player("testPlayer", new FakeClientState("a")), "somePlace","abc");
         }catch(WordSweeperException ex){
             fail();
         }

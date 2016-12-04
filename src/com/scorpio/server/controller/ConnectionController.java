@@ -23,15 +23,15 @@ public class ConnectionController implements IShutdownHandler {
     public ConnectionController(){
 
         this.requestMapping = new HashMap<String, Class>();
-        this.requestMapping.put("createGameRequest", GameAccessController.class);
-        this.requestMapping.put("joinGameRequest", GameAccessController.class);
-        this.requestMapping.put("exitGameRequest", GameAccessController.class);
-        this.requestMapping.put("lockGameRequest", GameAccessController.class);
-        this.requestMapping.put("repositionBoardRequest", GameActionController.class);
-        this.requestMapping.put("resetGameRequest", GameManagementController.class);
-        this.requestMapping.put("listGamesRequest", GameAccessController.class);
-        this.requestMapping.put("findWordRequest", GameActionController.class);
-        this.requestMapping.put("showGameStateRequest", GameAccessController.class);
+        this.requestMapping.put("createGameRequest", CreateGameRequestController.class);
+        this.requestMapping.put("joinGameRequest", JoinGameRequestController.class);
+        this.requestMapping.put("exitGameRequest", ExitGameRequestController.class);
+        this.requestMapping.put("lockGameRequest", LockGameRequestController.class);
+        this.requestMapping.put("repositionBoardRequest", RepositionBoardRequestController.class);
+        this.requestMapping.put("resetGameRequest", ResetGameRequestController.class);
+        this.requestMapping.put("listGamesRequest", ListGamesRequestController.class);
+        this.requestMapping.put("findWordRequest", FindWordRequestController.class);
+        this.requestMapping.put("showGameStateRequest", ShowGameStateRequestController.class);
 
     }
 

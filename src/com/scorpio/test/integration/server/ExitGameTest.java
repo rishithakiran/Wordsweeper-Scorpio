@@ -1,8 +1,7 @@
 package com.scorpio.test.integration.server;
 
 
-import com.scorpio.server.controller.ConnectionController;
-import com.scorpio.server.controller.GameAccessController;
+import com.scorpio.server.controller.*;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
@@ -26,11 +25,11 @@ public class ExitGameTest {
     @Test
     public void functionality_LastPlayer(){
         ConnectionController router = new ConnectionController();
-        GameAccessController gac = new GameAccessController();
+        CreateGameRequestController cgr = new CreateGameRequestController();
 
         Player p1 = new Player("aPlayer", null);
         try {
-            gac.createGame(p1, "mygame", null);
+            cgr.createGame(p1, "mygame", null);
         }catch(WordSweeperException ex){
             fail();
         }
@@ -48,13 +47,14 @@ public class ExitGameTest {
     @Test
     public void functionality_AdminLeaves(){
         ConnectionController router = new ConnectionController();
-        GameAccessController gac = new GameAccessController();
+        CreateGameRequestController cgr = new CreateGameRequestController();
+        JoinGameRequestController jgr = new JoinGameRequestController();
 
         Player p1 = new Player("aPlayer", new FakeClientState("a"));
         Player p2 = new Player("bPlayer", new FakeClientState("b"));
         try {
-            gac.createGame(p1, "mygame", null);
-            gac.joinGame(p2, "mygame", null);
+            cgr.createGame(p1, "mygame", null);
+            jgr.joinGame(p2, "mygame", null);
         }catch(WordSweeperException ex){
             fail();
         }
@@ -73,16 +73,17 @@ public class ExitGameTest {
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
-        GameAccessController gac = new GameAccessController();
+        CreateGameRequestController cgr = new CreateGameRequestController();
+        JoinGameRequestController jgr = new JoinGameRequestController();
 
         Player p1 = new Player("bPlayer", new FakeClientState("a"));
         Player p2 = new Player("aPlayer", new FakeClientState("b"));
         Player p3 = new Player("cPlayer", new FakeClientState("c"));
 
         try {
-            gac.createGame(p1, "mygame", null);
-            gac.joinGame(p2, "mygame", null);
-            gac.joinGame(p3, "mygame", null);
+            cgr.createGame(p1, "mygame", null);
+            jgr.joinGame(p2, "mygame", null);
+            jgr.joinGame(p3, "mygame", null);
         }catch(WordSweeperException ex){
             fail();
         }

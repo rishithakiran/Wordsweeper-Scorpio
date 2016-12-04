@@ -1,15 +1,12 @@
 package com.scorpio.test.unit.server.controller;
 
 import com.scorpio.server.accessory.Coordinate;
-import com.scorpio.server.controller.ConnectionController;
-import com.scorpio.server.controller.GameAccessController;
-import com.scorpio.server.controller.GameActionController;
+import com.scorpio.server.controller.CreateGameRequestController;
+import com.scorpio.server.controller.FindWordRequestController;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.*;
 import com.scorpio.test.util.FakeClientState;
-import com.scorpio.test.util.XMLUtil;
-import com.scorpio.xml.Message;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +14,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.fail;
 
-public class GameActionControllerTest {
+public class FindWordRequestControllerTest {
 	@Before
 	public void resetGameManager() {
 		GameManager.reset();
@@ -25,12 +22,12 @@ public class GameActionControllerTest {
 
 	@Test
 	public void functionality_FindWordBasic(){
-		GameAccessController gacc = new GameAccessController();
-		GameActionController gact = new GameActionController();
+		CreateGameRequestController cgr = new CreateGameRequestController();
+		FindWordRequestController fwr = new FindWordRequestController();
 
 		Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
 		try {
-			gacc.createGame(aPlayer, "mygame", null);
+			cgr.createGame(aPlayer, "mygame", null);
 		}catch(WordSweeperException ex){
 			fail();
 		}
@@ -66,7 +63,7 @@ public class GameActionControllerTest {
 		Word w = new Word(tiles);
 
 		try {
-			gact.findWord(w, aPlayer.getName(), "mygame");
+			fwr.findWord(w, aPlayer.getName(), "mygame");
 		}catch(WordSweeperException e){
 			fail();
 		}
@@ -84,47 +81,47 @@ public class GameActionControllerTest {
 
 	@Test(expected = WordSweeperException.class)
 	public void error_WordDoesNotExist() throws WordSweeperException {
-		GameAccessController gacc = new GameAccessController();
-		GameActionController gact = new GameActionController();
+		CreateGameRequestController cgr = new CreateGameRequestController();
+		FindWordRequestController fwr = new FindWordRequestController();
 		Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
 		try {
-			gacc.createGame(aPlayer, "mygame", null);
+			cgr.createGame(aPlayer, "mygame", null);
 		}catch(WordSweeperException ex){
 			fail();
 		}
 
-		gact.findWord(new Word(new ArrayList<>()), "aPlayer", "mygame");
+		fwr.findWord(new Word(new ArrayList<>()), "aPlayer", "mygame");
 	}
 
 
 	@Test(expected = WordSweeperException.class)
 	public void error_PlayerDoesNotExist() throws WordSweeperException {
-		GameAccessController gacc = new GameAccessController();
-		GameActionController gact = new GameActionController();
+		CreateGameRequestController cgr = new CreateGameRequestController();
+		FindWordRequestController fwr = new FindWordRequestController();
 		Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
 
 		try {
-			gacc.createGame(aPlayer, "mygame", null);
+			cgr.createGame(aPlayer, "mygame", null);
 		}catch(WordSweeperException ex){
 			fail();
 		}
 
-		gact.findWord(new Word(new ArrayList<>()), "bPlayer", "mygame");
+		fwr.findWord(new Word(new ArrayList<>()), "bPlayer", "mygame");
 	}
 
 
 	@Test(expected = WordSweeperException.class)
 	public void error_GameDoesNotExist() throws WordSweeperException {
-		GameAccessController gacc = new GameAccessController();
-		GameActionController gact = new GameActionController();
+		CreateGameRequestController cgr = new CreateGameRequestController();
+		FindWordRequestController fwr = new FindWordRequestController();
 		Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
 
 		try {
-			gacc.createGame(aPlayer, "mygame", null);
+			cgr.createGame(aPlayer, "mygame", null);
 		}catch(WordSweeperException ex){
 			fail();
 		}
 
-		gact.findWord(new Word(new ArrayList<>()), "aPlayer", "notmygame");
+		fwr.findWord(new Word(new ArrayList<>()), "aPlayer", "notmygame");
 	}
 }
