@@ -19,6 +19,14 @@ public class Word implements IModel{
 		return s;
 	}
 
+	public boolean hasBonus(){
+		for(Tile t : this.tiles){
+			if(t.isBonus()){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public int computeScore() throws WordSweeperException{
 		if(tiles == null){
@@ -30,8 +38,11 @@ public class Word implements IModel{
 
 		int word_score = 0;
 		for (Tile tile : tiles) {
-			int m=tile.getSharedBy();
-			int tile_score = (tile.getPoints() * tile.getMultiplier());
+			int m = tile.getSharedBy();
+			int tile_score = tile.getPoints();
+			if(tile.isBonus()){
+				tile_score *= 10;
+			}
 			if(m > 1) {
 				tile_score *= (int) Math.pow(2, m);
 			}

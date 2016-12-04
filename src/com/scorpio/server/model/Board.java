@@ -2,6 +2,7 @@ package com.scorpio.server.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.scorpio.server.accessory.Coordinate;
@@ -12,6 +13,8 @@ public class Board implements IModel {
 
 	protected ArrayList<Tile> tiles;
 	protected int size;
+
+    private Coordinate bonusCoord;
 
 	public Board(int size) {
 		this.tiles = new ArrayList<Tile>();
@@ -41,7 +44,7 @@ public class Board implements IModel {
 				// the issue
 				Tile tCopy = new Tile();
 				tCopy.setContents(t.getContents());
-				tCopy.setMultiplier(t.getMultiplier());
+				tCopy.setBonus(t.isBonus());
 				// Readdress the coordinate
 				tCopy.setLocation(new Coordinate(col+1,row+1));
 				subBoard.tiles.add(tCopy);
@@ -50,6 +53,78 @@ public class Board implements IModel {
 		return subBoard;
 	}
 
+    /**
+     * Selects a tile randomly from this board and marks it as a bonus tile. If
+     * there is already a bonus tile, it will clear it first.
+     */
+	public void addBonus(){
+        if(this.bonusCoord != null){
+            this.getTileAt(this.bonusCoord).setBonus(false);
+        }
+
+        Random random = new Random();
+        int col = random.nextInt(this.getSize()) + 1;
+        int row = random.nextInt(this.getSize()) + 1;
+        Coordinate c = new Coordinate(col, row);
+        this.getTileAt(c).setBonus(true);
+        this.bonusCoord = c;
+    }
+
+    /**
+     * Try to use the cached value of the location of the bonus on this board.
+     * However, if it fails checks, getBonusLocation() will do its best to find
+     * the bonus tile if it exists, or add one if there is no bonus tile on the
+     * board
+     * @return Coordinate location of the bonus tile on this board
+     */
+    public Coordinate getBonusLocation(){
+        if(this.bonusCoord == null){
+            this.addBonus();
+            return this.getBonusLocation();
+        }
+
+        /* This is really bad, so hopefully it never gets called
+         * If it is, that means that the board somehow got out of
+         * sync with itself, and the stored location on the bonus
+         * doesn't match up with where it actually exists (assuming
+         * it even exists at all). So we need to scrub through the
+         * board to either find where the bonus really is, or if it
+         * doesn't exist anymore, add a new one
+         * While we're doing this anyway, we'll check to ensure that
+         * there's only one bonus
+         */
+        if(this.getTileAt(this.bonusCoord).isBonus()) {
+            int bonusesFound = 0;
+            for (int col = 1; col <= this.size; ++col) {
+                for (int row = 1; row <= this.size; ++row) {
+                    if (this.getTileAt(new Coordinate(col, row)).isBonus()) {
+                        bonusesFound++;
+                        if(bonusesFound == 1) {
+                            this.bonusCoord = new Coordinate(col, row);
+                        }
+                    }
+                }
+            }
+            if(bonusesFound == 0){
+                this.addBonus();
+                return this.getBonusLocation();
+            }
+            if(bonusesFound > 1){
+                // We really messed up now. We'll need to reset the bonus tiles on the
+                // board and keep the first one we found, as that's the one that we've
+                // been sending to clients. They shouldn't notice
+                for (int col = 1; col <= this.size; ++col) {
+                    for (int row = 1; row <= this.size; ++row) {
+                        if(!this.bonusCoord.equals(new Coordinate(col, row))) {
+                            this.getTileAt(new Coordinate(col, row)).setBonus(false);
+                        }
+                    }
+                }
+            }
+        }
+
+        return this.bonusCoord;
+    }
 
 	/**
 	 * Given a coordinate, look at the board associated with this game an identify the
@@ -103,6 +178,14 @@ public class Board implements IModel {
 		return out;
 	}
 
+    /**
+     * Given a Word object, ensure that the tiles contained within it exist
+     * on this board. Additionally, this checks to ensure that the Word is in
+     * fact an English word, and that all tiles are adjacent to one another
+     * in the order they appear
+     * @param w The Word object to check
+     * @return true if the word exists and is valid, false otherwise
+     */
 	public boolean hasWord(Word w) {
 		/* We affirm that the tiles included in w match with what is described
 		 * by this board state. Additionally, we consult the dictionary to ensure
@@ -128,7 +211,7 @@ public class Board implements IModel {
                 int xdiff = Math.abs(priorCoords.row - currentCoords.row);
                 int ydiff = Math.abs(priorCoords.col - currentCoords.col);
 
-                if(xdiff + ydiff != 1){
+                if(xdiff > 1 || ydiff > 1){
                     return false;
                 }
             }

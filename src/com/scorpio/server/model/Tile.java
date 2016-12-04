@@ -48,7 +48,7 @@ public class Tile implements IModel {
 	private Coordinate location;
 
 	private String contents;
-	private int multiplier;
+	private boolean isBonus;
 
 	private int sharedBy;
 
@@ -56,7 +56,7 @@ public class Tile implements IModel {
 	public Tile() {
 		Random random = new Random();
 		int randIndex = random.nextInt(scoreforChar.size());
-		this.multiplier = 1;
+		this.isBonus = false;
 		this.sharedBy = 1;
 
 
@@ -65,7 +65,7 @@ public class Tile implements IModel {
 	}
 	public Tile(String value, Coordinate location){
 		this.contents = value;
-		this.multiplier = 1;
+		this.isBonus = false;
 		this.sharedBy = 1;
 		this.location = location;
 	}
@@ -109,12 +109,12 @@ public class Tile implements IModel {
 		return scoreforChar.get(this.contents);
 	}
 
-	public int getMultiplier() {
-		return multiplier;
+	public boolean isBonus() {
+		return this.isBonus;
 	}
 
-	public void setMultiplier(int multiplier) {
-		this.multiplier = multiplier;
+	public void setBonus(boolean isBonus) {
+		this.isBonus = isBonus;
 	}
 
 	public int getSharedBy() {

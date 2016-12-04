@@ -5,6 +5,7 @@ import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
+import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.model.RandomBoard;
@@ -59,7 +60,9 @@ public class CreateGameRequestController implements IProtocolHandler{
         }
 
         Game game = new Game();
-        game.setBoard(new RandomBoard(7));
+        Board b = new RandomBoard(7);
+        b.addBonus();
+        game.setBoard(b);
         game.setId(gameID);
         game.setLocked(false);
         if (password != null) {

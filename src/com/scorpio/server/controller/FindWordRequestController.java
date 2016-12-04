@@ -89,8 +89,18 @@ public class FindWordRequestController implements IProtocolHandler {
             Coordinate newLoc = new Coordinate(current.col - (player0Point.col - 1), current.row - (player0Point.row - 1));
             nT.setLocation(newLoc);
             nT.setContents(t.getContents());
-            nT.setMultiplier(t.getMultiplier());
-            nT.setSharedBy(t.getSharedBy());
+            nT.setBonus(t.isBonus());
+
+            // Figure out the multiplier on this tile by counting how many players
+            // have this tile on their board
+            int sharedBy = 0;
+            for(Player p : g.getPlayers()){
+                if(p.hasTile(t)){
+                    ++sharedBy;
+                }
+            }
+
+            nT.setSharedBy(sharedBy);
             relativeTiles.add(nT);
         }
         Word relativeW = new Word(relativeTiles);
@@ -103,6 +113,9 @@ public class FindWordRequestController implements IProtocolHandler {
             player.setScore(player.getScore() + score);
 
             g.getBoard().removeWord(w);
+            if(w.hasBonus()){
+                g.getBoard().addBonus();
+            }
         }else{
             throw new WordSweeperException("Word is not available in your board!");
         }

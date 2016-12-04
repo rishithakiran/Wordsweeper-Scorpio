@@ -99,7 +99,7 @@ public class Game implements IModel {
 	}
 
 	public Coordinate getBonus(){
-		return new Coordinate(1,1);
+		return this.board.getBonusLocation();
 	}
 
 	public Player getPlayer(String name){

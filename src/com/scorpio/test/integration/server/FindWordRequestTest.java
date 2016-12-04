@@ -60,8 +60,10 @@ public class FindWordRequestTest {
 
         assert(aPlayer.getScore() == 0);
 
-        // Set out test user to 0,0
+        // Set out test user to 1,1 and move our other user out of the way
         GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").setLocation(new Coordinate(1,1));
+        GameManager.getInstance().findGameById("mygame").getPlayer("bPlayer").setLocation(new Coordinate(4,1));
+
         Message msg = xml.createMessageFromFile("testxml/findWordRequest.xml");
         aPlayer.getClientState().sendMessage(router.process(aPlayer.getClientState(), msg));
 

@@ -47,15 +47,10 @@ public class TileTest {
 	}
 	public void testSetMultiplier() {
 		Tile t= new Tile();
-	    t.setMultiplier(2);
-	    assertEquals(2,t.getMultiplier());
+	    t.setBonus(true);
+	    assert(t.isBonus());
 	}
-	public void testGetMultiplier() {
-		Tile t= new Tile();
-	    t.setMultiplier(2);;
-	    int result=t.getMultiplier();
-	    assertEquals(2,result);
-	}
+
 	public void testEquals() {
 		Tile t= new Tile();
 	    assert(true==t.equals(null));
