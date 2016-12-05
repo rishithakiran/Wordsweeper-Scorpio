@@ -1,5 +1,6 @@
 package com.scorpio.server.controller;
 
+import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
@@ -34,10 +35,35 @@ public class RepositionBoardRequestController implements IProtocolHandler {
     }
 
 
-    public void repositionBoard(String player, String gameID, int rowChange, int colChange) throws WordSweeperException {
-        Game game = GameManager.getInstance().findGameById(gameID);
+    /**
+     * Move a player within this game by the given amounts. This function enforces illegal moves,
+     * and will throw exception if the player tries to do something not allowed
+     * @param player The player to move
+     * @param gameID The ID of the game to move the player in
+     * @param colChange Delta in column. Must be between -1 and 1
+     * @param rowChange Delta in row. Must be between -1 and 1
+     * @throws WordSweeperException If the player attempts to move illegally or off the board
+     */
+    public void repositionBoard(String player, String gameID, int colChange, int rowChange) throws WordSweeperException {
+        Game g = GameManager.getInstance().findGameById(gameID);
 
-        // This may throw a WordSweeperException up the stack
-        game.repositionPlayer(player, rowChange, colChange);
+        // Verify that the proposed change is in bounds
+        int playerBoardSize = 4;
+        Player p = g.getPlayer(player);
+        Coordinate currentLoc = p.getLocation();
+
+        // Check right and bottom edges of the board
+        if(currentLoc.col + playerBoardSize + colChange > g.getBoard().getSize() + 1 ||
+                currentLoc.row + playerBoardSize + rowChange >= g.getBoard().getSize() + 1){
+            throw new WordSweeperException("Player move out of bounds");
+        }
+
+        // Check top and left edges of the board
+        if(currentLoc.col + colChange < 1 || currentLoc.row + rowChange < 1){
+            throw new WordSweeperException("Player move out of bounds");
+        }
+
+        // Do the move
+        p.setLocation(new Coordinate(currentLoc.col + colChange, currentLoc.row + rowChange));
     }
 }

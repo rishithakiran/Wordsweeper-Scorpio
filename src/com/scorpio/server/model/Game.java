@@ -56,34 +56,7 @@ public class Game implements IModel {
     }
 
 
-	/**
-	 * Move a player within this game by the given amounts. This function enforces illegal moves,
-	 * and will throw exception if the player tries to do something not allowed
-	 * @param player The player to move
-	 * @param colChange Delta in column. Must be between -1 and 1
-	 * @param rowChange Delta in row. Must be between -1 and 1
-	 * @throws WordSweeperException If the player attempts to move illegally or off the board
-	 */
-	public void repositionPlayer(String player, int colChange, int rowChange) throws WordSweeperException{
-		// Verify that the proposed change is in bounds
-		int playerBoardSize = 4;
-		Player p = this.getPlayer(player);
-		Coordinate currentLoc = p.getLocation();
 
-		// Check right and bottom edges of the board
-		if(currentLoc.col + playerBoardSize + colChange > this.getBoard().getSize() + 1 ||
-				currentLoc.row + playerBoardSize + rowChange >= this.getBoard().getSize() + 1){
-			throw new WordSweeperException("Player move out of bounds");
-		}
-
-		// Check top and left edges of the board
-		if(currentLoc.col + colChange < 1 || currentLoc.row + rowChange < 1){
-			throw new WordSweeperException("Player move out of bounds");
-		}
-
-		// Do the move
-		p.setLocation(new Coordinate(currentLoc.col + colChange, currentLoc.row + rowChange));
-	}
 
 
 	// Complex Getters and Setters

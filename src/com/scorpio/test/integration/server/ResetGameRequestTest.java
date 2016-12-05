@@ -35,7 +35,7 @@ public class ResetGameRequestTest {
         Game g = GameManager.getInstance().findGameById("somePlace");
         g.getPlayer("testPlayer").setScore(20);
         Message msg = xml.createMessageFromFile("testxml/resetGameRequest.xml");
-        router.process(new FakeClientState("foo"), msg);
+        router.process(new FakeClientState("a"), msg);
         assert(g.getPlayer("testPlayer").getScore() == 0);
     }
 
