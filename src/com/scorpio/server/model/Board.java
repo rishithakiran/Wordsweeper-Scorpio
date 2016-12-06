@@ -246,6 +246,7 @@ public class Board implements IModel {
 		}
 		this.tiles = newBoard.tiles;
 		this.size = newsize;
+
 	}
 
 
