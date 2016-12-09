@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 /**
  * Responsible for validating the input word.
- * 
- * @author Saranya, Josh
+ * @author Saranya
+ * @author Josh
  */
 public class Dictionary {
     private static Dictionary instance = null;

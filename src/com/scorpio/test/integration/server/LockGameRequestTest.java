@@ -13,7 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
-
+/**
+ * Test cases for handling XML Lock Game Request.
+ * @author Rishitha
+ *
+ */
 
 public class LockGameRequestTest {
     private XMLUtil xml = new XMLUtil();
@@ -22,7 +26,8 @@ public class LockGameRequestTest {
     public void reset(){
         GameManager.reset();
     }
-
+    
+    /**Test the basic functionality of Lock Game request.*/
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
@@ -42,6 +47,7 @@ public class LockGameRequestTest {
         assert(GameManager.getInstance().findGameById("somePlace").isLocked());
     }
 
+    /**Test for Lock game request, when it not from the Managing user.*/
     @Test
     public void error_NotManagingUser(){
         ConnectionController router = new ConnectionController();
@@ -59,7 +65,5 @@ public class LockGameRequestTest {
         assert(!router.process(s, msg).success());
 
     }
-    
-    
-    
+   
 }

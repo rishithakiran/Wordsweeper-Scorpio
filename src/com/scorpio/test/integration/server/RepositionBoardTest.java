@@ -14,7 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
-
+/**
+ * Test cases for handling XML Repositioning the board.
+ * @author Josh
+ *
+ */
 public class RepositionBoardTest {
     private XMLUtil xml = new XMLUtil();
     @Before
@@ -22,6 +26,9 @@ public class RepositionBoardTest {
         GameManager.reset();
     }
 
+    /**
+     * Test for the basic functionality for Repositioning the board.
+     */
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
@@ -35,12 +42,11 @@ public class RepositionBoardTest {
             fail();
         }
 
-        // Set out test user to 0,0
+        // Set out test user to 1,1
         GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").setLocation(new Coordinate(1,1));
         Message msg = xml.createMessageFromFile("testxml/repositionBoardRequest.xml");
         router.process(new FakeClientState("a"), msg);
         Coordinate newLoc = GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").getLocation();
-
 
         if(!newLoc.equals(new Coordinate(2,1))){
             fail();

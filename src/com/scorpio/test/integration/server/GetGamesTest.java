@@ -5,11 +5,16 @@ import org.junit.Test;
 import com.scorpio.server.controller.ConnectionController;
 import com.scorpio.test.util.XMLUtil;
 import com.scorpio.xml.Message;
-
+/**
+ * Test cases for handling XML List of games.
+ * @author Apoorva
+ *
+ */
 public class GetGamesTest {
 
 	private XMLUtil xml = new XMLUtil();
 	
+	/**Test for basic functionality of List games.*/
 	 @Test
 	    public void functionality_Basic(){
 	        ConnectionController router = new ConnectionController();

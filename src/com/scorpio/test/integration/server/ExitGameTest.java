@@ -1,6 +1,5 @@
 package com.scorpio.test.integration.server;
 
-
 import com.scorpio.server.controller.*;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
@@ -12,16 +11,23 @@ import com.scorpio.xml.Message;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.fail;
-
-
+/**
+ * Test cases for handling XML ExitGame request.
+ * @author Josh
+ *
+ */
 public class ExitGameTest {
-    @Before
+    
+	@Before
     public void reset(){
         GameManager.reset();
     }
 
     private XMLUtil xml = new XMLUtil();
 
+    /**
+     * Test for when last player of the game leaves.
+     */
     @Test
     public void functionality_LastPlayer(){
         ConnectionController router = new ConnectionController();
@@ -33,8 +39,7 @@ public class ExitGameTest {
         }catch(WordSweeperException ex){
             fail();
         }
-
-
+        
         Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
         router.process(null, msg);
 
@@ -44,6 +49,9 @@ public class ExitGameTest {
 
     }
 
+    /**
+     * Test when Managing user leaves.
+     */
     @Test
     public void functionality_AdminLeaves(){
         ConnectionController router = new ConnectionController();
@@ -59,7 +67,6 @@ public class ExitGameTest {
             fail();
         }
 
-
         Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
         router.process(null, msg);
 
@@ -70,6 +77,9 @@ public class ExitGameTest {
         assert(g.getManagingPlayer().getName().equals("bPlayer"));
     }
 
+    /**
+     * Test for basic functionality of exit game.
+     */
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
@@ -88,12 +98,10 @@ public class ExitGameTest {
             fail();
         }
 
-
         Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
         router.process(null, msg);
 
         Game g = GameManager.getInstance().findGameById("mygame");
-
 
         assert(g.getPlayers().size() == 2);
         assert(g.getManagingPlayer().getName().equals("bPlayer"));
@@ -101,7 +109,6 @@ public class ExitGameTest {
         // Ensure that b and c got a new boardResponse notifying them that a left
         assert(((FakeClientState)p1.getClientState()).getLastMessage() != null);
         assert(((FakeClientState)p3.getClientState()).getLastMessage() != null);
-
     }
 
     @Test
@@ -110,7 +117,7 @@ public class ExitGameTest {
 
         Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
         Message out = router.process(null, msg);
+ 
         assert(!out.success());
-
     }
 }

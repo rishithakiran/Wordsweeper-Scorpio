@@ -36,7 +36,7 @@ public class ExitGameRequestController implements IProtocolHandler{
 
         // If the game still exists, notify all remaining players
         if (GameManager.getInstance().findGameById(targetGame) != null) {
-            // Notify all players of chaage to board state
+            // Notify all players of change to board state
             GameManager.getInstance().findGameById(targetGame).notifyPlayers();
         }
 

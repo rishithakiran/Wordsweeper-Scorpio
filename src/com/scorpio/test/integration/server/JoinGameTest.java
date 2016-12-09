@@ -12,8 +12,11 @@ import com.scorpio.xml.Message;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.fail;
-
-
+/**
+ * Test cases for handling XML Join game request.
+ * @author Josh
+ * @author Apoorva
+ */
 public class JoinGameTest {
     private XMLUtil xml = new XMLUtil();
 
@@ -21,7 +24,7 @@ public class JoinGameTest {
     public void reset(){
         GameManager.reset();
     }
-
+    /**Test for basic functionality of Joining a game request*/
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
@@ -41,6 +44,4 @@ public class JoinGameTest {
         assert(playersBefore + 1 == playersAfter);
         assert(g.getPlayers().get(1).getName().equals("nextOne"));
     }
-
-
 }

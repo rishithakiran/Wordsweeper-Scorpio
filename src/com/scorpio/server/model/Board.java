@@ -10,7 +10,9 @@ import com.scorpio.server.accessory.Dictionary;
 import com.scorpio.server.exception.WordSweeperException;
 /**
  * The Board entity class which handles the functionalities of board.
- * @author Saranya, Josh, Rishitha
+ * @author Saranya
+ * @author Josh
+ * @author Rishitha
  */
 public class Board implements IModel {
 	protected ArrayList<Tile> tiles = new ArrayList<>();
@@ -18,13 +20,12 @@ public class Board implements IModel {
     private Coordinate bonusCoord;
 
 
-	/** Constructor of class Board.
+	/** Construct a Board class with appropriate size..
 	 * @param size	The size of the board.
 	 */
 	public Board(int size) {
 		this.size = size;
 	}
-
 
 	/**
 	 * Get a square board that is a subset of this board.
@@ -58,7 +59,6 @@ public class Board implements IModel {
 		return subBoard;
 	}
 
-
     /**
      * Selects a tile randomly from this board and marks it as a bonus tile. If
      * there is already a bonus tile, it will clear it first.
@@ -75,7 +75,6 @@ public class Board implements IModel {
         this.getTileAt(c).setBonus(true);
         this.bonusCoord = c;
     }
-
 
     /**
      * Try to use the cached value of the location of the bonus on this board.
@@ -133,9 +132,8 @@ public class Board implements IModel {
         return this.bonusCoord;
     }
 
-
 	/**
-	 * Given a coordinate, look at the board associated with this game an identify the
+	 * Given a coordinate, look at the board associated with this game and identify the
 	 * tile there.
 	 * @param c The coordinate to use for lookup.
 	 * @return Tile at that location.
@@ -164,7 +162,6 @@ public class Board implements IModel {
         }
     }
 
-
 	/**
 	 * Returns the size of the board.
 	 * @return Current height/width of the board (it's a square)
@@ -172,7 +169,6 @@ public class Board implements IModel {
 	public int getSize() {
 		return size;
 	}
-
 
 	/**
 	 * Serialize the board in preparation to be sent through a boardResponse message
@@ -229,7 +225,6 @@ public class Board implements IModel {
 
 		return Dictionary.getInstance().isWord(w.toString().toLowerCase());
 	}
-
 
 	/**
 	 * Grows the board to match the given size. The board will always be
@@ -291,10 +286,8 @@ public class Board implements IModel {
                 rebuiltBoard.tiles.add(newTile);
             }
         }
-
         this.tiles = rebuiltBoard.tiles;
     }
-
 
     public void setBonus(Coordinate c){
         if(this.bonusCoord != null){

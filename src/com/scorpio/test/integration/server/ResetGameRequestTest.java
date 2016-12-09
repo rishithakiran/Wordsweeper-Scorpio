@@ -13,8 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
-
-
+/**
+ * Test cases for handling XML Reseting the game request.
+ * @author Josh
+ *
+ */
 public class ResetGameRequestTest {
     private XMLUtil xml = new XMLUtil();
 
@@ -23,6 +26,7 @@ public class ResetGameRequestTest {
         GameManager.reset();
     }
 
+    /**Test for the basic functionality of reset game request where players scores are reset.*/
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();
@@ -39,6 +43,7 @@ public class ResetGameRequestTest {
         assert(g.getPlayer("testPlayer").getScore() == 0);
     }
 
+    /**Test for reset game when game is not available.*/
     @Test
     public void resiliency_NoGame(){
         ConnectionController router = new ConnectionController();

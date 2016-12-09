@@ -9,7 +9,11 @@ import com.scorpio.server.model.Player;
 import com.scorpio.test.util.XMLUtil;
 import org.junit.Before;
 import org.junit.Test;
-
+/**
+ * Test cases for Reset game request.
+ * @author Josh
+ *
+ */
 public class ResetGameRequestControllerTest {
 	private XMLUtil xml = new XMLUtil();
 
@@ -18,6 +22,11 @@ public class ResetGameRequestControllerTest {
 		GameManager.reset();
 	}
 
+	/**
+	 * Ensure that active game with reset request handles all functionality correctly.
+	 * Resets the scores of the player in the current active game.
+	 * @throws WordSweeperException
+	 */
 	@Test
 	public void functionality_Basic() throws WordSweeperException {
         CreateGameRequestController cgr = new CreateGameRequestController();

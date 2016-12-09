@@ -9,7 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
-
+/**
+ * Test cases for Creating game request.
+ * @author Josh
+ *
+ */
 public class CreateGameRequestControllerTest {
     @Before
     public void resetGameManager() {
@@ -17,6 +21,10 @@ public class CreateGameRequestControllerTest {
     }
 
     @Test
+    /**
+     * Ensure a game is created and verify the number of players, board size and managing users.
+     * @throws WordSweeperException
+     */
     public void functionality_CreateGame() throws WordSweeperException {
         CreateGameRequestController cgr = new CreateGameRequestController();
         Player owner = new Player("test", null);
@@ -32,7 +40,10 @@ public class CreateGameRequestControllerTest {
 
     }
 
-
+    /**
+     * Ensure already created game is not recreated.
+     * @throws WordSweeperException
+     */
     @Test(expected = WordSweeperException.class)
     public void error_GameAlreadyExists() throws WordSweeperException {
         CreateGameRequestController cgr = new CreateGameRequestController();

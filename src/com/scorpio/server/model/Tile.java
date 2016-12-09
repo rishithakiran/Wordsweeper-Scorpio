@@ -6,7 +6,9 @@ import java.util.Random;
 import com.scorpio.server.accessory.Coordinate;
 /**
  * Includes functionalities associated with the Tiles of the board.
- * @author Saranya, Josh
+ * @author Apoorva
+ * @author Saranya
+ * @author Josh
  *
  */
 public class Tile implements IModel {

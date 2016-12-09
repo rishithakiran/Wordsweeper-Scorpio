@@ -2,36 +2,60 @@ package com.scorpio.server.protocol.response;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.model.Board;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
-
+/**
+ * The Board Response holds all functionalities with respect to the corresponding 
+ * requests those require a board response as a part of the process, necessary
+ * to send to the client.
+ * @author Josh
+ *
+ */
 public class BoardResponse {
 	private final String playerID;
 	private final String gameID;
 	private final String requestID;
 	private final boolean isAdminResponse;
 	private final String error;
-
+	
+	/**
+	 * Constructor for BoardResponse which handles the playerID, gameId, requestId and Admin response.
+	 * @param playerId			ID of the Player.
+	 * @param gameID			ID of the Game.
+	 * @param requestID			Request ID.
+	 * @param isAdminResponse	Response from Admin.
+	 */
 	public BoardResponse(String playerId,String gameID, String requestID, boolean isAdminResponse) {
-		 this.playerID = playerId;
+		this.playerID = playerId;
 		this.gameID = gameID;
 		this.requestID = requestID;
 		this.isAdminResponse = isAdminResponse;
 		this.error = null;
 	}
-
+	
+	/**
+	 * Constructor for BoardResponse which handles the playerID, gameId, requestId, error and Admin response.
+	 * @param playerID			ID of the player.
+	 * @param gameID			ID of the game.
+	 * @param requestID			Request ID.
+	 * @param isAdminResponse	Admin response.
+	 * @param error				Error message.
+	 */
 	public BoardResponse(String playerID, String gameID, String requestID, boolean isAdminResponse, String error) {
-		   this.playerID = playerID;
+		this.playerID = playerID;
 		this.gameID = gameID;
 		this.requestID = requestID;
 		this.isAdminResponse = isAdminResponse;
 		this.error = error;
 	}
 
+	/**
+	 * Create response for XML header string for player objects.
+	 * @return	Player object values.
+	 */
 	private List<String> getPlayerXMLObjects() {
 		Game g = GameManager.getInstance().findGameById(this.gameID);
 		List<Player> players = g.getPlayers();
@@ -46,7 +70,12 @@ public class BoardResponse {
 
 		return playerXMLObjects;
 	}
-
+	
+	/**
+	 * Create standard response XML header string for successful response or failure response.
+	 * And create a board response XML header with gameId, managing user and bonus.
+	 * @return	Header of the response.
+	 */
 	private String getHeader() {
 		Game g = GameManager.getInstance().findGameById(gameID);
 
@@ -70,6 +99,10 @@ public class BoardResponse {
 		return header + boardResponseHeader;
 	}
 
+	/**
+	 * Create standard response XML footer string for Board response.
+	 * @return	Footer of the response.
+	 */
 	private String getFooter() {
 		String boardResponseFooter = "</boardResponse>";
 		String footer = "</response>";
@@ -77,6 +110,10 @@ public class BoardResponse {
 		return boardResponseFooter + footer;
 	}
 
+	/**
+	 * The appropriate data is returned to the client.
+	 * @return Header and Footer.
+	 */
 	public String toXML() {
 		String complete = this.getHeader();
 

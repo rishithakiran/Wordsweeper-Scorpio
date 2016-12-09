@@ -11,7 +11,10 @@ import java.util.HashMap;
 /**
  * Responsible for directing inbound connections to the appropriate
  * controller
- * @author Josh, Apoorva, Rishitha, Saranya
+ * @author Josh
+ * @author Apoorva
+ * @author Rishitha
+ * @author Saranya
  */
 public class ConnectionController implements IShutdownHandler {
     private final HashMap<String, Class> requestMapping;

@@ -15,6 +15,7 @@ import java.util.Random;
 /**
  * Modules that handles Join Game request.
  * @author Josh
+ * @author Apoorva
  *
  */
 public class JoinGameRequestController implements IProtocolHandler{

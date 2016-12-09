@@ -4,14 +4,16 @@ import com.scorpio.server.exception.WordSweeperException;
 import java.util.ArrayList;
 /**
  * Includes functionalities for Word class.
- * @author Saranya, Josh, Rishitha
+ * @author Saranya
+ * @author Josh
+ * @author Rishitha
  *
  */
 public class Word implements IModel{
     public ArrayList<Tile> tiles;
 
     /**
-     * Constructor of Word class.
+     * Construct a Word class with Array List of tiles..
      * @param tiles Array List of tiles.
      */
 	public Word(ArrayList<Tile> tiles) {
@@ -60,11 +62,8 @@ public class Word implements IModel{
 			if(m > 1) {
 				tile_score *= (int) Math.pow(2, m);
 			}
-
 			word_score += tile_score;
 		}
-
 		return (int)Math.pow(2,tiles.size()) * 10 * word_score;
-
 	}
 }

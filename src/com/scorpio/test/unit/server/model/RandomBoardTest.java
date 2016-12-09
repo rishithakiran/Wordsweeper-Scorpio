@@ -9,9 +9,13 @@ import com.scorpio.server.model.Word;
 import org.junit.Test;
 
 import java.util.ArrayList;
-
+/**
+ * Test cases for all functionalities related to Random Board class.
+ * @author Josh
+ */
 
 public class RandomBoardTest {
+	/**Ensure the coordinates axis of the created random board is valid*/
    @Test
    public void functionality_CoordsCorrect(){
        Board b = new RandomBoard(7);

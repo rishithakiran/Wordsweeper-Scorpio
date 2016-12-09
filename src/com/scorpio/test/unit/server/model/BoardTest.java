@@ -10,9 +10,16 @@ import com.scorpio.server.model.Board;
 import com.scorpio.server.model.RandomBoard;
 import com.scorpio.server.model.Tile;
 import com.scorpio.server.model.Word;
-
-
+/**
+ * Test cases for all the functionalities related to Board class.
+ * @author Saranya
+ * @author Josh
+ */
 public class BoardTest {
+	
+	/**
+	 * Test to verify that a character is associated with the Tile.
+	 */
     @Test
     public void funtionality_SetTileAt() {
         Board b = new RandomBoard(7);
@@ -49,6 +56,11 @@ public class BoardTest {
         b.removeWord(tWord);
     }
 
+    /**
+     * Ensure that the given input word is validated and the corresponding
+     * tiles are removed and the board is updated with the tiles below.
+     * @throws WordSweeperException
+     */
     @Test
     public void functionality_RemoveWord() throws WordSweeperException{
         Board b = new RandomBoard(7);
@@ -82,6 +94,12 @@ public class BoardTest {
         assert(b.getTileAt(new Coordinate(5, 4)).getContents().equals("N"));
     }
 
+    /**
+     * Ensure that a input word in a vertical line is validated
+     * and corresponding tiles are removed from the board 
+     * and the board is updated accordingly.
+     * @throws WordSweeperException
+     */
     @Test
     public void functionality_RemoveWordVertical() throws WordSweeperException{
         Board b = new RandomBoard(7);
@@ -111,9 +129,12 @@ public class BoardTest {
         assert(b.getTileAt(new Coordinate(1, 1)).getContents().equals("C"));
         assert(b.getTileAt(new Coordinate(1, 2)).getContents().equals("J"));
         assert(b.getTileAt(new Coordinate(1, 3)).getContents().equals("Q"));
-
     }
 
+    /**
+     * Ensure that the sub-board size is within the bounds of the required
+     * sub-board size.
+     */
     @Test
     public void resiliency_SubBoardTooBig(){
         RandomBoard b = new RandomBoard(7);
@@ -122,7 +143,11 @@ public class BoardTest {
 
         assert(sb == null);
     }
-
+    
+    /**
+     * Ensure that the sub-board starting location does not result in out-of-bounds of 
+     * that of the global board size. 
+     */
     @Test
     public void resiliency_SubBoardOOB(){
         RandomBoard b = new RandomBoard(7);
@@ -135,27 +160,37 @@ public class BoardTest {
     @Test
     public void functionality_SubBoardIdentity(){
         RandomBoard b = new RandomBoard(7);
-
         Board sb = b.getSubBoard(new Coordinate(1,1), 7);
 
         // This check could be better
         assert(sb != null);
     }
 
+    /**
+     * Test to ensure the functionality of the tile in the board.
+     */
     @Test
     public void functionality_GetTile(){
         RandomBoard b = new RandomBoard(7);
         Tile t = b.getTileAt(new Coordinate(1,1));
         assert(t.getLocation().equals(new Coordinate(1,1)));
     }
-
+    
+    /**
+     * Test to ensure that the tile location is not out-of-bounds than that of board.
+     */
     @Test
     public void resiliency_TileOOB(){
         RandomBoard b = new RandomBoard(7);
         Tile t = b.getTileAt(new Coordinate(8,8));
         assert(t == null);
     }
-
+    
+    /**
+     * Test to ensure that a board is created of required size and verify the total
+     * number of tiles in the board. And ensure that two randomly created board doesn't
+     * have same contents.
+     */
     @Test
     public void functionality_Random(){
         RandomBoard b = new RandomBoard(7);
@@ -168,6 +203,11 @@ public class BoardTest {
         assert(!(b.toString().equals(b2.toString())));
     }
 
+    /**
+     * Ensure that a sub-board of required size is created and verify the tile size. 
+     * And also verify the location of the tile present in the global board 
+     * is identified in the sub-board.
+     */
     @Test
     public void functionality_SubBoard(){
         RandomBoard b = new RandomBoard(7);
@@ -176,7 +216,6 @@ public class BoardTest {
 
         String[] tiles = sub.toString().split(",");
         assert(tiles.length == 16);
-
 
         // Probably don't need to test ALL tiles
         Tile t1 = b.getTileAt(new Coordinate(1,1));

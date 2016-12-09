@@ -10,14 +10,18 @@ import com.scorpio.test.util.XMLUtil;
 import com.scorpio.xml.Message;
 import org.junit.Test;
 import java.util.HashMap;
-
+/**
+ * Test case for Connection Controller.
+ * @author Josh
+ *
+ */
 public class ConnectionControllerTest {
 	private XMLUtil xml = new XMLUtil();
 
 	@Test
 	/**
 	 * Ensure that with a given mapping, our connection controller routes us to
-	 * the correct place
+	 * the correct place.
 	 */
 	public void functionality_Basic() {
 		HashMap<String, Class> mapping = new HashMap<String, Class>();
@@ -36,7 +40,7 @@ public class ConnectionControllerTest {
 	@Test
 	/**
 	 * Ensure that if we somehow map to a controller that doesn't exist, the
-	 * server doesn't crash and burn
+	 * server doesn't crash and burn.
 	 */
 	public void resiliency_BadClass() {
 		HashMap<String, Class> mapping = new HashMap<String, Class>();
@@ -49,7 +53,7 @@ public class ConnectionControllerTest {
 
 	@Test
 	/**
-	 * Ensure that mapping to a malformed class is handled gracefully
+	 * Ensure that mapping to a malformed class is handled gracefully.
 	 */
 	public void resiliency_MalformedClass() {
 		HashMap<String, Class> mapping = new HashMap<String, Class>();
@@ -72,7 +76,7 @@ public class ConnectionControllerTest {
 
 	@Test
 	/**
-	 * Validate that if we're passed an empty message, nothing bad happens
+	 * Validate that if we're passed an empty message, nothing bad happens.
 	 */
 	public void resiliency_BadMessage() {
 		ConnectionController router = new ConnectionController();

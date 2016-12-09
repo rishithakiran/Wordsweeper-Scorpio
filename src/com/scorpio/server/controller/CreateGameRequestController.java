@@ -17,6 +17,7 @@ import java.util.Random;
 /**
  * Module that handles creating game request.
  * @author Josh
+ * @author Apoorva
  *
  */
 public class CreateGameRequestController implements IProtocolHandler{

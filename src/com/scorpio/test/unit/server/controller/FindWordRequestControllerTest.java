@@ -14,13 +14,21 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.fail;
-
+/**
+ * Test cases for Find word request controller.
+ * @author Josh
+ *
+ */
 public class FindWordRequestControllerTest {
 	@Before
 	public void resetGameManager() {
 		GameManager.reset();
 	}
 
+	/**
+	 * Creating a board of characters and ensuring the word formed is valid
+	 * and providing the corresponding board response with updated contents.
+	 */
 	@Test
 	public void functionality_FindWordBasic(){
 		CreateGameRequestController cgr = new CreateGameRequestController();
@@ -33,7 +41,6 @@ public class FindWordRequestControllerTest {
 			fail();
 		}
 		aPlayer.setLocation(new Coordinate(1,1));
-
 
 		Board b = new RandomBoard(7);
 		String boardString =("R B C D E F G" +
@@ -69,7 +76,6 @@ public class FindWordRequestControllerTest {
 			fail();
 		}
 
-
 		int score = aPlayer.getScore();
 		assert(score == 8320);
 
@@ -80,6 +86,10 @@ public class FindWordRequestControllerTest {
 		assert(b.getTileAt(new Coordinate(1, 3)).getContents().equals("Q"));
 	}
 
+	/**
+	 * Ensure that empty word is handled appropriately.
+	 * @throws WordSweeperException
+	 */
 	@Test(expected = WordSweeperException.class)
 	public void error_WordDoesNotExist() throws WordSweeperException {
 		CreateGameRequestController cgr = new CreateGameRequestController();
@@ -94,7 +104,10 @@ public class FindWordRequestControllerTest {
 		fwr.findWord(new Word(new ArrayList<>()), "aPlayer", "mygame");
 	}
 
-
+	/**
+	 * Ensure that invalid player requesting for find word is handled properly.
+	 * @throws WordSweeperException
+	 */
 	@Test(expected = WordSweeperException.class)
 	public void error_PlayerDoesNotExist() throws WordSweeperException {
 		CreateGameRequestController cgr = new CreateGameRequestController();
@@ -110,7 +123,10 @@ public class FindWordRequestControllerTest {
 		fwr.findWord(new Word(new ArrayList<>()), "bPlayer", "mygame");
 	}
 
-
+	/**
+	 * Ensure that find word request is handled only for a valid game.
+	 * @throws WordSweeperException
+	 */
 	@Test(expected = WordSweeperException.class)
 	public void error_GameDoesNotExist() throws WordSweeperException {
 		CreateGameRequestController cgr = new CreateGameRequestController();
@@ -126,6 +142,11 @@ public class FindWordRequestControllerTest {
 		fwr.findWord(new Word(new ArrayList<>()), "aPlayer", "notmygame");
 	}
 
+	/**
+	 * Ensure that calculating scoring for shared tile is handled correctly.
+	 * In this case, we provide shared region with two other players and
+	 * corresponding calculation is done and verified.
+	 */
 	@Test
 	public void functionality_SharedBoardMultiplier2(){
 		CreateGameRequestController cgr = new CreateGameRequestController();
@@ -181,10 +202,15 @@ public class FindWordRequestControllerTest {
 			fail();
 		}
 
-
 		int score = aPlayer.getScore();
 		assert(score == 21760);
 	}
+	
+	/**
+	 * Ensure that calculating scoring for shared tile is handled correctly.
+	 * In this case, we provide shared region with three other players and
+	 * corresponding calculation is done and verified.
+	 */
 	@Test
 	public void functionality_SharedBoardMultiplier3(){
 		CreateGameRequestController cgr = new CreateGameRequestController();
@@ -246,7 +272,6 @@ public class FindWordRequestControllerTest {
 		}catch(WordSweeperException e){
 			fail();
 		}
-
 
 		int score = aPlayer.getScore();
 		assert(score == 29440);

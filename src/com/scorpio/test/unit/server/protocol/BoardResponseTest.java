@@ -11,13 +11,23 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.UUID;
-
+/**
+ * Test cases for the corresponding functionalities of Board Response.
+ * @author Josh
+ *
+ */
 public class BoardResponseTest {
 	@Before
 	public void resetGameManager() {
 		GameManager.reset();
 	}
 
+	/**
+	 * Ensure that a player receives successful board response with gameId, bonus location, 
+	 * whether or not he is a managing user, player name, location of the player and
+	 * appropriate score.
+	 * @throws WordSweeperException
+	 */
 	@Test
 	public void functionality_Basic() throws WordSweeperException {
 		UUID gameUUID = UUID.randomUUID();
@@ -41,7 +51,13 @@ public class BoardResponseTest {
 				g.getPlayerBoard(testPlayerName));
 		assert (br.equals(correctResp));
 	}
-
+	
+	/**
+	 * Ensure that a Admin receives successful board response with gameId, bonus location, 
+	 * whether or not he is a managing user, player name, location of all the players and
+	 * appropriate score.
+	 * @throws WordSweeperException
+	 */
 	@Test
 	public void functionality_Admin() throws WordSweeperException {
 		UUID gameUUID = UUID.randomUUID();

@@ -5,8 +5,9 @@ import com.scorpio.server.core.ClientState;
 import com.scorpio.xml.Message;
 /**
  * Includes all functionalities associated to the player entity class.
- * @author Saranya, Josh, Rishitha
- *
+ * @author Saranya
+ * @author Josh
+ * @author Rishitha
  */
 
 public class Player implements IModel{
@@ -18,7 +19,7 @@ public class Player implements IModel{
 	// Maintain the client state, so we can send this user messages
 	private ClientState state;
 	/**
-	 * Constructor for the player class. 
+	 * Construct a player class with name and client state. 
 	 * @param name	Name of the player.
 	 * @param s	Client State.
 	 */

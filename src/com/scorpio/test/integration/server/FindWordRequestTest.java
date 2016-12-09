@@ -17,7 +17,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
-
+/**
+ * Test cases for handling XML FindWord request.
+ * @author Saranya
+ * @author Josh
+ *
+ */
 public class FindWordRequestTest {
     private XMLUtil xml = new XMLUtil();
     @Before
@@ -25,6 +30,11 @@ public class FindWordRequestTest {
         GameManager.reset();
     }
 
+    /**
+     * Test for basic functionality of Find Word.
+     * For the given input word, it verifies the players score for valid word 
+     * and provides a corresponding response for other players.
+     */
     @Test
     public void functionality_Basic(){
         ConnectionController router = new ConnectionController();

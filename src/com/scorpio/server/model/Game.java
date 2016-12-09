@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 /**
  * Includes all functionalities associated with the game entity class.
- * @author Saranya, Josh, Rishitha
+ * @author Saranya
+ * @author Josh
+ * @author Rishitha
  */
 public class Game implements IModel {
 	private String id;

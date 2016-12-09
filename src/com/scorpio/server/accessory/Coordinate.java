@@ -3,7 +3,6 @@ package com.scorpio.server.accessory;
  * Responsible for assigning the coordinate location for each tile.
  * The representation is (y,x) for each tile location in an XY plane. 
  * @author 	Josh
- * 
  */
 public class Coordinate {
 	/** Represents the row value.

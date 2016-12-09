@@ -2,7 +2,11 @@ package com.scorpio.test.util;
 
 import com.scorpio.server.core.ClientState;
 import com.scorpio.xml.Message;
-
+/**
+ * Class for Fake Client.
+ * @author Josh
+ *
+ */
 public class FakeClientState implements ClientState {
     private String id;
     private int msgsReceived = 0;

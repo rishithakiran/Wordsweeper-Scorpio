@@ -1,7 +1,7 @@
 package com.scorpio.xml;
 
 import java.io.*;
-
+/**Parser for XML requests and reponses.*/
 public class Parser {
 
 	/** Common id across request/responses. */
