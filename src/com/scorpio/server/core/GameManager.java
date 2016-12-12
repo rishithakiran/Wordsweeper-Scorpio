@@ -12,7 +12,18 @@ import java.util.UUID;
  * @author Josh
  */
 public class GameManager implements IModel {
-	
+
+	private static int id = 0;
+
+	/**
+	 * Keep track of sequential game ID's, so that each new game gets the next logical one
+	 * By placing it here, we are able to reset it along with the GameManager
+	 * @return Next available ID
+	 */
+	public int getNextID(){
+		return id++;
+	}
+
 	/**Creates HashMap that stores all details about the games.*/
 	public HashMap<String, Game> games = new HashMap<String, Game>();
 	private static GameManager instance = null;
@@ -22,6 +33,7 @@ public class GameManager implements IModel {
 	 */
 	public static void reset(){
 		instance = new GameManager();
+		id = 0;
 	}
 
 

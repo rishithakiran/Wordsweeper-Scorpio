@@ -22,7 +22,6 @@ import java.util.Random;
  *
  */
 public class CreateGameRequestController implements IProtocolHandler{
-    private static int id = 0;
     @Override
     public Message process(ClientState state, Message request) {
         // Affiliate this client state with a session, if it doesn't already have one. If it does, they shouldn't
@@ -44,7 +43,7 @@ public class CreateGameRequestController implements IProtocolHandler{
         }
 
         //String gameUUID = UUID.randomUUID().toString();
-        String gameUUID = String.valueOf(id++);
+        String gameUUID = String.valueOf(GameManager.getInstance().getNextID());
 
         try {
             Player np = new Player(playerName, state);
