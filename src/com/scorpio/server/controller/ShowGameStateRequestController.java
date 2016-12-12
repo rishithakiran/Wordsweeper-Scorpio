@@ -26,6 +26,7 @@ public class ShowGameStateRequestController implements IProtocolHandler{
         }
 
 
+        // Send back the response
         BoardResponse boardResponse = new BoardResponse(null, gameId, request.id(), true);
         return new Message(boardResponse.toXML());
 

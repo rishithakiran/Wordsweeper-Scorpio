@@ -47,9 +47,10 @@ public class LockGameRequestController implements IProtocolHandler{
 
 
     /**
-     * Locks the game with
+     * Attempt to lock the given game, checking that it exists, and can be locked
      *
      * @param gameID Target game
+     * @throws WordSweeperException If the game does not exist or is already locked
      */
     public void lockGame(String gameID) throws WordSweeperException{
         Game game = GameManager.getInstance().findGameById(gameID);

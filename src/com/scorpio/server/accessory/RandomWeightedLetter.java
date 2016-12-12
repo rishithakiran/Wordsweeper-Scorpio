@@ -1,9 +1,18 @@
 package com.scorpio.server.accessory;
 
+/**
+ * Generates a letter with a random distribution that favors more common letters (e.g. E, T, A, etc.)
+ * over less common ones, such as Z
+ * @author Josh
+ */
 public class RandomWeightedLetter {
+    // The letter that will be returned
     private final String v;
 
+    // The cumulative weight of all elements. As we use percentages, this will be 100%
     private static double totalWeight = 100.0;
+
+    // Table of all weights
     private static LetterTuple[] freqs = {
             new LetterTuple("E", 12.70),
             new LetterTuple("T", 9.06),
@@ -37,6 +46,9 @@ public class RandomWeightedLetter {
         return this.v;
     }
 
+    /**
+     * Generate a new RandomWeightedLetter instance
+     */
     public RandomWeightedLetter(){
         int randomIndex = -1;
         double random = Math.random() * totalWeight;
@@ -52,6 +64,7 @@ public class RandomWeightedLetter {
         this.v= freqs[randomIndex].letter;
     }
 
+    // Private internal class to for the rows of our lookup tables
     private static class LetterTuple {
         public final String letter;
         public final double weight;

@@ -69,10 +69,9 @@ public class JoinGameRequestController implements IProtocolHandler{
      *            Target game
      * @param password
      *            Password for the game
+     * @throws WordSweeperException If the player is unable to join the provided game
      */
     public void joinGame(Player player, String gameID, String password) throws WordSweeperException {
-
-
 
         Game game = GameManager.getInstance().findGameById(gameID);
         if (game == null) {

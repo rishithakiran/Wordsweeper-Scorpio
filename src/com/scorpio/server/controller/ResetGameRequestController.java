@@ -55,6 +55,11 @@ public class ResetGameRequestController implements IProtocolHandler {
     }
 
 
+    /**
+     * Given a gameID, validate that the game exists and then reset it
+     * @param gameId The game to lock
+     * @throws WordSweeperException If the game does not exist
+     */
     public static void resetGame(String gameId) throws WordSweeperException{
         Game g = GameManager.getInstance().findGameById(gameId);
         if(g == null){

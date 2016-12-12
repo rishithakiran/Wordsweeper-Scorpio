@@ -93,7 +93,9 @@ public class ConnectionController implements IShutdownHandler {
     }
 
     /**
-     * Logout.
+     * Called when a client unexpectedly closes the connection. In this case, the server needs to
+     * figure out if they had any active sessions, and if they do, close them out
+     * @param state ClientState of the request
      */
     @Override
     public void logout(ClientState state) {

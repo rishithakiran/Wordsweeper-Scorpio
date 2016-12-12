@@ -12,6 +12,7 @@ import com.scorpio.xml.Message;
 public class ListGamesRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
+        // Return a list of games
         ListOfGamesResponse listOfGamesResponse = new ListOfGamesResponse(request.id());
         return new Message(listOfGamesResponse.toXML());
     }
