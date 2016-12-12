@@ -22,20 +22,21 @@ import java.util.Random;
 public class JoinGameRequestController implements IProtocolHandler{
     @Override
     public Message process(ClientState state, Message request) {
+        Node child = request.contents.getFirstChild();
+        String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
+        Player newPlayer = new Player(child.getAttributes().getNamedItem("name").getNodeValue(), state);
+
+
         // Affiliate this client state with a session, if it doesn't already have one. If it does, they shouldn't
         // be allowed to join -- no multiboxers!
         Session s = (Session) state.getData();
         if(s != null){
-            FailureResponse fr = new FailureResponse("Please leave your other game first", request.id());
-            return new Message(fr.toXML());
+            BoardResponse br = new BoardResponse(newPlayer.getName(), targetGame, request.id(), false, "Please leave your other game first");
+            return new Message(br.toXML());
         }
-
-
-        Node child = request.contents.getFirstChild();
+        
 
         // Find the game
-        String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
-        Player newPlayer = new Player(child.getAttributes().getNamedItem("name").getNodeValue(), state);
         String password = null;
         if (child.getAttributes().getNamedItem("password") != null) {
             password = child.getAttributes().getNamedItem("password").getNodeValue();

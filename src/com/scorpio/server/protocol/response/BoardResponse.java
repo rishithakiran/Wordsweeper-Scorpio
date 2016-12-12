@@ -93,6 +93,7 @@ public class BoardResponse {
 		} else {
 			header = "<response id='" + requestID + "' success='true'>";
 		}
+
 		String boardResponseHeader = String.format("<boardResponse gameId='%s' managingUser='%s' bonus='%s'", gameID,
 				managingUser, bonus);
 		if (this.isAdminResponse) {

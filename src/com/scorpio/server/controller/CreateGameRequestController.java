@@ -24,26 +24,27 @@ import java.util.Random;
 public class CreateGameRequestController implements IProtocolHandler{
     @Override
     public Message process(ClientState state, Message request) {
+        Node child = request.contents.getFirstChild();
+        String playerName = child.getAttributes().getNamedItem("name").getNodeValue();
+        String gameUUID = String.valueOf(GameManager.getInstance().getNextID());
+
         // Affiliate this client state with a session, if it doesn't already have one. If it does, they shouldn't
         // be allowed to join -- no multiboxers!
         Session s = (Session) state.getData();
         if(s != null){
-            FailureResponse fr = new FailureResponse("Please leave your other game first", request.id());
-            return new Message(fr.toXML());
+            BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false, "Please leave your other game first");
+            return new Message(br.toXML());
         }
 
 
 
-        Node child = request.contents.getFirstChild();
 
-        String playerName = child.getAttributes().getNamedItem("name").getNodeValue();
         String password = null;
         if (child.getAttributes().getNamedItem("password") != null) {
             password = child.getAttributes().getNamedItem("password").getNodeValue();
         }
 
-        //String gameUUID = UUID.randomUUID().toString();
-        String gameUUID = String.valueOf(GameManager.getInstance().getNextID());
+
 
         try {
             Player np = new Player(playerName, state);
@@ -56,9 +57,8 @@ public class CreateGameRequestController implements IProtocolHandler{
             BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
             return new Message(br.toXML());
         } catch (WordSweeperException ex) {
-            // If this occurs, we could not create a new game
-            FailureResponse fr = new FailureResponse(ex.toString(), request.id());
-            return new Message(fr.toXML());
+            BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false, "Could not create game");
+            return new Message(br.toXML());
         }
     }
 
