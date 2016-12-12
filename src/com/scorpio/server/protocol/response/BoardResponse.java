@@ -78,8 +78,15 @@ public class BoardResponse {
 	 */
 	private String getHeader() {
 		Game g = GameManager.getInstance().findGameById(gameID);
-
-		String managingUser = g.getManagingPlayer().getName();
+		String bonus;
+		String managingUser;
+		if(g == null){
+			managingUser = "none";
+			bonus = "0,0";
+		}else{
+			managingUser = g.getManagingPlayer().getName();
+			bonus = g.getBonus().toString();
+		}
 		String header;
 		if (this.error != null) {
 			header = "<response id='" + requestID + "' success='false' reason='" + this.error + "'>";
@@ -87,7 +94,7 @@ public class BoardResponse {
 			header = "<response id='" + requestID + "' success='true'>";
 		}
 		String boardResponseHeader = String.format("<boardResponse gameId='%s' managingUser='%s' bonus='%s'", gameID,
-				managingUser, g.getBonus().toString());
+				managingUser, bonus);
 		if (this.isAdminResponse) {
 			Board b = g.getBoard();
 			String extraData = String.format(" size='%d' contents='%s'>", b.getSize(), b.toString());

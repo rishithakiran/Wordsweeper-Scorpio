@@ -58,7 +58,7 @@ public class RepositionBoardRequestController implements IProtocolHandler {
 
         // Check right and bottom edges of the board
         if(currentLoc.col + playerBoardSize + colChange > g.getBoard().getSize() + 1 ||
-                currentLoc.row + playerBoardSize + rowChange >= g.getBoard().getSize() + 1){
+                currentLoc.row + playerBoardSize + rowChange > g.getBoard().getSize() + 1){
             throw new WordSweeperException("Player move out of bounds");
         }
 

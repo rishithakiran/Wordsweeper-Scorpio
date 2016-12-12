@@ -1,6 +1,8 @@
 package com.scorpio.server.controller;
 
 import com.scorpio.server.core.ClientState;
+import com.scorpio.server.core.GameManager;
+import com.scorpio.server.model.Game;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.*;
 import com.scorpio.xml.Message;
@@ -16,6 +18,14 @@ public class ShowGameStateRequestController implements IProtocolHandler{
         Node child = request.contents.getFirstChild();
 
         String gameId = child.getAttributes().getNamedItem("gameId").getNodeValue();
+
+        // Ensure that this game exists
+        if(GameManager.getInstance().findGameById(gameId) == null){
+            BoardResponse boardResponse = new BoardResponse(null, gameId, request.id(), false, "Game does not exist");
+            return new Message(boardResponse.toXML());
+        }
+
+
         BoardResponse boardResponse = new BoardResponse(null, gameId, request.id(), true);
         return new Message(boardResponse.toXML());
 
