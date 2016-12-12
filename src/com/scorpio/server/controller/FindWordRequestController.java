@@ -120,9 +120,6 @@ public class FindWordRequestController implements IProtocolHandler {
             player.setScore(player.getScore() + score);
 
             g.getBoard().removeWord(w);
-            if(w.hasBonus()){
-                g.getBoard().addBonus();
-            }
         }else{
             throw new WordSweeperException("Word is not available in your board!");
         }

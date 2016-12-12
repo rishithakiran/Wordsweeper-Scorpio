@@ -286,7 +286,11 @@ public class Board implements IModel {
                 rebuiltBoard.tiles.add(newTile);
             }
         }
+
         this.tiles = rebuiltBoard.tiles;
+		if(w.hasBonus()){
+			this.addBonus();
+		}
     }
 
     public void setBonus(Coordinate c){

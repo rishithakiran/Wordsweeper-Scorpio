@@ -61,10 +61,4 @@ public class TileTest {
 	    t.setBonus(true);
 	    assert(t.isBonus());
 	}
-	
-	@Test
-	public void testEquals() {
-		Tile t = new Tile();
-	    assert(true == t.equals(null));
-	}
 }

@@ -1,11 +1,13 @@
 package com.scorpio.test.unit.server.controller;
 
 import com.scorpio.server.controller.CreateGameRequestController;
+import com.scorpio.server.controller.JoinGameRequestController;
 import com.scorpio.server.controller.LockGameRequestController;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
+import com.scorpio.test.util.FakeClientState;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -73,5 +75,28 @@ public class LockGameRequestControllerTest {
         lgr.lockGame(gameId);
 
         assert(testGame.isLocked());
+    }
+
+    /**
+     * Ensure that we cannot join a locked game
+     * @throws WordSweeperException
+     */
+    @Test(expected = WordSweeperException.class)
+    public void functionality_GameIsActuallyLocked() throws WordSweeperException{
+        LockGameRequestController lgr = new LockGameRequestController();
+        CreateGameRequestController cgr = new CreateGameRequestController();
+        JoinGameRequestController jgr = new JoinGameRequestController();
+
+        Player owner = new Player("test", null);
+        String gameId = "abc";
+        try {
+            cgr.createGame(owner, gameId, null);
+            Game testGame = GameManager.getInstance().findGameById("abc");
+            lgr.lockGame(gameId);
+        }catch(WordSweeperException ex){
+            fail();
+        }
+
+        jgr.joinGame(new Player("test2", new FakeClientState("b")), "abc", null);
     }
 }

@@ -170,6 +170,6 @@ public class Game implements IModel {
 		 * @return	The location of the bonus point.
 		 */
 		public Coordinate getBonus(){
-			return new Coordinate(0,0);
+			return this.getBoard().getBonusLocation();
 		}
 }
