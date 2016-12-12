@@ -28,6 +28,7 @@ public class ExitGameRequestController implements IProtocolHandler{
 
         try {
             this.exitGame(targetPlayer, targetGame);
+            state.setData(null);
         } catch (WordSweeperException ex) {
             // If this occurs, we could not join the game
             ExitGameResponse egr = new ExitGameResponse(targetGame, request.id(), ex.toString());

@@ -1,6 +1,7 @@
 package com.scorpio.server.controller;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.Session;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
@@ -24,6 +25,16 @@ public class CreateGameRequestController implements IProtocolHandler{
     private static int id = 0;
     @Override
     public Message process(ClientState state, Message request) {
+        // Affiliate this client state with a session, if it doesn't already have one. If it does, they shouldn't
+        // be allowed to join -- no multiboxers!
+        Session s = (Session) state.getData();
+        if(s != null){
+            FailureResponse fr = new FailureResponse("Please leave your other game first", request.id());
+            return new Message(fr.toXML());
+        }
+
+
+
         Node child = request.contents.getFirstChild();
 
         String playerName = child.getAttributes().getNamedItem("name").getNodeValue();
@@ -36,7 +47,12 @@ public class CreateGameRequestController implements IProtocolHandler{
         String gameUUID = String.valueOf(id++);
 
         try {
-            this.createGame(new Player(playerName, state), gameUUID, password);
+            Player np = new Player(playerName, state);
+            this.createGame(np, gameUUID, password);
+
+            // Store the session
+            state.setData((Object) new Session(np, GameManager.getInstance().findGameById(gameUUID)));
+
             // Formulate a response and send it
             BoardResponse br = new BoardResponse(playerName, gameUUID, request.id(), false);
             return new Message(br.toXML());

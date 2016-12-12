@@ -1,6 +1,9 @@
 package com.scorpio.server.controller;
 
+import com.scorpio.server.accessory.Session;
 import com.scorpio.server.core.ClientState;
+import com.scorpio.server.model.Game;
+import com.scorpio.server.model.Player;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.IShutdownHandler;
 import com.scorpio.xml.Message;
@@ -94,6 +97,25 @@ public class ConnectionController implements IShutdownHandler {
      */
     @Override
     public void logout(ClientState state) {
-        System.out.println("Logout?");
+        // Using the stored session, ensure that this player is removed
+        Session s = (Session) state.getData();
+
+        if(s == null){
+            // Not my problem
+            return;
+        }
+        Game g = s.getGame();
+        if(g.getPlayer(s.getPlayer().getName()) != null){
+            // The player did not tell us they were exiting
+            ExitGameRequestController egr = new ExitGameRequestController();
+            try {
+                egr.exitGame(s.getPlayer().getName(), g.getId());
+                g.notifyPlayers();
+            }catch(Exception e){
+                // uhh...
+                // It's fine
+                // Probably
+            }
+        }
     }
 }

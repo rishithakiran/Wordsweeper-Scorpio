@@ -1,6 +1,7 @@
 package com.scorpio.server.controller;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.Session;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
@@ -21,6 +22,15 @@ import java.util.Random;
 public class JoinGameRequestController implements IProtocolHandler{
     @Override
     public Message process(ClientState state, Message request) {
+        // Affiliate this client state with a session, if it doesn't already have one. If it does, they shouldn't
+        // be allowed to join -- no multiboxers!
+        Session s = (Session) state.getData();
+        if(s != null){
+            FailureResponse fr = new FailureResponse("Please leave your other game first", request.id());
+            return new Message(fr.toXML());
+        }
+
+
         Node child = request.contents.getFirstChild();
 
         // Find the game
@@ -33,6 +43,7 @@ public class JoinGameRequestController implements IProtocolHandler{
 
         try {
             this.joinGame(newPlayer, targetGame, password);
+            state.setData((Object) new Session(newPlayer, GameManager.getInstance().findGameById(targetGame)));
         } catch (WordSweeperException ex) {
             // If this occurs, we could not join the game
             JoinGameResponse jgr = new JoinGameResponse(targetGame, state.id(), ex.toString());
@@ -60,6 +71,9 @@ public class JoinGameRequestController implements IProtocolHandler{
      *            Password for the game
      */
     public void joinGame(Player player, String gameID, String password) throws WordSweeperException {
+
+
+
         Game game = GameManager.getInstance().findGameById(gameID);
         if (game == null) {
             throw new WordSweeperException("Game doesn't exist");

@@ -1,11 +1,13 @@
 package com.scorpio.server.controller;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.Session;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.*;
 import com.scorpio.server.protocol.IProtocolHandler;
+import com.scorpio.server.protocol.response.FailureResponse;
 import com.scorpio.server.protocol.response.FindWordResponse;
 import com.scorpio.xml.Message;
 import org.w3c.dom.Node;
@@ -19,11 +21,27 @@ import java.util.ArrayList;
 public class FindWordRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
+        // Ensure this person is actually who they say they are
+        Session session = (Session) state.getData();
+        if(session == null){
+            FailureResponse fr = new FailureResponse("Who are you?", request.id());
+            return new Message(fr.toXML());
+        }
         Node child = request.contents.getFirstChild();
+        Node nextChild = child.getFirstChild();
+
+        // Establish which game and what player
+        String playerId = child.getAttributes().getNamedItem("name").getNodeValue();
+        String gameId = child.getAttributes().getNamedItem("gameId").getNodeValue();
+
+        // Verify session data here
+        if(!session.getGame().getId().equals(gameId) || !session.getPlayer().getName().equals(playerId)){
+            FailureResponse fr = new FailureResponse("You're lying to me", request.id());
+            return new Message(fr.toXML());
+        }
 
         // Extract the cells of this request that form a word
         ArrayList<Tile> tiles = new ArrayList<Tile>();
-        Node nextChild = child.getFirstChild();
         while(nextChild != null){
             String s = nextChild.getAttributes().getNamedItem("letter").getNodeValue();
             String loc = nextChild.getAttributes().getNamedItem("position").getNodeValue();
@@ -35,9 +53,7 @@ public class FindWordRequestController implements IProtocolHandler {
         }
         Word w = new Word(tiles);
 
-        // Establish which game and what player
-        String playerId = child.getAttributes().getNamedItem("name").getNodeValue();
-        String gameId = child.getAttributes().getNamedItem("gameId").getNodeValue();
+
         try {
             this.findWord(w, playerId, gameId);
         }catch(WordSweeperException ex){
