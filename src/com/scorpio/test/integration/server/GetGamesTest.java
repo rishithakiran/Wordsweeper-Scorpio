@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import com.scorpio.server.controller.ConnectionController;
 import com.scorpio.test.util.XMLUtil;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 /**
  * Test cases for handling XML List of games.
  * @author Apoorva

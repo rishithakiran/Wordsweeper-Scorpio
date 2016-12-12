@@ -4,7 +4,7 @@ import com.scorpio.server.controller.ConnectionController;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.test.util.FakeClientState;
 import com.scorpio.test.util.XMLUtil;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 import org.junit.Test;
 /**
  * Test cases for handling XML CreateGame request.

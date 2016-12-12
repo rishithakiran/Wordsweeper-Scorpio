@@ -7,7 +7,7 @@ import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.*;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.scorpio.xml;
+package com.scorpio.serverbase.xml;
 
 import java.io.*;
 /**Parser for XML requests and reponses.*/

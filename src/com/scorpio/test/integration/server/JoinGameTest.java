@@ -8,7 +8,7 @@ import com.scorpio.server.model.Game;
 import com.scorpio.server.model.Player;
 import com.scorpio.test.util.FakeClientState;
 import com.scorpio.test.util.XMLUtil;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.fail;

@@ -1,7 +1,6 @@
 package com.scorpio.test.util;
 
-import com.scorpio.xml.Message;
-import org.junit.BeforeClass;
+import com.scorpio.serverbase.xml.Message;
 
 import java.io.File;
 import java.io.FileInputStream;

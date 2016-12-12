@@ -7,9 +7,8 @@ import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.*;
 import com.scorpio.server.protocol.IProtocolHandler;
-import com.scorpio.server.protocol.response.FailureResponse;
 import com.scorpio.server.protocol.response.FindWordResponse;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;

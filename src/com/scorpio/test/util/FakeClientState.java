@@ -1,7 +1,7 @@
 package com.scorpio.test.util;
 
 import com.scorpio.server.core.ClientState;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 /**
  * Class for Fake Client.
  * @author Josh

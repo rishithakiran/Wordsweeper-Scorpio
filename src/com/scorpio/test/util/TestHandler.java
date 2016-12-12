@@ -1,9 +1,8 @@
 package com.scorpio.test.util;
 
 import com.scorpio.server.core.ClientState;
-import com.scorpio.server.core.GameManager;
 import com.scorpio.server.protocol.IProtocolHandler;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 
 /**
  * This is a protocol handler that has the ability to detect

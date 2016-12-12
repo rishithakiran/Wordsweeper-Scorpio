@@ -1,9 +1,8 @@
 package com.scorpio.server.model;
 
 import com.scorpio.server.accessory.Coordinate;
-import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.protocol.response.BoardResponse;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

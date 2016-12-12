@@ -4,7 +4,7 @@ import java.io.*;
 
 import com.scorpio.server.controller.ConnectionController;
 import com.scorpio.serverbase.Server;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 
 /** Code to launch Server from the command line. */
 public class ServerLauncher {

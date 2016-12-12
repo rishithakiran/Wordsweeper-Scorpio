@@ -1,4 +1,4 @@
-package com.scorpio.xml;
+package com.scorpio.serverbase.xml;
 
 import java.util.ArrayList;
 import org.xml.sax.*;

@@ -1,7 +1,7 @@
 package com.scorpio.server.protocol;
 
 import com.scorpio.server.core.ClientState;
-import com.scorpio.xml.*;
+import com.scorpio.serverbase.xml.*;
 
 /** 
  * ServerThread out-sources processing of protocol to implementors 

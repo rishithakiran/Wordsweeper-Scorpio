@@ -2,12 +2,11 @@ package com.scorpio.test.unit.server.controller;
 
 import com.scorpio.server.controller.ConnectionController;
 import com.scorpio.server.core.ClientState;
-import com.scorpio.server.core.GameManager;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.test.util.TestHandler;
 import com.scorpio.test.util.Trigger;
 import com.scorpio.test.util.XMLUtil;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 import org.junit.Test;
 import java.util.HashMap;
 /**

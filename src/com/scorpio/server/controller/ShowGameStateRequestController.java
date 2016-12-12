@@ -2,10 +2,9 @@ package com.scorpio.server.controller;
 
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
-import com.scorpio.server.model.Game;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.*;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 import org.w3c.dom.Node;
 /**
  * Module that handles Show game state request.

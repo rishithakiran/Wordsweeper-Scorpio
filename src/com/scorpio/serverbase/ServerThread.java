@@ -8,7 +8,7 @@ import com.scorpio.server.core.ClientState;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.IShutdownHandler;
 import org.w3c.dom.*;
-import com.scorpio.xml.*;
+import com.scorpio.serverbase.xml.*;
 
 /** Thread to handle individual requests from a client. */
 public class ServerThread extends Thread implements ClientState {

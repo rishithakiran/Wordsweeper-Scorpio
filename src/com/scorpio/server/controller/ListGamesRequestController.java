@@ -3,7 +3,7 @@ package com.scorpio.server.controller;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.*;
-import com.scorpio.xml.Message;
+import com.scorpio.serverbase.xml.Message;
 /**
  * Module that handles List of games request.
  * @author Apoorva

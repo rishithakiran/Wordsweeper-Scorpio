@@ -2,7 +2,7 @@ package com.scorpio.server.model;
 
 import com.scorpio.server.accessory.Coordinate;
 import com.scorpio.server.core.ClientState;
-import com.scorpio.xml.Message;
+
 /**
  * Includes all functionalities associated to the player entity class.
  * @author Saranya
