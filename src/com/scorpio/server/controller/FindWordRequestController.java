@@ -21,12 +21,6 @@ import java.util.ArrayList;
 public class FindWordRequestController implements IProtocolHandler {
     @Override
     public Message process(ClientState state, Message request) {
-        // Ensure this person is actually who they say they are
-        Session session = (Session) state.getData();
-        if(session == null){
-            FailureResponse fr = new FailureResponse("Who are you?", request.id());
-            return new Message(fr.toXML());
-        }
         Node child = request.contents.getFirstChild();
         Node nextChild = child.getFirstChild();
 
@@ -34,10 +28,23 @@ public class FindWordRequestController implements IProtocolHandler {
         String playerId = child.getAttributes().getNamedItem("name").getNodeValue();
         String gameId = child.getAttributes().getNamedItem("gameId").getNodeValue();
 
+        // Ensure this person is actually who they say they are
+        Session session = (Session) state.getData();
+        if(session == null){
+            FindWordResponse fwr = new FindWordResponse(
+                    playerId,gameId,request.id(),
+                    "Who are you?"
+            );
+            return new Message(fwr.toXML());
+        }
+
         // Verify session data here
         if(!session.getGame().getId().equals(gameId) || !session.getPlayer().getName().equals(playerId)){
-            FailureResponse fr = new FailureResponse("You're lying to me", request.id());
-            return new Message(fr.toXML());
+            FindWordResponse fwr = new FindWordResponse(
+                    playerId,gameId,request.id(),
+                    "You're lying to me"
+            );
+            return new Message(fwr.toXML());
         }
 
         // Extract the cells of this request that form a word

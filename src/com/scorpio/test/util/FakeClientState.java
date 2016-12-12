@@ -11,6 +11,7 @@ public class FakeClientState implements ClientState {
     private String id;
     private int msgsReceived = 0;
     private Message lastMessageReceived = null;
+    private Object data = null;
     public FakeClientState(String id){
         this.id = id;
     }
@@ -32,12 +33,13 @@ public class FakeClientState implements ClientState {
 
     @Override
     public Object setData(Object newData) {
-        return null;
+        this.data = newData;
+        return this.data;
     }
 
     @Override
     public Object getData() {
-        return null;
+        return this.data;
     }
 
     public String id(){

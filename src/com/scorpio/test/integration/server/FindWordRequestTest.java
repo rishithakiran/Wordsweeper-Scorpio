@@ -1,6 +1,7 @@
 package com.scorpio.test.integration.server;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.Session;
 import com.scorpio.server.controller.ConnectionController;
 import com.scorpio.server.controller.CreateGameRequestController;
 import com.scorpio.server.controller.JoinGameRequestController;
@@ -41,7 +42,8 @@ public class FindWordRequestTest {
         CreateGameRequestController cgr = new CreateGameRequestController();
         JoinGameRequestController jgr = new JoinGameRequestController();
 
-        Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
+        FakeClientState fcs = new FakeClientState("e3b52914-fa5a-45d1-9fcc-a38ca0e6fcae");
+        Player aPlayer = new Player("aPlayer", fcs);
         Player bPlayer = new Player("bPlayer", new FakeClientState("b"));
 
         try {
@@ -50,6 +52,9 @@ public class FindWordRequestTest {
         }catch(WordSweeperException ex){
             fail();
         }
+
+        // If we don't craft this right, the controller will think we're a hacker
+        fcs.setData(new Session(aPlayer, GameManager.getInstance().findGameById("mygame")));
 
         Board b = new RandomBoard(7);
         String boardString =("R B C D E F G" +

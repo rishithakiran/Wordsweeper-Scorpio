@@ -41,7 +41,7 @@ public class ExitGameTest {
         }
         
         Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
-        router.process(null, msg);
+        router.process(new FakeClientState("a"), msg);
 
         Game g = GameManager.getInstance().findGameById("mygame");
 
@@ -68,7 +68,7 @@ public class ExitGameTest {
         }
 
         Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
-        router.process(null, msg);
+        router.process(new FakeClientState("a"), msg);
 
         Game g = GameManager.getInstance().findGameById("mygame");
 
@@ -99,7 +99,7 @@ public class ExitGameTest {
         }
 
         Message msg = xml.createMessageFromFile("testxml/exitGameRequest.xml");
-        router.process(null, msg);
+        router.process(new FakeClientState("s"), msg);
 
         Game g = GameManager.getInstance().findGameById("mygame");
 
