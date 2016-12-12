@@ -1,12 +1,14 @@
 package com.scorpio.server.controller;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.Session;
 import com.scorpio.server.core.ClientState;
 import com.scorpio.server.core.GameManager;
 import com.scorpio.server.exception.WordSweeperException;
 import com.scorpio.server.model.*;
 import com.scorpio.server.protocol.IProtocolHandler;
 import com.scorpio.server.protocol.response.BoardResponse;
+import com.scorpio.server.protocol.response.FailureResponse;
 import com.scorpio.serverbase.xml.Message;
 import org.w3c.dom.Node;
 /**
@@ -23,6 +25,18 @@ public class RepositionBoardRequestController implements IProtocolHandler {
         String targetGame = child.getAttributes().getNamedItem("gameId").getNodeValue();
         String rowChange = child.getAttributes().getNamedItem("rowChange").getNodeValue();
         String colChange = child.getAttributes().getNamedItem("colChange").getNodeValue();
+
+        // Ensure that this client state belongs to this game
+        Session s = (Session) state.getData();
+        if(s == null){
+            BoardResponse br = new BoardResponse(playerName, targetGame, request.id(), false, "Who are you?");
+            return new Message(br.toXML());
+        }
+        if(!(s.getPlayer().getName().equals(playerName) && s.getGame().getId().equals(targetGame))){
+            BoardResponse br = new BoardResponse(playerName, targetGame, request.id(), false, "You're lying to me");
+            return new Message(br.toXML());
+        }
+
 
         try{
             this.repositionBoard(playerName, targetGame, Integer.parseInt(colChange), Integer.parseInt(rowChange));

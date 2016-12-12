@@ -1,6 +1,7 @@
 package com.scorpio.test.integration.server;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.Session;
 import com.scorpio.server.controller.ConnectionController;
 import com.scorpio.server.controller.CreateGameRequestController;
 import com.scorpio.server.controller.RepositionBoardRequestController;
@@ -35,17 +36,21 @@ public class RepositionBoardTest {
         RepositionBoardRequestController gact = new RepositionBoardRequestController();
         CreateGameRequestController cgr = new CreateGameRequestController();
 
-        Player aPlayer = new Player("aPlayer", new FakeClientState("a"));
+        FakeClientState fcs = new FakeClientState("a");
+        Player aPlayer = new Player("aPlayer", fcs);
         try {
             cgr.createGame(aPlayer, "mygame", null);
         }catch(WordSweeperException ex){
             fail();
         }
 
+        Session s = new Session(aPlayer, GameManager.getInstance().findGameById("mygame"));
+        fcs.setData((Object)s);
+
         // Set out test user to 1,1
         GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").setLocation(new Coordinate(1,1));
         Message msg = xml.createMessageFromFile("testxml/repositionBoardRequest.xml");
-        router.process(new FakeClientState("a"), msg);
+        router.process(fcs, msg);
         Coordinate newLoc = GameManager.getInstance().findGameById("mygame").getPlayer("aPlayer").getLocation();
 
         if(!newLoc.equals(new Coordinate(2,1))){
