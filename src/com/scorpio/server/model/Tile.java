@@ -4,6 +4,8 @@ import java.util.Hashtable;
 import java.util.Random;
 
 import com.scorpio.server.accessory.Coordinate;
+import com.scorpio.server.accessory.RandomWeightedLetter;
+
 /**
  * Includes functionalities associated with the Tiles of the board.
  * @author Apoorva
@@ -62,12 +64,9 @@ public class Tile implements IModel {
      * Construct the tile with a random value
      */
 	public Tile() {
-		Random random = new Random();
-		int randIndex = random.nextInt(scoreforChar.size());
 		this.isBonus = false;
 		this.sharedBy = 0;
-		this.contents = (String)(scoreforChar.keySet().toArray())[randIndex];
-
+		this.contents = new RandomWeightedLetter().getValue();
 	}
 
 	/**
