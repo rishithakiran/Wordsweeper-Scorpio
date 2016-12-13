@@ -44,7 +44,7 @@ public class JoinGameResponse {
         }else {
             header = "<response id='" + requestID + "' success='true'>";
         }
-        String boardResponseHeader = String.format("<joinGameResponse gameId='%s'>", gameId);
+        String boardResponseHeader = String.format("<joinGameResponse gameId='%s'/>", gameId);
 
         return header + boardResponseHeader;
     }
@@ -54,10 +54,8 @@ public class JoinGameResponse {
 	 * @return	Footer of the response.
 	 */
     private String getFooter(){
-        String boardResponseFooter = "</joinGameResponse>";
         String footer = "</response>";
-
-        return boardResponseFooter + footer;
+        return footer;
     }
     
     /**

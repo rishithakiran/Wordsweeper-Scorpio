@@ -76,7 +76,7 @@ public class JoinGameRequestController implements IProtocolHandler{
 
         Game game = GameManager.getInstance().findGameById(gameID);
         if (game == null) {
-            throw new WordSweeperException("Game doesn't exist");
+            throw new WordSweeperException("Game does not exist");
         }
 
 
